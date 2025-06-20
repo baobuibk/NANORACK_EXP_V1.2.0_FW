@@ -1,0 +1,4 @@
+../Dev/MIN_Proto/min_process.c:26:6:MIN_Timeout_Handler	16	static
+../Dev/MIN_Proto/min_process.c:40:6:MIN_Process_Init	8	static
+../Dev/MIN_Proto/min_process.c:45:6:MIN_Processing	16	static
+../Dev/MIN_Proto/min_process.c:56:6:MIN_CreateTask	8	static

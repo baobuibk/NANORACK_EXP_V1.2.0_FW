@@ -1,0 +1,12 @@
+../Dev/MIN_Proto/min_app/min_app.c:15:6:min_debug_print	1
+../Dev/MIN_Proto/min_app/min_app.c:26:10:min_tx_space	1
+../Dev/MIN_Proto/min_app/min_app.c:35:6:min_tx_byte	2
+../Dev/MIN_Proto/min_app/min_app.c:54:6:min_tx_start	1
+../Dev/MIN_Proto/min_app/min_app.c:67:6:min_tx_finished	1
+../Dev/MIN_Proto/min_app/min_app.c:81:10:min_time_ms	1
+../Dev/MIN_Proto/min_app/min_app.c:86:6:MIN_Context_Init	2
+../Dev/MIN_Proto/min_app/min_app.c:99:6:MIN_ReInit	1
+../Dev/MIN_Proto/min_app/min_app.c:106:6:MIN_RegisterTimeoutCallback	1
+../Dev/MIN_Proto/min_app/min_app.c:110:6:MIN_App_Poll	6
+../Dev/MIN_Proto/min_app/min_app.c:133:6:MIN_Send	2
+../Dev/MIN_Proto/min_app/min_app.c:158:6:min_application_handler	5

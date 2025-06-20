@@ -1,0 +1,7 @@
+../Dev/Devices/Auto_run/auto_run.c:65:13:auto_run_task_update	19
+../Dev/Devices/Auto_run/auto_run.c:179:6:auto_get_temp	4
+../Dev/Devices/Auto_run/auto_run.c:211:6:auto_set_pd	1
+../Dev/Devices/Auto_run/auto_run.c:218:6:auto_set_ls	1
+../Dev/Devices/Auto_run/auto_run.c:225:6:read_adc	1
+../Dev/Devices/Auto_run/auto_run.c:244:6:read_adc_without_LF	1
+../Dev/Devices/Auto_run/auto_run.c:255:6:AutoRun_CreateTask	1
