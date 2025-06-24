@@ -28,8 +28,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
-#include "stm32f7xx_ll_adc.h"
-#include "stm32f7xx_ll_dma.h"
 #include "stm32f7xx_ll_i2c.h"
 #include "stm32f7xx_ll_rcc.h"
 #include "stm32f7xx_ll_bus.h"
@@ -38,6 +36,7 @@ extern "C" {
 #include "stm32f7xx_ll_cortex.h"
 #include "stm32f7xx_ll_utils.h"
 #include "stm32f7xx_ll_pwr.h"
+#include "stm32f7xx_ll_dma.h"
 #include "stm32f7xx_ll_spi.h"
 #include "stm32f7xx_ll_tim.h"
 #include "stm32f7xx_ll_usart.h"
@@ -87,6 +86,20 @@ void Error_Handler(void);
 #define TEC_3_EN_GPIO_Port GPIOC
 #define TEC_4_EN_Pin LL_GPIO_PIN_15
 #define TEC_4_EN_GPIO_Port GPIOC
+#define ADC_TEMP1_Pin LL_GPIO_PIN_0
+#define ADC_TEMP1_GPIO_Port GPIOC
+#define ADC_TEMP2_Pin LL_GPIO_PIN_1
+#define ADC_TEMP2_GPIO_Port GPIOC
+#define ADC_TEMP3_Pin LL_GPIO_PIN_2
+#define ADC_TEMP3_GPIO_Port GPIOC
+#define ADC_TEMP4_Pin LL_GPIO_PIN_3
+#define ADC_TEMP4_GPIO_Port GPIOC
+#define ADC_TEC_OUT_Pin LL_GPIO_PIN_1
+#define ADC_TEC_OUT_GPIO_Port GPIOA
+#define ADC_LASER2_Pin LL_GPIO_PIN_2
+#define ADC_LASER2_GPIO_Port GPIOA
+#define ADC_LASER1_Pin LL_GPIO_PIN_3
+#define ADC_LASER1_GPIO_Port GPIOA
 #define EXP_SPI_NSS_Pin LL_GPIO_PIN_4
 #define EXP_SPI_NSS_GPIO_Port GPIOA
 #define EXP_SPI_SCK_Pin LL_GPIO_PIN_5
@@ -95,6 +108,14 @@ void Error_Handler(void);
 #define EXP_SPI_MISO_GPIO_Port GPIOA
 #define EXP_SPI_MOSI_Pin LL_GPIO_PIN_7
 #define EXP_SPI_MOSI_GPIO_Port GPIOA
+#define ADC_TEMP5_Pin LL_GPIO_PIN_4
+#define ADC_TEMP5_GPIO_Port GPIOC
+#define ADC_TEMP6_Pin LL_GPIO_PIN_5
+#define ADC_TEMP6_GPIO_Port GPIOC
+#define ADC_TEMP7_Pin LL_GPIO_PIN_0
+#define ADC_TEMP7_GPIO_Port GPIOB
+#define ADC_TEMP8_Pin LL_GPIO_PIN_1
+#define ADC_TEMP8_GPIO_Port GPIOB
 #define LASER_DAC_CS_Pin LL_GPIO_PIN_2
 #define LASER_DAC_CS_GPIO_Port GPIOB
 #define EXP_UART_RX_Pin LL_GPIO_PIN_7

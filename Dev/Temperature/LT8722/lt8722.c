@@ -137,7 +137,11 @@ int8_t lt8722_transaction(struct lt8722_dev *dev, struct lt8722_packet *packet)
 		packet->ack = buffer[3];
 	}
 	if (packet->ack != LT8722_ACK_ACKNOWLEDGE)
+	{
+		dev->status |= (1 << TEC_FAULT_POS); //communication fault
 		return -1;
+	}
+	dev->status &= ~(1 << TEC_FAULT_POS); //communication OK
 	return 0;
 }
 
@@ -206,6 +210,8 @@ int8_t lt8722_reg_write_mask(struct lt8722_dev *dev, uint8_t address, uint32_t m
  */
 int8_t lt8722_set_enable_req(struct lt8722_dev *dev, bool value)
 {
+	if (value) dev->status |= (1 << TEC_ENABLED_POS);
+	else dev->status &= ~(1 << TEC_ENABLED_POS);
 	return lt8722_reg_write_mask(dev, LT8722_SPIS_COMMAND, LT8722_ENABLE_REQ_MASK, value);
 }
 
@@ -216,6 +222,8 @@ int8_t lt8722_set_enable_req(struct lt8722_dev *dev, bool value)
  */
 int8_t lt8722_set_swen_req(struct lt8722_dev *dev, bool value)
 {
+	if (value) dev->status |= (1 << TEC_SWITCH_ENABLED_POS);
+	else dev->status &= ~(1 << TEC_SWITCH_ENABLED_POS);
 	return lt8722_reg_write_mask(dev, LT8722_SPIS_COMMAND, LT8722_SWEN_REQ_MASK, value);
 }
 
@@ -225,6 +233,7 @@ int8_t lt8722_set_swen_req(struct lt8722_dev *dev, bool value)
  */
 int8_t lt8722_reset(struct lt8722_dev *dev)
 {
+	dev->status &= ~((1 << TEC_INIT_POS) | (1 << TEC_ENABLED_POS) | (1 << TEC_SWITCH_ENABLED_POS) | ((1 << TEC_DIR_POS)));
 	return lt8722_reg_write_mask(dev, LT8722_SPIS_COMMAND, LT8722_SPI_RST_MASK, LT8722_SPI_RST_RESET);
 }
 
@@ -422,6 +431,12 @@ int8_t lt8722_init(struct lt8722_dev *dev)
 //		delay_us(255);
 //
 //		ret = lt8722_set_swen_req(channel, LT8722_SWEN_REQ_DISABLED);
+	if (!ret)
+		{
+		dev->status |= ((1 << TEC_INIT_POS) | (1 << TEC_ENABLED_POS) | (1 << TEC_SWITCH_ENABLED_POS)); //tec is initted
+		}
+	else dev->status = 0;
+	dev->voltage = 0;
 	return ret;
 }
 
@@ -437,11 +452,19 @@ int8_t lt8722_set_output_voltage_channel(struct lt8722_dev *dev, tec_dir_t dir, 
 	int64_t vdac = 0;
 	int32_t dac = 0x0;
 	if (dir == TEC_COOL)
+	{
+		dev->status &= ~(1 << TEC_DIR_POS);
 		vdac = LT8722_DAC_OFFSET - value / 16;
+	}
 	if (dir == TEC_HEAT)
+	{
+		dev->status |= (1 << TEC_DIR_POS);
 		vdac = LT8722_DAC_OFFSET + value / 16;
+	}
 	dac = lt8722_voltage_to_dac(vdac);
 	ret = lt8722_set_dac(dev, dac);
+	dev->voltage = value;
+
 	return ret;
 }
 

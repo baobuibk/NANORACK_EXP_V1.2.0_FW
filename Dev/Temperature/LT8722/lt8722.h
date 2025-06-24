@@ -329,6 +329,11 @@ struct lt8722_packet {
  * @struct lt8722_dev
  * @brief Device descriptor for LT8722.
  */
+#define TEC_INIT_POS 			0
+#define TEC_ENABLED_POS 		1
+#define TEC_SWITCH_ENABLED_POS 	2
+#define TEC_DIR_POS 			3
+#define TEC_FAULT_POS 			4
 struct lt8722_dev {
 	SPI_TypeDef *hspi;
 	GPIO_TypeDef *cs_port;
@@ -337,8 +342,9 @@ struct lt8722_dev {
 	uint16_t en_pin;
 	GPIO_TypeDef *swen_port;
 	uint16_t swen_pin;
-	bool start_up_sequence;
-	uint16_t status;
+	uint8_t status; //							FAULT | DIR | SWITCH_ENABLED | ENABLED | INIT
+	int64_t  voltage;
+
 };
 
 int32_t lt8722_voltage_to_dac(int64_t voltage);

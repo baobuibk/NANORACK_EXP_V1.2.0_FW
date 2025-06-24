@@ -1,3 +1,0 @@
-../Dev/CLI_Terminal/CLI_Setup/cli_setup.c:52:13:writeCharTocli_EXPConsole	24	static
-../Dev/CLI_Terminal/CLI_Setup/cli_setup.c:57:16:SystemCLI_Init	16	static
-../Dev/CLI_Terminal/CLI_Setup/cli_setup.c:115:14:get_EXPConsole_CliPointer	4	static

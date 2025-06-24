@@ -543,3 +543,8 @@ void NTC_get_temperature(int16_t* temp)
 		if (temp[i] < -500 || temp[i] > 2000)  temp[i] = 0x7FFF;
 	}
 };
+int16_t ntc_convert(uint16_t ADC_val)
+{
+	int16_t temperature = NTC_table[ADC_val];
+	return temperature;
+}

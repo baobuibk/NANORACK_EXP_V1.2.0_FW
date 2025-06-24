@@ -22,8 +22,9 @@
 #include "stm32f7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "scheduler.h"
+#include "watchdog.h"
 #include "uart_driver.h"
+#include "sst.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,7 +58,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern UART_HandleTypeDef huart6;
+extern DMA_HandleTypeDef hdma_adc1;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -185,7 +186,9 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	SCH_RunSystemTickTimer();
+	//SCH_RunSystemTickTimer();
+	SST_TimeEvt_tick();
+	watch_dog_pulse();
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -208,6 +211,7 @@ void DMA2_Stream0_IRQHandler(void)
   /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
 
   /* USER CODE END DMA2_Stream0_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_adc1);
   /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
 
   /* USER CODE END DMA2_Stream0_IRQn 1 */
@@ -216,16 +220,15 @@ void DMA2_Stream0_IRQHandler(void)
 /**
   * @brief This function handles USART6 global interrupt.
   */
-void USART6_IRQHandler(void)
-{
-  /* USER CODE BEGIN USART6_IRQn 0 */
-	UART_Driver_ISR(USART6);
-  /* USER CODE END USART6_IRQn 0 */
-  HAL_UART_IRQHandler(&huart6);
-  /* USER CODE BEGIN USART6_IRQn 1 */
-
-  /* USER CODE END USART6_IRQn 1 */
-}
+//void USART6_IRQHandler(void)
+//{
+//  /* USER CODE BEGIN USART6_IRQn 0 */
+////////////////////////	UART_Driver_ISR(USART6);
+//  /* USER CODE END USART6_IRQn 0 */
+//  /* USER CODE BEGIN USART6_IRQn 1 */
+////////////////////////
+//  /* USER CODE END USART6_IRQn 1 */
+//}
 
 /* USER CODE BEGIN 1 */
 

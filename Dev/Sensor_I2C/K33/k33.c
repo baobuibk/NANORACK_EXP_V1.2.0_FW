@@ -9,6 +9,7 @@
 #include "k33.h"
 #include "stdio.h"
 #include "stm32f7xx_ll_utils.h"
+#include "stm32f7xx_ll_i2c.h"
 
 
 static K33_RawData_t K33_RawData;

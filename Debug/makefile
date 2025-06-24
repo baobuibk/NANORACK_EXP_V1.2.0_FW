@@ -23,6 +23,12 @@ RM := rm -rf
 -include Dev/Sensor_I2C/BME280/subdir.mk
 -include Dev/Sensor_I2C/subdir.mk
 -include Dev/Sche/subdir.mk
+-include Dev/MiddleWare/sst0_c/src/subdir.mk
+-include Dev/MiddleWare/container/subdir.mk
+-include Dev/MiddleWare/Utils/subdir.mk
+-include Dev/MiddleWare/STDIO/subdir.mk
+-include Dev/MiddleWare/FSM/subdir.mk
+-include Dev/MiddleWare/CLI_Terminal/CLI_Src/subdir.mk
 -include Dev/MIN_Proto/min_app/subdir.mk
 -include Dev/MIN_Proto/min/subdir.mk
 -include Dev/MIN_Proto/subdir.mk
@@ -34,14 +40,19 @@ RM := rm -rf
 -include Dev/Devices/IR_LED/subdir.mk
 -include Dev/Devices/DateTime/subdir.mk
 -include Dev/Devices/Auto_run/subdir.mk
--include Dev/CLI_Terminal/CLI_Src/subdir.mk
--include Dev/CLI_Terminal/CLI_Setup/subdir.mk
--include Dev/CLI_Terminal/CLI_Command/subdir.mk
--include Dev/Board/subdir.mk
 -include Dev/BSupport/UART/RingBuffer/subdir.mk
 -include Dev/BSupport/UART/subdir.mk
 -include Dev/BSupport/SysTick/subdir.mk
 -include Dev/BSupport/I2C/subdir.mk
+-include Dev/BSupport/BSP/bsp_tec/subdir.mk
+-include Dev/BSupport/BSP/bsp_ntc/subdir.mk
+-include Dev/BSupport/BSP/bsp_heater/subdir.mk
+-include Dev/BSupport/BSP/Board/subdir.mk
+-include Dev/App/temperature_monitor/subdir.mk
+-include Dev/App/temperature_control/subdir.mk
+-include Dev/App/shell/CLI_Command/subdir.mk
+-include Dev/App/shell/subdir.mk
+-include Dev/App/app_main/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
 -include objects.mk
@@ -98,8 +109,8 @@ all: main-build
 main-build: EXP_V120.elf secondary-outputs
 
 # Tool invocations
-EXP_V120.elf EXP_V120.map: $(OBJS) $(USER_OBJS) D:\STworkspace\EXP_V120\STM32F765VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "EXP_V120.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"D:\STworkspace\EXP_V120\STM32F765VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EXP_V120.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+EXP_V120.elf EXP_V120.map: $(OBJS) $(USER_OBJS) D:\PROJECT\BOOK_EXAMPLE\EXP_V120\STM32F765VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "EXP_V120.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"D:\PROJECT\BOOK_EXAMPLE\EXP_V120\STM32F765VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EXP_V120.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -1,5 +1,0 @@
-../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_gpio.h:881:22:LL_GPIO_SetOutputPin	1
-../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_gpio.h:910:22:LL_GPIO_ResetOutputPin	1
-../Dev/WDog/watchdog.c:34:6:Ex_Watchdog_Init	1
-../Dev/WDog/watchdog.c:39:6:Ex_Watchdog_CreateTask	1
-../Dev/WDog/watchdog.c:44:6:status_wdt_update	4

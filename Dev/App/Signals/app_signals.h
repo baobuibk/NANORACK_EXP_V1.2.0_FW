@@ -1,0 +1,29 @@
+/*
+ * app_signals.h
+ *
+ *  Created on: Jun 10, 2025
+ *      Author: Admin
+ */
+
+#ifndef APP_SIGNALS_H_
+#define APP_SIGNALS_H_
+
+#include "FSM_signals.h"
+/* Event signals */
+enum event_signals {
+	/* Event signals */
+		EVT_SHELL_HAS_DATA = SIG_USER,
+		EVT_SHELL_TIMEOUT,
+		EVT_TIMEOUT ,
+		EVT_MIN_POLL,
+		EVT_MIN_SHELL_HAS_DATA,
+		EVT_MIN_SHELL_POLL_TIME,
+		EVT_TEMPERATURE_CONTROL_TIMEOUT_CONTROL_LOOP,
+		EVT_TEMPERATURE_CONTROL_HAS_CMD,
+		EVT_TEMPERATURE_MONITOR_NTC_ADC_COMPLETED,
+		EVT_TEMPERATURE_MONITOR_NTC_TRIGGER_TIME,
+		MAX_EVENT_SIG
+};
+
+
+#endif /* APP_SIGNALS_APP_SIGNALS_H_ */

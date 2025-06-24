@@ -62,3 +62,7 @@ void status_wdt_update(void)
 		}
 	}
 }
+void watch_dog_pulse(void)
+{
+	LL_GPIO_TogglePin(WD_DONE_GPIO_Port, WD_DONE_Pin);
+}

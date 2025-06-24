@@ -16,6 +16,6 @@
 
 void Ex_Watchdog_Init(void);
 void Ex_Watchdog_CreateTask(void);
-
+void watch_dog_pulse(void);
 
 #endif /* WATCHDOG_WATCHDOG_H_ */
