@@ -23,11 +23,8 @@
 /* USER CODE BEGIN Includes */
 #include "board.h"
 #include "uart_driver.h"
-#include "watchdog.h"
-#include "status_led.h"
 #include "ntc.h"
 #include "cli_command.h"
-#include "temperature.h"
 #include "sensor_i2c.h"
 #include "min_process.h"
 #include "adg1414.h"
@@ -60,6 +57,9 @@ DMA_HandleTypeDef hdma_adc1;
 
 TIM_HandleTypeDef htim1;
 
+
+#define SPI_RAM_BUFFER_SIZE 100000
+static uint8_t sram_data[SPI_RAM_BUFFER_SIZE];
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -172,8 +172,11 @@ int main(void)
 //  app_init();
 //  app_start();
 //  app_run();
-  bsp_photodiode_timer1_init(1000);
-  bsp_photodiode_sample_start(10);
+//  bsp_photodiode_timer1_init(1000);
+//  bsp_photodiode_sample_start(10);
+
+  for (uint32_t i = 0;i<1000;i++) sram_data[i] = i&0xFF;
+  bsp_spi_ram_write(0, 1000, sram_data);
   while (1)
   {
 	//  SCH_HandleScheduledTask();

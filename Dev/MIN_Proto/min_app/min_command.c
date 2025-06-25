@@ -12,7 +12,7 @@
 #include "lt8722.h"
 #include "board.h"
 #include "uart_driver.h"
-#include "temperature.h"
+//#include "temperature.h"
 
 
 

@@ -11,24 +11,23 @@
 
 // Struct cấu hình SRAM
 typedef struct {
-    SPI_TypeDef *spi;               // Instance SPI
-    GPIO_TypeDef *cs_port;          // Cổng CS
-    uint32_t cs_pin;                // Chân CS
-    uint8_t *buffer;                // Bộ đệm DMA
-    uint32_t buffer_size;           // Kích thước bộ đệm
-    volatile uint32_t transfer_size; // Kích thước truyền
-    volatile uint8_t transfer_done; // Cờ hoàn tất
-    DMA_TypeDef *dma;               // Instance DMA
-    uint32_t dma_stream_tx;         // Stream TX
-    uint32_t dma_stream_rx;         // Stream RX
-    uint32_t dma_channel_tx;        // Channel TX
-    uint32_t dma_channel_rx;        // Channel RX
-} SRAM_Config_t;
+    SPI_TypeDef *spi;               // Instance SPI (SPI2)
+    GPIO_TypeDef *cs_port;          // Cổng CS (GPIOD)
+    uint32_t cs_pin;                // Chân CS (PD7)
+    uint32_t transfer_size;         // Kích thước truyền
+    uint8_t transfer_done;          // Cờ hoàn thành
+    DMA_TypeDef *dma;               // Instance DMA (DMA2)
+    uint32_t dma_stream_tx;         // Stream TX (Stream 5)
+    uint32_t dma_stream_rx;         // Stream RX (Stream 6)
+    uint32_t dma_channel;           // Channel (0)
+} IS66_t;
 
 // Prototype hàm
-void SRAM_Init(SRAM_Config_t *config);
-void SRAM_Read(SRAM_Config_t *config, uint32_t address, uint32_t size, uint8_t *buffer);
-void SRAM_Write(SRAM_Config_t *config, uint32_t address, uint32_t size, uint8_t *buffer);
-uint8_t SRAM_IsTransferComplete(SRAM_Config_t *config);
+void SRAM_Initialize(IS66_t *config);
+void SRAM_Read(IS66_t *end1, uint32_t address, uint32_t size, uint8_t *buffer);
+void SRAM_Write(IS66_t *end1, uint32_t address, uint32_t size, uint8_t *buffer);
+uint8_t SRAM_IsTransferDone(IS66_t *end1);
+void DMA_TX_callback(IS66_t *dev)  ;
+void DMA_RX_callback(IS66_t *dev)  ;
 
 #endif // IS66WVS4M8BLL_H

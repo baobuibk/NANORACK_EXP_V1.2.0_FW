@@ -32,7 +32,7 @@ circular_buffer_t temperature_control_task_event_queue = {0}; // Circular buffer
 
 
 
-uint8_t bsp_NTC_get_temperature(uint8_t NTC_idx);
+
 
 
 static state_t temperature_control_state_manual_handler(temperature_control_task_t * const me, temperature_control_evt_t const * const e);

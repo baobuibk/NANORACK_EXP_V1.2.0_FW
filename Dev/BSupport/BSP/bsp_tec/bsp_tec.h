@@ -14,6 +14,10 @@ extern struct lt8722_dev tec_0;
 extern struct lt8722_dev tec_1;
 extern struct lt8722_dev tec_2;
 extern struct lt8722_dev tec_3;
+
+uint32_t bsp_temperature_power_on(void);
+
+uint32_t bsp_temperature_power_off(void);
 //
 //uint32_t bsp_tec_enable(uint32_t tec_idx);
 //uint32_t bsp_tec_disable(uint32_t tec_idx);

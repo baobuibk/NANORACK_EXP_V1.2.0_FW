@@ -151,7 +151,8 @@ static const CliCommandBinding cliStaticBindings_internal[] = {
     { "TEC",   "tec_profile_volt_get", "Get current profile voltage of TEC [0-3, a=all]",         true,  NULL, CMD_TEC_Get_Profile_Volt },
     { "TEC",   "tec_profile_set", "register Tec for profile: 0/1 0/1 0/1 0/1 ]", true,  NULL, CMD_TEC_Profile_Register},
     { "TEC",   "tec_profile_get", "get the tec profile ]", true,  NULL, CMD_TEC_Profile_Get},
-
+	{ "TEC",   "tec_man_volt_set",  "Set TEC output : tec_idx C/H voltage",        true,  NULL, CMD_TEC_Man_Set_Volt },
+	{ "TEC",   "tec_man_output_set",  "Set TEC output : tec_idx C/H voltage",        true,  NULL, CMD_TEC_Man_Set_Output },
     // Heater
     { "Heater", "htr_profile_duty_set","Set duty cycle for heater [0-3]: [0~100%]",              true,  NULL, CMD_HTR_Set_Profile_Duty },
     { "Heater", "htr_profile_duty_get","Read current duty cycle setting of heater [0-3, a=all]", true,  NULL, CMD_HTR_Get_Profile_Duty },
@@ -165,18 +166,26 @@ static const CliCommandBinding cliStaticBindings_internal[] = {
 
     // Automatic control
     { "Auto",  "auto_control_start", "start auto control mode",      true,  NULL, CMD_Start_Auto_Mode },
-
     { "Auto",  "auto_control_stop", "start auto control mode",      true,  NULL, CMD_Stop_Auto_Mode },
 
-    { "Auto",  "auto_tec_set", "Enable/disable TECs for auto control [tecX_en 0/1]",      true,  NULL, CMD_TEC_Set_Auto },
-    { "Auto",  "auto_tec_get", "List enabled TEC channels for auto control [0-3, a]",     true,  NULL, CMD_TEC_Get_Auto },
-    { "Auto",  "auto_htr_set", "Enable/disable heaters for auto control [htrX_en 0/1]",   true,  NULL, CMD_HTR_Set_Auto },
-    { "Auto",  "auto_htr_get", "List enabled heater channels for auto control [0-3, a]",  true,  NULL, CMD_HTR_Get_Auto },
-    { "Auto",  "auto_temp_set","Enable/disable full temperature control routine [0/1]",   true,  NULL, CMD_Temp_Set_Auto },
-    { "Auto",  "auto_temp_get","Read current state of temperature control routine",       true,  NULL, CMD_Temp_Get_Auto },
 
-	{ "TEC",   "tec_man_volt_set",  "Set TEC output : tec_idx C/H voltage",        true,  NULL, CMD_TEC_Man_Set_Volt },
-	{ "TEC",   "tec_man_output_set",  "Set TEC output : tec_idx C/H voltage",        true,  NULL, CMD_TEC_Man_Set_Output },
+// Laser Photo
+	{ "Laser", "laser_set_current",    "format: laser_set_current [0(int)/1(ext)] [dac_val]",  true, NULL, CMD_Set_Laser },
+	{ NULL, "get_current",  "format: get_current [int/ext]",                                   true, NULL, CMD_Get_Current },
+	    { NULL, "pd_get",       "format: pd_get [pd_index]",                                       true, NULL, CMD_PD_Get },
+	    { NULL, "sp_set_pd",    "format: sp_set_pd [photo_index]",                                 true, NULL, CMD_Sample_Set_PD },
+	    { NULL, "sp_set_rate",  "format: sp_set_rate [sampling_rate] [num_samples]",               true, NULL, CMD_Sample_Set_Rate },
+	    { NULL, "sp_trig",      "format: sp_trig",                                                 true, NULL, CMD_Sample_Trig },
+	    { NULL, "sp_status",    "format: sp_status",                                               true, NULL, CMD_Sample_Status_Get },
+
+	//    { "Auto",  "auto_tec_set", "Enable/disable TECs for auto control [tecX_en 0/1]",      true,  NULL, CMD_TEC_Set_Auto },
+//    { "Auto",  "auto_tec_get", "List enabled TEC channels for auto control [0-3, a]",     true,  NULL, CMD_TEC_Get_Auto },
+//    { "Auto",  "auto_htr_set", "Enable/disable heaters for auto control [htrX_en 0/1]",   true,  NULL, CMD_HTR_Set_Auto },
+//    { "Auto",  "auto_htr_get", "List enabled heater channels for auto control [0-3, a]",  true,  NULL, CMD_HTR_Get_Auto },
+//    { "Auto",  "auto_temp_set","Enable/disable full temperature control routine [0/1]",   true,  NULL, CMD_Temp_Set_Auto },
+//    { "Auto",  "auto_temp_get","Read current state of temperature control routine",       true,  NULL, CMD_Temp_Get_Auto },
+
+
 //    { "TEC",   "tec_dir_get",  "Read direction setting of TEC [0-3, a=all]",              true,  NULL, CMD_TEC_Get_Dir },
 //
 //    // Sensors

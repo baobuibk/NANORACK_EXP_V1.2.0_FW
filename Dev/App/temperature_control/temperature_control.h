@@ -45,7 +45,7 @@ struct temperature_control_profile_t{
 	int16_t setpoint;
     uint16_t tec_voltage; // output voltage for each tec
     };
-    struct temperature_control_task_t {
+struct temperature_control_task_t {
     SST_Task super;
     temperature_control_state_handler_t state; /* the "state variable" */
     uint32_t state_num;

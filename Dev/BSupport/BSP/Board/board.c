@@ -19,9 +19,9 @@ struct mb85rs2mt_dev fram = {
 		  .cs_pin = FRAM_CS_Pin
 };
 
-MCP4902_Device_t DAC_device;
-ADG1414_Device_t laser_int;
-ADG1414_Device_t laser_ext;
-//ADC_DMA_Device_t laser_adc;
-ADG1414_Device_t photo_sw;
+//MCP4902_Device_t DAC_device;
+//ADG1414_Device_t laser_int;
+//ADG1414_Device_t laser_ext;
+////ADC_DMA_Device_t laser_adc;
+//ADG1414_Device_t photo_sw;
 
