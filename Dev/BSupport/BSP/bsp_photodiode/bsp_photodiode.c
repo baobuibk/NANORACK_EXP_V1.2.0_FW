@@ -16,8 +16,26 @@ ADS8327_Device_t photo_adc = {
 		.convst_pin = PHOTO_ADC_CONV_Pin,           // Chân convst
 
 };
-
+ADG1414_Device_t photo_sw;
 static uint32_t num_sample;
+
+
+void bsp_photo_sw_init(void)
+{
+	  ADG1414_Chain_Init(&photo_sw, SPI2, PHOTO_SW_CS_GPIO_Port, PHOTO_SW_CS_Pin, INTERNAL_CHAIN_SWITCH_NUM);
+
+}
+
+void bsp_photo_sw_spi_change_mode(void)
+{
+
+}
+
+
+void bsp_photo_adc_spi_change_mode(void)
+{
+
+}
 /*
  *timer interrupt->start Conv
  *EXTI (EOC) falling edge

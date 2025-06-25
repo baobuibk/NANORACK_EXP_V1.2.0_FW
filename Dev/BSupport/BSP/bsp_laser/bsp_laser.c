@@ -35,3 +35,25 @@ void bsp_laser_ext_switch_on(uint32_t channel_idx)
 void bsp_laser_ext_switch_off_all(void){
 	ADG1414_Chain_SwitchAllOff(&laser_ext);
 }
+/*
+ * current source has 250 ohm shunt
+ * with maximum voltage of 3V, we calculate the voltage for ADC and send to ADC
+ */
+
+void bsp_laser_int_set_current(uint32_t percent)
+{
+	if (percent > 100) percent = 100;
+	MCP4902_Set_Voltage(&DAC_device, 0, 33*percent);
+}
+
+void bsp_laser_ext_set_current(uint32_t percent)
+{
+	if (percent > 100) percent = 100;
+	MCP4902_Set_Voltage(&DAC_device, 1, 33*percent);
+}
+void bsp_laser_set_current(uint32_t id, uint32_t percent)
+{
+	if (id ==0)  bsp_laser_int_set_current(percent);
+	else bsp_laser_ext_set_current(percent);
+
+}

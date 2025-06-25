@@ -30,6 +30,10 @@ struct experiment_task_t{
 	experiment_task_handler_t state;
 	SST_TimeEvt timeout_timer;
 	uint8_t	sub_state;
+	uint8_t  laser_current[2]; //current for internal/external laser
+	uint8_t  int_laser_pos; //0-36, 0xFF for switched OFF all
+	uint8_t  ext_laser_pos; //0-8, 0xFF for switched OFF all
+
 };
 
 struct experiment_task_init_t {
@@ -38,4 +42,12 @@ struct experiment_task_init_t {
 	circular_buffer_t * event_buffer;
 	uint8_t	sub_state;
 };
+
+uint32_t experiment_task_laser_set_current(experiment_task_t * const me, uint32_t laser_id, uint32_t percent);
+uint32_t experiment_task_laser_get_current(experiment_task_t * const me, uint32_t laser_id);
+uint32_t experiment_task_int_laser_switchon(experiment_task_t * const me, uint32_t laser_id);
+uint32_t experiment_task_ext_laser_switchon(experiment_task_t * const me, uint32_t laser_id);
+uint32_t experiment_task_int_laser_switchoff(experiment_task_t * const me);
+uint32_t experiment_task_ext_laser_switchoff(experiment_task_t * const me);
+
 #endif /* APP_EXPERIMENT_EXPERIMENT_TASK_H_ */

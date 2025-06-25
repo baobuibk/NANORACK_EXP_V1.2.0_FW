@@ -12,6 +12,7 @@
 #include "lt8722.h"
 #include "temperature_control.h"
 #include "temperature_monitor.h"
+#include "experiment_task.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -21,6 +22,10 @@
 
 extern temperature_control_task_t temperature_control_task_inst ;
 static temperature_control_task_t *ptemperature_control_task = &temperature_control_task_inst;
+
+extern experiment_task_t experiment_task_inst;
+static experiment_task_t *pexperiment_task = &experiment_task_inst;
+
 /*************************************************
  *                Private variable                 *
  *************************************************/
@@ -92,33 +97,41 @@ static void CMD_Start_Auto_Mode(EmbeddedCli *cli, char *args, void *context);
 static void CMD_Stop_Auto_Mode(EmbeddedCli *cli, char *args, void *context);
 
 
+static void CMD_Set_Laser_Int_Current(EmbeddedCli *cli, char *args, void *context);
+static void CMD_Set_Laser_Ext_Current(EmbeddedCli *cli, char *args, void *context);
+static void CMD_Laser_Get_Current(EmbeddedCli *cli, char *args, void *context);
+static void CMD_Int_Laser_Switch_On(EmbeddedCli *cli, char *args, void *context);
+static void CMD_Ext_Laser_Switch_On(EmbeddedCli *cli, char *args, void *context);
+static void CMD_Int_Laser_Switch_Off(EmbeddedCli *cli, char *args, void *context);
+static void CMD_Ext_Laser_Switch_Off(EmbeddedCli *cli, char *args, void *context);
 
-static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context);
-static void CMD_TEC_Get_Auto(EmbeddedCli *cli, char *args, void *context);
-static void CMD_HTR_Set_Auto(EmbeddedCli *cli, char *args, void *context);
-static void CMD_HTR_Get_Auto(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Temp_Set_Auto(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Temp_Get_Auto(EmbeddedCli *cli, char *args, void *context);
 
-static void CMD_Sens_List(EmbeddedCli *cli, char *args, void *context);
-static void CMD_LSMSens_Get(EmbeddedCli *cli, char *args, void *context);
-static void CMD_H3LSens_Get(EmbeddedCli *cli, char *args, void *context);
-static void CMD_BMESens_Get(EmbeddedCli *cli, char *args, void *context);
-static void CMD_H250Sens_Get(EmbeddedCli *cli, char *args, void *context);
-static void CMD_K33Sens_Get(EmbeddedCli *cli, char *args, void *context);
-
-// Laser Photo
-static void CMD_Set_Laser(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Get_Current(EmbeddedCli *cli, char *args, void *context);
-static void CMD_PD_Get(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Sample_Set_PD(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Sample_Set_Rate(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Sample_Trig(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Sample_Status_Get(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Sample_Get(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Sample_Get_Char(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Sample_Get_Buf(EmbeddedCli *cli, char *args, void *context);
-static void CMD_Sample_Get_Buf_Char(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_TEC_Get_Auto(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_HTR_Set_Auto(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_HTR_Get_Auto(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Temp_Set_Auto(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Temp_Get_Auto(EmbeddedCli *cli, char *args, void *context);
+//
+//static void CMD_Sens_List(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_LSMSens_Get(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_H3LSens_Get(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_BMESens_Get(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_H250Sens_Get(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_K33Sens_Get(EmbeddedCli *cli, char *args, void *context);
+//
+//// Laser Photo
+//static void CMD_Set_Laser(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Get_Current(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_PD_Get(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Sample_Set_PD(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Sample_Set_Rate(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Sample_Trig(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Sample_Status_Get(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Sample_Get(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Sample_Get_Char(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Sample_Get_Buf(EmbeddedCli *cli, char *args, void *context);
+//static void CMD_Sample_Get_Buf_Char(EmbeddedCli *cli, char *args, void *context);
 
 /*************************************************
  *                 Command  Array                *
@@ -170,13 +183,20 @@ static const CliCommandBinding cliStaticBindings_internal[] = {
 
 
 // Laser Photo
-	{ "Laser", "laser_set_current",    "format: laser_set_current [0(int)/1(ext)] [dac_val]",  true, NULL, CMD_Set_Laser },
-	{ NULL, "get_current",  "format: get_current [int/ext]",                                   true, NULL, CMD_Get_Current },
-	    { NULL, "pd_get",       "format: pd_get [pd_index]",                                       true, NULL, CMD_PD_Get },
-	    { NULL, "sp_set_pd",    "format: sp_set_pd [photo_index]",                                 true, NULL, CMD_Sample_Set_PD },
-	    { NULL, "sp_set_rate",  "format: sp_set_rate [sampling_rate] [num_samples]",               true, NULL, CMD_Sample_Set_Rate },
-	    { NULL, "sp_trig",      "format: sp_trig",                                                 true, NULL, CMD_Sample_Trig },
-	    { NULL, "sp_status",    "format: sp_status",                                               true, NULL, CMD_Sample_Status_Get },
+	{ "Laser", "laser_int_set_current",    "format: laser_int_set_current [percent]",  true, NULL, CMD_Set_Laser_Int_Current },
+	{ "Laser", "laser_ext_set_current",    "format: laser_ext_set_current  [percent]",  true, NULL, CMD_Set_Laser_Ext_Current },
+	{ "Laser", "laser_get_current",    "format: laser_get_current  ",  true, NULL, CMD_Laser_Get_Current },
+	{ "Laser", "laser_int_switch_on",    "format: laser_int_switch_on  pos  ",  true, NULL, CMD_Int_Laser_Switch_On },
+	{ "Laser", "laser_ext_switch_on",    "format: laser_ext_switch_on  pos  ",  true, NULL, CMD_Ext_Laser_Switch_On },
+	{ "Laser", "laser_int_switch_off",    "format: laser_int_switch_off  ",  true, NULL, CMD_Int_Laser_Switch_Off },
+	{ "Laser", "laser_ext_switch_off",    "format: laser_ext_switch_off  ",  true, NULL, CMD_Ext_Laser_Switch_Off },
+
+//	{ NULL, "get_current",  "format: get_current [int/ext]",                                   true, NULL, CMD_Get_Current },
+//	    { NULL, "pd_get",       "format: pd_get [pd_index]",                                       true, NULL, CMD_PD_Get },
+//	    { NULL, "sp_set_pd",    "format: sp_set_pd [photo_index]",                                 true, NULL, CMD_Sample_Set_PD },
+//	    { NULL, "sp_set_rate",  "format: sp_set_rate [sampling_rate] [num_samples]",               true, NULL, CMD_Sample_Set_Rate },
+//	    { NULL, "sp_trig",      "format: sp_trig",                                                 true, NULL, CMD_Sample_Trig },
+//	    { NULL, "sp_status",    "format: sp_status",                                               true, NULL, CMD_Sample_Status_Get },
 
 	//    { "Auto",  "auto_tec_set", "Enable/disable TECs for auto control [tecX_en 0/1]",      true,  NULL, CMD_TEC_Set_Auto },
 //    { "Auto",  "auto_tec_get", "List enabled TEC channels for auto control [0-3, a]",     true,  NULL, CMD_TEC_Get_Auto },
@@ -618,6 +638,115 @@ static void CMD_Stop_Auto_Mode(EmbeddedCli *cli, char *args, void *context)
 {
 	temperature_control_man_mode_set(ptemperature_control_task);
 	cli_printf(cli, "Auto mode stopped");
+}
+
+/*
+ * format: laser_int_set_current  percent
+ */
+static void CMD_Set_Laser_Int_Current(EmbeddedCli *cli, char *args, void *context)
+{
+	uint32_t tokenCount = embeddedCliGetTokenCount(args);
+
+	if (tokenCount != 1)
+	{
+		cli_printf(cli, "format: laser_set_current 0/1 percent (0 for internal, 1 for external\r\n");
+		return;
+	}
+
+	const char *arg1 = embeddedCliGetToken(args, 2);
+	int16_t percent = atoi(arg1);
+	if (percent > 100)
+
+		{
+			cli_printf(cli, "argument 1 out of range,(0-100)\r\n");
+			return;
+		}
+	experiment_task_laser_set_current(pexperiment_task, 0, percent);
+	cli_printf(cli, "set internal laser to %d percent\r\n",percent);
+}
+
+static void CMD_Set_Laser_Ext_Current(EmbeddedCli *cli, char *args, void *context)
+{
+	uint32_t tokenCount = embeddedCliGetTokenCount(args);
+
+	if (tokenCount != 1)
+	{
+		cli_printf(cli, "format: laser_set_current 0/1 percent (0 for internal, 1 for external\r\n");
+		return;
+	}
+
+	const char *arg1 = embeddedCliGetToken(args, 1);
+	int16_t percent = atoi(arg1);
+	if (percent > 100)
+
+		{
+			cli_printf(cli, "argument 1 out of range,(0-100)\r\n");
+			return;
+		}
+	experiment_task_laser_set_current(pexperiment_task, 1, percent);
+	cli_printf(cli, "set internal laser to %d percent\r\n",percent);
+}
+
+static void CMD_Laser_Get_Current(EmbeddedCli *cli, char *args, void *context)
+{
+	uint32_t int_laser_current = experiment_task_laser_get_current(pexperiment_task, 0);
+	uint32_t ext_laser_current = experiment_task_laser_get_current(pexperiment_task, 1);
+
+	cli_printf(cli, "int_laser current = %d percent ext_laser current = %d percent",int_laser_current,ext_laser_current);
+}
+static void CMD_Int_Laser_Switch_On(EmbeddedCli *cli, char *args, void *context)
+{
+	uint32_t tokenCount = embeddedCliGetTokenCount(args);
+
+	if (tokenCount != 1)
+	{
+		cli_printf(cli, "format: laser_int_switch position\r\n");
+		return;
+	}
+
+	const char *arg1 = embeddedCliGetToken(args, 1);
+	int32_t laser_idx = atoi(arg1);
+	if (laser_idx > INTERNAL_CHAIN_CHANNEL_NUM - 1)
+
+		{
+			cli_printf(cli, "argument 1 out of range,(0-35)\r\n");
+			return;
+		}
+	experiment_task_int_laser_switchon(pexperiment_task,  laser_idx);
+	cli_printf(cli, "switched int laser %d on\r\n",laser_idx);
+}
+
+
+
+static void CMD_Ext_Laser_Switch_On(EmbeddedCli *cli, char *args, void *context)
+{
+	uint32_t tokenCount = embeddedCliGetTokenCount(args);
+
+	if (tokenCount != 1)
+	{
+		cli_printf(cli, "format: laser_ext_switch position\r\n");
+		return;
+	}
+
+	const char *arg1 = embeddedCliGetToken(args, 1);
+	int32_t laser_idx = atoi(arg1);
+	if (laser_idx > EXTERNAL_CHAIN_CHANNEL_NUM - 1)
+
+		{
+			cli_printf(cli, "argument 1 out of range,(0-7)\r\n");
+			return;
+		}
+	experiment_task_ext_laser_switchon(pexperiment_task,  laser_idx);
+	cli_printf(cli, "switched ext laser %d on\r\n",laser_idx);
+}
+
+static void CMD_Int_Laser_Switch_Off(EmbeddedCli *cli, char *args, void *context)
+{
+	experiment_task_int_laser_switchoff(pexperiment_task);
+}
+static void CMD_Ext_Laser_Switch_Off(EmbeddedCli *cli, char *args, void *context){
+	experiment_task_ext_laser_switchoff(pexperiment_task);
+
 }
 
 //static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context) {

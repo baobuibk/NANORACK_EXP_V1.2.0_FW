@@ -5,6 +5,7 @@
  *      Author: Admin
  */
 #include "experiment_task.h"
+#include "bsp_laser.h"
 #include "dbc_assert.h"
 #include "app_signals.h"
 #include "error_codes.h"
@@ -157,9 +158,43 @@ static state_t experiment_task_state_data_aqui_handler(experiment_task_t * const
 	}
  }
 
-static state_t experiment_task_state_data_send_handler(experiment_task_t * const me, experiment_evt_t const * const e)
+uint32_t experiment_task_laser_set_current(experiment_task_t * const me, uint32_t laser_id, uint32_t percent)
 {
-
+	if ((laser_id > 1) || (percent > 100)) return ERROR_NOT_SUPPORTED;
+	bsp_laser_set_current(laser_id, percent);
+	me->laser_current[laser_id] = percent;
+	return ERROR_OK;
 }
 
-
+uint32_t experiment_task_laser_get_current(experiment_task_t * const me, uint32_t laser_id)
+{
+	uint32_t index;
+	if (laser_id > 0) index = 1; else index = 0;
+	return me->laser_current[index];
+}
+uint32_t experiment_task_int_laser_switchon(experiment_task_t * const me, uint32_t laser_id)
+{
+	if (laser_id > INTERNAL_CHAIN_CHANNEL_NUM - 1) return ERROR_NOT_SUPPORTED;
+	bsp_laser_int_switch_on(laser_id);
+	me->int_laser_pos = laser_id;
+	return ERROR_OK;
+}
+uint32_t experiment_task_int_laser_switchoff(experiment_task_t * const me)
+{
+	bsp_laser_int_switch_off_all();
+	me->int_laser_pos = 0xFF;
+	return ERROR_OK;
+}
+uint32_t experiment_task_ext_laser_switchon(experiment_task_t * const me, uint32_t laser_id)
+{
+	if (laser_id > EXTERNAL_CHAIN_CHANNEL_NUM - 1) return ERROR_NOT_SUPPORTED;
+	bsp_laser_ext_switch_on(laser_id);
+	me->ext_laser_pos = laser_id;
+	return ERROR_OK;
+}
+uint32_t experiment_task_ext_laser_switchoff(experiment_task_t * const me)
+{
+	bsp_laser_ext_switch_off_all();
+	me->ext_laser_pos = 0xFF;
+	return ERROR_OK;
+}
