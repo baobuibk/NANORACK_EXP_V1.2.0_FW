@@ -63,11 +63,6 @@ extern struct lt8722_dev tec_3;
 extern struct lt8722_dev * tec_table[];
 extern struct mb85rs2mt_dev fram;
 
-extern MCP4902_Device_t DAC_device;
-extern ADG1414_Device_t laser_int;
-extern ADG1414_Device_t laser_ext;
-//extern ADC_DMA_Device_t laser_adc;
-extern ADG1414_Device_t photo_sw;
-extern ADS8327_Device_t photo_adc;
+
 
 #endif /* BOARD_BOARD_H_ */

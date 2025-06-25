@@ -59,18 +59,18 @@ struct lt8722_dev tec_3 = {
 		  .status = 0
 };
 
-struct lt8722_dev * tec_table[] = {&tec_0, &tec_1, &tec_2, &tec_3};
-
-uint32_t bsp_tec_enable(uint32_t tec_idx)
-{
-	if (tec_idx > 3) return ERROR_NOT_SUPPORTED;
-	return lt8722_set_swen_req(tec_table[tec_idx], LT8722_SWEN_REQ_ENABLED);
-}
-uint32_t bsp_tec_disable(uint32_t tec_idx)
-{
-	if (tec_idx > 3) return ERROR_NOT_SUPPORTED;
-	return lt8722_set_swen_req(tec_table[tec_idx], LT8722_SWEN_REQ_DISABLED);
-}
+//struct lt8722_dev * tec_table[] = {&tec_0, &tec_1, &tec_2, &tec_3};
+//
+//uint32_t bsp_tec_enable(uint32_t tec_idx)
+//{
+//	if (tec_idx > 3) return ERROR_NOT_SUPPORTED;
+//	return lt8722_set_swen_req(tec_table[tec_idx], LT8722_SWEN_REQ_ENABLED);
+//}
+//uint32_t bsp_tec_disable(uint32_t tec_idx)
+//{
+//	if (tec_idx > 3) return ERROR_NOT_SUPPORTED;
+//	return lt8722_set_swen_req(tec_table[tec_idx], LT8722_SWEN_REQ_DISABLED);
+//}
 
 uint32_t bsp_temperature_power_on(void)
 {
@@ -82,14 +82,14 @@ uint32_t bsp_temperature_power_off(void)
 	LL_GPIO_ResetOutputPin(EF_5_EN_GPIO_Port, EF_5_EN_Pin);
 	return ERROR_OK;
 }
-
-uint32_t bsp_tec_init(uint32_t tec_idx)
-{
-	if (tec_idx > 3) return ERROR_NOT_SUPPORTED;
-	return lt8722_init(tec_table[tec_idx]);
-}
-uint32_t bsp_tec_output_voltage(uint32_t tec_idx, uint32_t dir, uint16_t voltage)
-{
-	if (tec_idx > 3) return ERROR_NOT_SUPPORTED;
-	return lt8722_set_output_voltage_channel(tec_table[tec_idx], dir, (int64_t)voltage * 1000000);
-}
+//
+//uint32_t bsp_tec_init(uint32_t tec_idx)
+//{
+//	if (tec_idx > 3) return ERROR_NOT_SUPPORTED;
+//	return lt8722_init(tec_table[tec_idx]);
+//}
+//uint32_t bsp_tec_output_voltage(uint32_t tec_idx, uint32_t dir, uint16_t voltage)
+//{
+//	if (tec_idx > 3) return ERROR_NOT_SUPPORTED;
+//	return lt8722_set_output_voltage_channel(tec_table[tec_idx], dir, (int64_t)voltage * 1000000);
+//}

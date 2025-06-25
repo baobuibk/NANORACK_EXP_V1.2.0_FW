@@ -28,6 +28,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
+#include "stm32f7xx_ll_dma.h"
 #include "stm32f7xx_ll_i2c.h"
 #include "stm32f7xx_ll_rcc.h"
 #include "stm32f7xx_ll_bus.h"
@@ -36,7 +37,6 @@ extern "C" {
 #include "stm32f7xx_ll_cortex.h"
 #include "stm32f7xx_ll_utils.h"
 #include "stm32f7xx_ll_pwr.h"
-#include "stm32f7xx_ll_dma.h"
 #include "stm32f7xx_ll_spi.h"
 #include "stm32f7xx_ll_tim.h"
 #include "stm32f7xx_ll_usart.h"
@@ -152,8 +152,6 @@ void Error_Handler(void);
 #define PHOTO_ADC_CS_GPIO_Port GPIOD
 #define PHOTO_ADC_CONV_Pin LL_GPIO_PIN_10
 #define PHOTO_ADC_CONV_GPIO_Port GPIOD
-#define PHOTO_ADC_EOC_Pin LL_GPIO_PIN_11
-#define PHOTO_ADC_EOC_GPIO_Port GPIOD
 #define CONS_TX_Pin LL_GPIO_PIN_6
 #define CONS_TX_GPIO_Port GPIOC
 #define CONS_RX_Pin LL_GPIO_PIN_7

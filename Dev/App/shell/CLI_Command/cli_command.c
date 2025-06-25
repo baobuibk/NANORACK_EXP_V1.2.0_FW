@@ -177,28 +177,28 @@ static const CliCommandBinding cliStaticBindings_internal[] = {
 
 	{ "TEC",   "tec_man_volt_set",  "Set TEC output : tec_idx C/H voltage",        true,  NULL, CMD_TEC_Man_Set_Volt },
 	{ "TEC",   "tec_man_output_set",  "Set TEC output : tec_idx C/H voltage",        true,  NULL, CMD_TEC_Man_Set_Output },
-    { "TEC",   "tec_dir_get",  "Read direction setting of TEC [0-3, a=all]",              true,  NULL, CMD_TEC_Get_Dir },
-
-    // Sensors
-    { "Sensor","sens_list",    "List all available connected sensors",                    true,  NULL, CMD_Sens_List },
-    { "Sensor","lsm_sens_get", "Read LSM6DSOX data [0=all, 1=acc, 2=gyro]",               true,  NULL, CMD_LSMSens_Get },
-    { "Sensor","h3l_sens_get", "Read high-g acceleration data from H3LIS331 sensor",      true,  NULL, CMD_H3LSens_Get },
-    { "Sensor","bme_sens_get", "Read BME280 sensor [0=all, 1=temp, 2=RH, 3=pressure]",     true,  NULL, CMD_BMESens_Get },
-    { "Sensor","h250_sens_get","Read CO₂ concentration from H-250(G)-3V sensor",          false, NULL, CMD_H250Sens_Get },
-    { "Sensor","k33_sens_get", "Read CO₂ concentration from K33 ICB-F 10% sensor",        false, NULL, CMD_K33Sens_Get },
-
-	// Laser Photo
-    { NULL, "set_laser",    "format: set_laser [int/ext] [laser_index] [dac_val]",             true, NULL, CMD_Set_Laser },
-    { NULL, "get_current",  "format: get_current [int/ext]",                                   true, NULL, CMD_Get_Current },
-    { NULL, "pd_get",       "format: pd_get [pd_index]",                                       true, NULL, CMD_PD_Get },
-    { NULL, "sp_set_pd",    "format: sp_set_pd [photo_index]",                                 true, NULL, CMD_Sample_Set_PD },
-    { NULL, "sp_set_rate",  "format: sp_set_rate [sampling_rate] [num_samples]",               true, NULL, CMD_Sample_Set_Rate },
-    { NULL, "sp_trig",      "format: sp_trig",                                                 true, NULL, CMD_Sample_Trig },
-    { NULL, "sp_status",    "format: sp_status",                                               true, NULL, CMD_Sample_Status_Get },
-    { NULL, "sp_get",       "format: sp_get [num_samples]",                                    true, NULL, CMD_Sample_Get },
-    { NULL, "sp_get_c",     "format: sp_get_c [num_samples]",                                  true, NULL, CMD_Sample_Get_Char },
-    { NULL, "sp_get_buf",   "format: sp_get_buf",                                              true, NULL, CMD_Sample_Get_Buf },
-    { NULL, "sp_get_buf_c", "format: sp_get_buf_c",                                            true, NULL, CMD_Sample_Get_Buf_Char },
+//    { "TEC",   "tec_dir_get",  "Read direction setting of TEC [0-3, a=all]",              true,  NULL, CMD_TEC_Get_Dir },
+//
+//    // Sensors
+//    { "Sensor","sens_list",    "List all available connected sensors",                    true,  NULL, CMD_Sens_List },
+//    { "Sensor","lsm_sens_get", "Read LSM6DSOX data [0=all, 1=acc, 2=gyro]",               true,  NULL, CMD_LSMSens_Get },
+//    { "Sensor","h3l_sens_get", "Read high-g acceleration data from H3LIS331 sensor",      true,  NULL, CMD_H3LSens_Get },
+//    { "Sensor","bme_sens_get", "Read BME280 sensor [0=all, 1=temp, 2=RH, 3=pressure]",     true,  NULL, CMD_BMESens_Get },
+//    { "Sensor","h250_sens_get","Read CO₂ concentration from H-250(G)-3V sensor",          false, NULL, CMD_H250Sens_Get },
+//    { "Sensor","k33_sens_get", "Read CO₂ concentration from K33 ICB-F 10% sensor",        false, NULL, CMD_K33Sens_Get },
+//
+//	// Laser Photo
+//    { NULL, "set_laser",    "format: set_laser [int/ext] [laser_index] [dac_val]",             true, NULL, CMD_Set_Laser },
+//    { NULL, "get_current",  "format: get_current [int/ext]",                                   true, NULL, CMD_Get_Current },
+//    { NULL, "pd_get",       "format: pd_get [pd_index]",                                       true, NULL, CMD_PD_Get },
+//    { NULL, "sp_set_pd",    "format: sp_set_pd [photo_index]",                                 true, NULL, CMD_Sample_Set_PD },
+//    { NULL, "sp_set_rate",  "format: sp_set_rate [sampling_rate] [num_samples]",               true, NULL, CMD_Sample_Set_Rate },
+//    { NULL, "sp_trig",      "format: sp_trig",                                                 true, NULL, CMD_Sample_Trig },
+//    { NULL, "sp_status",    "format: sp_status",                                               true, NULL, CMD_Sample_Status_Get },
+//    { NULL, "sp_get",       "format: sp_get [num_samples]",                                    true, NULL, CMD_Sample_Get },
+//    { NULL, "sp_get_c",     "format: sp_get_c [num_samples]",                                  true, NULL, CMD_Sample_Get_Char },
+//    { NULL, "sp_get_buf",   "format: sp_get_buf",                                              true, NULL, CMD_Sample_Get_Buf },
+//    { NULL, "sp_get_buf_c", "format: sp_get_buf_c",                                            true, NULL, CMD_Sample_Get_Buf_Char },
 };
 
 /*************************************************
@@ -611,544 +611,544 @@ static void CMD_Stop_Auto_Mode(EmbeddedCli *cli, char *args, void *context)
 	cli_printf(cli, "Auto mode stopped");
 }
 
-static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement TEC auto mode set logic
-	const char *arg1 = embeddedCliGetToken(args, 1);
-	const char *arg2 = embeddedCliGetToken(args, 2);
-	const char *arg3 = embeddedCliGetToken(args, 3);
-	const char *arg4 = embeddedCliGetToken(args, 4);
-	uint8_t tec_0_en = atoi(arg1);
-	uint8_t tec_1_en = atoi(arg2);
-	uint8_t tec_2_en = atoi(arg3);
-	uint8_t tec_3_en = atoi(arg4);
-	temperature_set_tec_auto(tec_0_en, tec_1_en, tec_2_en, tec_3_en);
-	char buffer[60];
-	if (tec_0_en) {
-		snprintf(buffer, sizeof(buffer), "TEC 0 is ena");
-		embeddedCliPrint(cli, buffer);
-	}
-	if (tec_1_en) {
-		snprintf(buffer, sizeof(buffer), "TEC 1 is ena");
-		embeddedCliPrint(cli, buffer);
-	}
-	if (tec_2_en) {
-		snprintf(buffer, sizeof(buffer), "TEC 2 is ena");
-		embeddedCliPrint(cli, buffer);
-	}
-	if (tec_3_en) {
-		snprintf(buffer, sizeof(buffer), "TEC 3 is ena");
-		embeddedCliPrint(cli, buffer);
-	}
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_TEC_Get_Auto(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement TEC auto mode get logic
-	const char *arg1 = embeddedCliGetToken(args, 1);
-	uint8_t tec_en[4];
-	temperature_get_tec_auto(&tec_en[0], &tec_en[1], &tec_en[2], &tec_en[3]);
-	char buffer[60];
-	if (*arg1 == 'a' || *arg1 == '\0') {
-		for (uint8_t channel = 0; channel < 4; channel++) {
-			if (tec_en[channel])
-				snprintf(buffer, sizeof(buffer), "TEC %d is ena", channel);
-			else
-				snprintf(buffer, sizeof(buffer), "TEC %d is dis", channel);
-			embeddedCliPrint(cli, buffer);
-		}
-	}
-	else if (*arg1 == '0' || *arg1 == '1' || *arg1 == '2' || *arg1 == '3') {
-		int channel = atoi(arg1);
-		if (tec_en[channel])
-			snprintf(buffer, sizeof(buffer), "TEC %d is ena", channel);
-		else
-			snprintf(buffer, sizeof(buffer), "TEC %d is dis", channel);
-		embeddedCliPrint(cli, buffer);
-	}
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_HTR_Set_Auto(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement Heater auto mode set logic
-	const char *arg1 = embeddedCliGetToken(args, 1);
-	const char *arg2 = embeddedCliGetToken(args, 2);
-	const char *arg3 = embeddedCliGetToken(args, 3);
-	const char *arg4 = embeddedCliGetToken(args, 4);
-	uint8_t htr_en[4] = {atoi(arg1), atoi(arg2), atoi(arg3), atoi(arg4)};
-	temperature_set_heater_auto(htr_en[0], htr_en[1], htr_en[2], htr_en[3]);
-	char buffer[60];
-	for (uint8_t channel = 0; channel < 4; channel++) {
-		if (htr_en[channel]) {
-			snprintf(buffer, sizeof(buffer), "Heater %d is ena", channel);
-			embeddedCliPrint(cli, buffer);
-		}
-	}
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_HTR_Get_Auto(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement Heater auto mode get logic
-	const char *arg1 = embeddedCliGetToken(args, 1);
-	uint8_t htr_en[4];
-	temperature_get_heater_auto(&htr_en[0], &htr_en[1], &htr_en[2], &htr_en[3]);
-	char buffer[60];
-	if (*arg1 == 'a' || *arg1 == '\0') {
-		for (uint8_t channel = 0; channel < 4; channel++) {
-			if (htr_en[channel])
-				snprintf(buffer, sizeof(buffer), "Heater %d is ena", channel);
-			else
-				snprintf(buffer, sizeof(buffer), "Heater %d is dis", channel);
-			embeddedCliPrint(cli, buffer);
-		}
-	}
-	else if (*arg1 == '0' || *arg1 == '1' || *arg1 == '2' || *arg1 == '3') {
-		int channel = atoi(arg1);
-		if (htr_en[channel])
-			snprintf(buffer, sizeof(buffer), "Heater %d is ena", channel);
-		else
-			snprintf(buffer, sizeof(buffer), "Heater %d is dis", channel);
-		embeddedCliPrint(cli, buffer);
-	}
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_Temp_Set_Auto(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement auto temperature set logic
-	const char *arg1 = embeddedCliGetToken(args, 1);
-	uint8_t Temp_auto = atoi(arg1)? 1: 0;
-	temperature_set_auto_ctrl(Temp_auto);
-	if (Temp_auto)
-		embeddedCliPrint(cli, "Temp is auto ctrl");
-	else
-		embeddedCliPrint(cli, "Temp isn't auto ctrl");
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_Temp_Get_Auto(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement auto temperature get logic
-	uint8_t Temp_auto = 0;
-	temperature_get_auto_ctrl(&Temp_auto);
-	if (Temp_auto)
-		embeddedCliPrint(cli, "Temp is auto ctrl");
-	else
-		embeddedCliPrint(cli, "Temp isn't auto ctrl");
-	embeddedCliPrint(cli, "");
-}
-
-
-static void CMD_Sens_List(EmbeddedCli *cli, char *args, void *context) {
-	// TODO:
-	char buffer[100];
-	NTC_get_temperature(NTC_Temperature);
-	int16_t temp;
-	for (uint8_t channel = 0; channel < 8; channel++) {
-		temp = NTC_Temperature[channel];
-		if (temp != 0x7FFF) {
-			Sensor_list.ntc = 1;
-			break;
-		}
-	}
-	Sensor_I2C_Init();
-	strcpy(buffer, "sensor:");
-	if (Sensor_list.ntc) {
-		strcat(buffer, "ntc,");
-	}
-	if (Sensor_list.lsm) {
-		strcat(buffer, "lsm,");
-	}
-	if (Sensor_list.bmp) {
-		strcat(buffer, "bmp,");
-	}
-	if (Sensor_list.bme) {
-		strcat(buffer, "bme,");
-	}
-	if (Sensor_list.h3l) {
-		strcat(buffer, "h3l,");
-	}
-	if (Sensor_list.h250) {
-		strcat(buffer, "h250,");
-	}
-	if (Sensor_list.k33) {
-		strcat(buffer, "k33,");
-	}
-	if (Sensor_list.sfc) {
-		strcat(buffer, "sfc,");
-	}
-
-	size_t len = strlen(buffer);
-	if (len >= 1 && buffer[len - 1] == ',') {
-	    buffer[len - 1] = '\0';
-	}
-
-	embeddedCliPrint(cli, buffer);
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_LSMSens_Get(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement LSM sensor get logic
-	LSM6DSOX_Read_Data(&LSM6DSOX_Data);
-    char buffer[80];
-
-    const char *arg1 = embeddedCliGetToken(args, 1);
-	if (*arg1 == 'a' || *arg1 == '\0')
-		snprintf(buffer, sizeof(buffer), "accel:%d %d %d(g),gyro:%d %d %d(dps)",
-								LSM6DSOX_Data.Accel.x, LSM6DSOX_Data.Accel.y, LSM6DSOX_Data.Accel.z,
-								LSM6DSOX_Data.Gyro.x, LSM6DSOX_Data.Gyro.y, LSM6DSOX_Data.Gyro.z);
-	else if (*arg1 == '0')
-		snprintf(buffer, sizeof(buffer), "accel:%d %d %d(g)", LSM6DSOX_Data.Accel.x, LSM6DSOX_Data.Accel.y, LSM6DSOX_Data.Accel.z);
-	else if (*arg1 == '1')
-		snprintf(buffer, sizeof(buffer), "gyro:%d %d %d(dps)", LSM6DSOX_Data.Gyro.x, LSM6DSOX_Data.Gyro.y, LSM6DSOX_Data.Gyro.z);
-	embeddedCliPrint(cli, buffer);
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_H3LSens_Get(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement H3L sensor get logic
-	H3LIS331DL_Get_Accel(&H3LIS331DL_Data);
-	char buffer[50];
-	snprintf(buffer, sizeof(buffer), "accel:%d %d %d(g)", (int16_t)H3LIS331DL_Data.x, (int16_t)H3LIS331DL_Data.y, (int16_t)H3LIS331DL_Data.z);
-	embeddedCliPrint(cli, buffer);
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_BMESens_Get(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement BME sensor get logic
-	BME280_Read_Data(&BME280_Data);
-	char buffer[80];
-
-	const char *arg1 = embeddedCliGetToken(args, 1);
-	if (*arg1 == 'a' || *arg1 == '\0')
-		snprintf(buffer, sizeof(buffer), "temp:%.2f(C),humid:%.2f(%%),press:%.2f(hPa)", BME280_Data.temperature, BME280_Data.humidity, BME280_Data.pressure);
-	else if (*arg1 == '0')
-		snprintf(buffer, sizeof(buffer), "temp:%.2f(C)", BME280_Data.temperature);
-	else if (*arg1 == '1')
-		snprintf(buffer, sizeof(buffer), "humid:%.2f(%%)", BME280_Data.humidity);
-	else if (*arg1 == '2')
-		snprintf(buffer, sizeof(buffer), "press:%.2f(hPa)", BME280_Data.pressure);
-	embeddedCliPrint(cli, buffer);
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_H250Sens_Get(EmbeddedCli *cli, char *args, void *context) {
-	// TODO: Implement H250 sensor get logic
-	H250_I2C_Read_Data(&H250_I2C_Data);
-	char buffer[30];
-	snprintf(buffer, sizeof(buffer), "co2:%.2f(%%)", (float)H250_I2C_Data/100.0f);
-	embeddedCliPrint(cli, buffer);
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_K33Sens_Get(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement K33 sensor get logic
-	K33_Read_Data(&K33_Data);
-	char buffer[80];
-
-	const char *arg1 = embeddedCliGetToken(args, 1);
-	if (*arg1 == 'a' || *arg1 == '\0')
-		snprintf(buffer, sizeof(buffer), "co2:%.2f(%%),temp:%.2f(C),humid:%.2f(%%)", (float)(K33_Data.CO2/1000.0f), (float)(K33_Data.Temp/100.0f), (float)(K33_Data.RH/100.0f));
-	else if (*arg1 == '0')
-		snprintf(buffer, sizeof(buffer), "co2:%.2f(%%)", (float)(K33_Data.CO2/1000.0f));
-	else if (*arg1 == '1')
-		snprintf(buffer, sizeof(buffer), "temp:%.2f(C)", (float)(K33_Data.Temp/100.0f));
-	else if (*arg1 == '2')
-		snprintf(buffer, sizeof(buffer), "humid:%.2f(%%)", (float)(K33_Data.RH/100.0f));
-	embeddedCliPrint(cli, buffer);
-	embeddedCliPrint(cli, "");
-}
-
-static void CMD_Set_Laser(EmbeddedCli *cli, char *args, void *context) {
-    int argc = embeddedCliGetTokenCount(args);
-    if (argc < 3) {
-        embeddedCliPrint(cli, "Too few args. Format: set_laser [int/ext] [laser_index] [dac_val]\n");
-        return;
-    }
-
-    const char *mode = embeddedCliGetToken(args, 1);
-    uint8_t laser_ind = (uint8_t)atoi(embeddedCliGetToken(args, 2));
-
-    if (strcmp(mode, "int") == 0) {
-        if (laser_ind == 0) {
-            if (argc != 3) {
-                embeddedCliPrint(cli, "Usage: set_laser int 0\n");
-                return;
-            }
-            MCP4902_Shutdown(&DAC_device, MCP4902_CHA);
-            ADG1414_Chain_SwitchAllOff(&laser_int);
-        } else if (laser_ind <= 36) {
-//            if (argc != 4) {
-//                embeddedCliPrint(cli, "Usage: set_laser int [1-36] [dac_val_percent]\n");
+//static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement TEC auto mode set logic
+//	const char *arg1 = embeddedCliGetToken(args, 1);
+//	const char *arg2 = embeddedCliGetToken(args, 2);
+//	const char *arg3 = embeddedCliGetToken(args, 3);
+//	const char *arg4 = embeddedCliGetToken(args, 4);
+//	uint8_t tec_0_en = atoi(arg1);
+//	uint8_t tec_1_en = atoi(arg2);
+//	uint8_t tec_2_en = atoi(arg3);
+//	uint8_t tec_3_en = atoi(arg4);
+//	temperature_set_tec_auto(tec_0_en, tec_1_en, tec_2_en, tec_3_en);
+//	char buffer[60];
+//	if (tec_0_en) {
+//		snprintf(buffer, sizeof(buffer), "TEC 0 is ena");
+//		embeddedCliPrint(cli, buffer);
+//	}
+//	if (tec_1_en) {
+//		snprintf(buffer, sizeof(buffer), "TEC 1 is ena");
+//		embeddedCliPrint(cli, buffer);
+//	}
+//	if (tec_2_en) {
+//		snprintf(buffer, sizeof(buffer), "TEC 2 is ena");
+//		embeddedCliPrint(cli, buffer);
+//	}
+//	if (tec_3_en) {
+//		snprintf(buffer, sizeof(buffer), "TEC 3 is ena");
+//		embeddedCliPrint(cli, buffer);
+//	}
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_TEC_Get_Auto(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement TEC auto mode get logic
+//	const char *arg1 = embeddedCliGetToken(args, 1);
+//	uint8_t tec_en[4];
+//	temperature_get_tec_auto(&tec_en[0], &tec_en[1], &tec_en[2], &tec_en[3]);
+//	char buffer[60];
+//	if (*arg1 == 'a' || *arg1 == '\0') {
+//		for (uint8_t channel = 0; channel < 4; channel++) {
+//			if (tec_en[channel])
+//				snprintf(buffer, sizeof(buffer), "TEC %d is ena", channel);
+//			else
+//				snprintf(buffer, sizeof(buffer), "TEC %d is dis", channel);
+//			embeddedCliPrint(cli, buffer);
+//		}
+//	}
+//	else if (*arg1 == '0' || *arg1 == '1' || *arg1 == '2' || *arg1 == '3') {
+//		int channel = atoi(arg1);
+//		if (tec_en[channel])
+//			snprintf(buffer, sizeof(buffer), "TEC %d is ena", channel);
+//		else
+//			snprintf(buffer, sizeof(buffer), "TEC %d is dis", channel);
+//		embeddedCliPrint(cli, buffer);
+//	}
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_HTR_Set_Auto(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement Heater auto mode set logic
+//	const char *arg1 = embeddedCliGetToken(args, 1);
+//	const char *arg2 = embeddedCliGetToken(args, 2);
+//	const char *arg3 = embeddedCliGetToken(args, 3);
+//	const char *arg4 = embeddedCliGetToken(args, 4);
+//	uint8_t htr_en[4] = {atoi(arg1), atoi(arg2), atoi(arg3), atoi(arg4)};
+//	temperature_set_heater_auto(htr_en[0], htr_en[1], htr_en[2], htr_en[3]);
+//	char buffer[60];
+//	for (uint8_t channel = 0; channel < 4; channel++) {
+//		if (htr_en[channel]) {
+//			snprintf(buffer, sizeof(buffer), "Heater %d is ena", channel);
+//			embeddedCliPrint(cli, buffer);
+//		}
+//	}
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_HTR_Get_Auto(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement Heater auto mode get logic
+//	const char *arg1 = embeddedCliGetToken(args, 1);
+//	uint8_t htr_en[4];
+//	temperature_get_heater_auto(&htr_en[0], &htr_en[1], &htr_en[2], &htr_en[3]);
+//	char buffer[60];
+//	if (*arg1 == 'a' || *arg1 == '\0') {
+//		for (uint8_t channel = 0; channel < 4; channel++) {
+//			if (htr_en[channel])
+//				snprintf(buffer, sizeof(buffer), "Heater %d is ena", channel);
+//			else
+//				snprintf(buffer, sizeof(buffer), "Heater %d is dis", channel);
+//			embeddedCliPrint(cli, buffer);
+//		}
+//	}
+//	else if (*arg1 == '0' || *arg1 == '1' || *arg1 == '2' || *arg1 == '3') {
+//		int channel = atoi(arg1);
+//		if (htr_en[channel])
+//			snprintf(buffer, sizeof(buffer), "Heater %d is ena", channel);
+//		else
+//			snprintf(buffer, sizeof(buffer), "Heater %d is dis", channel);
+//		embeddedCliPrint(cli, buffer);
+//	}
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_Temp_Set_Auto(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement auto temperature set logic
+//	const char *arg1 = embeddedCliGetToken(args, 1);
+//	uint8_t Temp_auto = atoi(arg1)? 1: 0;
+//	temperature_set_auto_ctrl(Temp_auto);
+//	if (Temp_auto)
+//		embeddedCliPrint(cli, "Temp is auto ctrl");
+//	else
+//		embeddedCliPrint(cli, "Temp isn't auto ctrl");
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_Temp_Get_Auto(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement auto temperature get logic
+//	uint8_t Temp_auto = 0;
+//	temperature_get_auto_ctrl(&Temp_auto);
+//	if (Temp_auto)
+//		embeddedCliPrint(cli, "Temp is auto ctrl");
+//	else
+//		embeddedCliPrint(cli, "Temp isn't auto ctrl");
+//	embeddedCliPrint(cli, "");
+//}
+//
+//
+//static void CMD_Sens_List(EmbeddedCli *cli, char *args, void *context) {
+//	// TODO:
+//	char buffer[100];
+//	NTC_get_temperature(NTC_Temperature);
+//	int16_t temp;
+//	for (uint8_t channel = 0; channel < 8; channel++) {
+//		temp = NTC_Temperature[channel];
+//		if (temp != 0x7FFF) {
+//			Sensor_list.ntc = 1;
+//			break;
+//		}
+//	}
+//	Sensor_I2C_Init();
+//	strcpy(buffer, "sensor:");
+//	if (Sensor_list.ntc) {
+//		strcat(buffer, "ntc,");
+//	}
+//	if (Sensor_list.lsm) {
+//		strcat(buffer, "lsm,");
+//	}
+//	if (Sensor_list.bmp) {
+//		strcat(buffer, "bmp,");
+//	}
+//	if (Sensor_list.bme) {
+//		strcat(buffer, "bme,");
+//	}
+//	if (Sensor_list.h3l) {
+//		strcat(buffer, "h3l,");
+//	}
+//	if (Sensor_list.h250) {
+//		strcat(buffer, "h250,");
+//	}
+//	if (Sensor_list.k33) {
+//		strcat(buffer, "k33,");
+//	}
+//	if (Sensor_list.sfc) {
+//		strcat(buffer, "sfc,");
+//	}
+//
+//	size_t len = strlen(buffer);
+//	if (len >= 1 && buffer[len - 1] == ',') {
+//	    buffer[len - 1] = '\0';
+//	}
+//
+//	embeddedCliPrint(cli, buffer);
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_LSMSens_Get(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement LSM sensor get logic
+//	LSM6DSOX_Read_Data(&LSM6DSOX_Data);
+//    char buffer[80];
+//
+//    const char *arg1 = embeddedCliGetToken(args, 1);
+//	if (*arg1 == 'a' || *arg1 == '\0')
+//		snprintf(buffer, sizeof(buffer), "accel:%d %d %d(g),gyro:%d %d %d(dps)",
+//								LSM6DSOX_Data.Accel.x, LSM6DSOX_Data.Accel.y, LSM6DSOX_Data.Accel.z,
+//								LSM6DSOX_Data.Gyro.x, LSM6DSOX_Data.Gyro.y, LSM6DSOX_Data.Gyro.z);
+//	else if (*arg1 == '0')
+//		snprintf(buffer, sizeof(buffer), "accel:%d %d %d(g)", LSM6DSOX_Data.Accel.x, LSM6DSOX_Data.Accel.y, LSM6DSOX_Data.Accel.z);
+//	else if (*arg1 == '1')
+//		snprintf(buffer, sizeof(buffer), "gyro:%d %d %d(dps)", LSM6DSOX_Data.Gyro.x, LSM6DSOX_Data.Gyro.y, LSM6DSOX_Data.Gyro.z);
+//	embeddedCliPrint(cli, buffer);
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_H3LSens_Get(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement H3L sensor get logic
+//	H3LIS331DL_Get_Accel(&H3LIS331DL_Data);
+//	char buffer[50];
+//	snprintf(buffer, sizeof(buffer), "accel:%d %d %d(g)", (int16_t)H3LIS331DL_Data.x, (int16_t)H3LIS331DL_Data.y, (int16_t)H3LIS331DL_Data.z);
+//	embeddedCliPrint(cli, buffer);
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_BMESens_Get(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement BME sensor get logic
+//	BME280_Read_Data(&BME280_Data);
+//	char buffer[80];
+//
+//	const char *arg1 = embeddedCliGetToken(args, 1);
+//	if (*arg1 == 'a' || *arg1 == '\0')
+//		snprintf(buffer, sizeof(buffer), "temp:%.2f(C),humid:%.2f(%%),press:%.2f(hPa)", BME280_Data.temperature, BME280_Data.humidity, BME280_Data.pressure);
+//	else if (*arg1 == '0')
+//		snprintf(buffer, sizeof(buffer), "temp:%.2f(C)", BME280_Data.temperature);
+//	else if (*arg1 == '1')
+//		snprintf(buffer, sizeof(buffer), "humid:%.2f(%%)", BME280_Data.humidity);
+//	else if (*arg1 == '2')
+//		snprintf(buffer, sizeof(buffer), "press:%.2f(hPa)", BME280_Data.pressure);
+//	embeddedCliPrint(cli, buffer);
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_H250Sens_Get(EmbeddedCli *cli, char *args, void *context) {
+//	// TODO: Implement H250 sensor get logic
+//	H250_I2C_Read_Data(&H250_I2C_Data);
+//	char buffer[30];
+//	snprintf(buffer, sizeof(buffer), "co2:%.2f(%%)", (float)H250_I2C_Data/100.0f);
+//	embeddedCliPrint(cli, buffer);
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_K33Sens_Get(EmbeddedCli *cli, char *args, void *context) {
+//    // TODO: Implement K33 sensor get logic
+//	K33_Read_Data(&K33_Data);
+//	char buffer[80];
+//
+//	const char *arg1 = embeddedCliGetToken(args, 1);
+//	if (*arg1 == 'a' || *arg1 == '\0')
+//		snprintf(buffer, sizeof(buffer), "co2:%.2f(%%),temp:%.2f(C),humid:%.2f(%%)", (float)(K33_Data.CO2/1000.0f), (float)(K33_Data.Temp/100.0f), (float)(K33_Data.RH/100.0f));
+//	else if (*arg1 == '0')
+//		snprintf(buffer, sizeof(buffer), "co2:%.2f(%%)", (float)(K33_Data.CO2/1000.0f));
+//	else if (*arg1 == '1')
+//		snprintf(buffer, sizeof(buffer), "temp:%.2f(C)", (float)(K33_Data.Temp/100.0f));
+//	else if (*arg1 == '2')
+//		snprintf(buffer, sizeof(buffer), "humid:%.2f(%%)", (float)(K33_Data.RH/100.0f));
+//	embeddedCliPrint(cli, buffer);
+//	embeddedCliPrint(cli, "");
+//}
+//
+//static void CMD_Set_Laser(EmbeddedCli *cli, char *args, void *context) {
+//    int argc = embeddedCliGetTokenCount(args);
+//    if (argc < 3) {
+//        embeddedCliPrint(cli, "Too few args. Format: set_laser [int/ext] [laser_index] [dac_val]\n");
+//        return;
+//    }
+//
+//    const char *mode = embeddedCliGetToken(args, 1);
+//    uint8_t laser_ind = (uint8_t)atoi(embeddedCliGetToken(args, 2));
+//
+//    if (strcmp(mode, "int") == 0) {
+//        if (laser_ind == 0) {
+//            if (argc != 3) {
+//                embeddedCliPrint(cli, "Usage: set_laser int 0\n");
 //                return;
 //            }
-
-            float percent = (float)atof(embeddedCliGetToken(args, 3));
-            if (percent < 0 || percent > 100) {
-                embeddedCliPrint(cli, "Percent must be 0-100\n");
-                return;
-            }
-
-            uint8_t dac_val = Map(percent, 0, 100, 0, 255);
-            MCP4902_Set_DAC(&DAC_device, MCP4902_CHA, dac_val);
-            ADG1414_Chain_SwitchOn(&laser_int, laser_ind);
-        } else {
-            embeddedCliPrint(cli, "Laser index out of range for int (1-36)\n");
-            return;
-        }
-    } else if (strcmp(mode, "ext") == 0) {
-        if (laser_ind == 0) {
-            if (argc != 3) {
-                embeddedCliPrint(cli, "Usage: set_laser ext 0\n");
-                return;
-            }
-            MCP4902_Shutdown(&DAC_device, MCP4902_CHB);
-            ADG1414_Chain_SwitchAllOff(&laser_ext);
-        } else if (laser_ind <= 8) {
-//            if (argc != 4) {
-//                embeddedCliPrint(cli, "Usage: set_laser ext [1-8] [dac_val_percent]\n");
+//            MCP4902_Shutdown(&DAC_device, MCP4902_CHA);
+//            ADG1414_Chain_SwitchAllOff(&laser_int);
+//        } else if (laser_ind <= 36) {
+////            if (argc != 4) {
+////                embeddedCliPrint(cli, "Usage: set_laser int [1-36] [dac_val_percent]\n");
+////                return;
+////            }
+//
+//            float percent = (float)atof(embeddedCliGetToken(args, 3));
+//            if (percent < 0 || percent > 100) {
+//                embeddedCliPrint(cli, "Percent must be 0-100\n");
 //                return;
 //            }
-
-            float percent = (float)atof(embeddedCliGetToken(args, 3));
-            if (percent < 0 || percent > 100) {
-                embeddedCliPrint(cli, "Percent must be 0-100\n");
-                return;
-            }
-
-            uint8_t dac_val = Map(percent, 0, 100, 0, 255);
-            MCP4902_Set_DAC(&DAC_device, MCP4902_CHB, dac_val);
-            ADG1414_Chain_SwitchOn(&laser_ext, laser_ind);
-        } else {
-            embeddedCliPrint(cli, "Laser index out of range for ext (1-8)\n");
-            return;
-        }
-    } else {
-        embeddedCliPrint(cli, "Invalid mode. Use 'int' or 'ext'\n");
-        return;
-    }
-
-    embeddedCliPrint(cli, "Laser set successfully\n");
-}
-
-static void CMD_Get_Current(EmbeddedCli *cli, char *args, void *context) {
-    return;
-}
-
-static void CMD_PD_Get(EmbeddedCli *cli, char *args, void *context) {
+//
+//            uint8_t dac_val = Map(percent, 0, 100, 0, 255);
+//            MCP4902_Set_DAC(&DAC_device, MCP4902_CHA, dac_val);
+//            ADG1414_Chain_SwitchOn(&laser_int, laser_ind);
+//        } else {
+//            embeddedCliPrint(cli, "Laser index out of range for int (1-36)\n");
+//            return;
+//        }
+//    } else if (strcmp(mode, "ext") == 0) {
+//        if (laser_ind == 0) {
+//            if (argc != 3) {
+//                embeddedCliPrint(cli, "Usage: set_laser ext 0\n");
+//                return;
+//            }
+//            MCP4902_Shutdown(&DAC_device, MCP4902_CHB);
+//            ADG1414_Chain_SwitchAllOff(&laser_ext);
+//        } else if (laser_ind <= 8) {
+////            if (argc != 4) {
+////                embeddedCliPrint(cli, "Usage: set_laser ext [1-8] [dac_val_percent]\n");
+////                return;
+////            }
+//
+//            float percent = (float)atof(embeddedCliGetToken(args, 3));
+//            if (percent < 0 || percent > 100) {
+//                embeddedCliPrint(cli, "Percent must be 0-100\n");
+//                return;
+//            }
+//
+//            uint8_t dac_val = Map(percent, 0, 100, 0, 255);
+//            MCP4902_Set_DAC(&DAC_device, MCP4902_CHB, dac_val);
+//            ADG1414_Chain_SwitchOn(&laser_ext, laser_ind);
+//        } else {
+//            embeddedCliPrint(cli, "Laser index out of range for ext (1-8)\n");
+//            return;
+//        }
+//    } else {
+//        embeddedCliPrint(cli, "Invalid mode. Use 'int' or 'ext'\n");
+//        return;
+//    }
+//
+//    embeddedCliPrint(cli, "Laser set successfully\n");
+//}
+//
+//static void CMD_Get_Current(EmbeddedCli *cli, char *args, void *context) {
+//    return;
+//}
+//
+//static void CMD_PD_Get(EmbeddedCli *cli, char *args, void *context) {
+////    int argc = embeddedCliGetTokenCount(args);
+////    if (argc != 2) {
+////        embeddedCliPrint(cli, "Usage: pd_get [pd_index]\n");
+////        return;
+////    }
+//
+//    uint8_t pd_ind = (uint8_t)atoi(embeddedCliGetToken(args, 1));
+//    if (pd_ind < 1 || pd_ind > 36) {
+//        embeddedCliPrint(cli, "Invalid pd_index. Must be in 1–36\n");
+//        return;
+//    }
+//
+////    SPI_SetDataLength(SPI2, LL_SPI_DATAWIDTH_8BIT);
+////    SPI_SetPrescaler(SPI2, LL_SPI_BAUDRATEPRESCALER_DIV16);
+//    ADG1414_Chain_SwitchOn(&photo_sw, pd_ind);
+//    LL_mDelay(10);
+//
+//    ADS8327_Read_Data_Polling(&photo_adc, 1000);
+//
+//    char msg[64];
+//    snprintf(msg, sizeof(msg), "\r\nPD_index[%d]: %d\n", pd_ind, (uint16_t)photo_adc.ADC_val);
+//    embeddedCliPrint(cli, msg);
+//}
+//
+//static void CMD_Sample_Set_PD(EmbeddedCli *cli, char *args, void *context) {
+////    int argc = embeddedCliGetTokenCount(args);
+////    if (argc < 2) {
+////        embeddedCliPrint(cli, "Too few arguments. Format: sample_set_pd [pd_index]\n");
+////        return;
+////    }
+////    if (argc > 2) {
+////        embeddedCliPrint(cli, "Too many arguments. Format: sample_set_pd [pd_index]\n");
+////        return;
+////    }
+//
+//    const char *arg1 = embeddedCliGetToken(args, 1);
+//    uint8_t pd_ind = (uint8_t)atoi(arg1);
+//
+//    if (pd_ind < 1 || pd_ind > 36) {
+//        embeddedCliPrint(cli, "Invalid PD index. Must be between 1 and 36.\n");
+//        return;
+//    }
+//
+////    SPI_SetDataLength(SPI2, LL_SPI_DATAWIDTH_8BIT);
+////    SPI_SetPrescaler(SPI2, LL_SPI_BAUDRATEPRESCALER_DIV16);
+//    ADG1414_Chain_SwitchOn(&photo_sw, pd_ind);
+//    photo_index = pd_ind;
+//
+//    char buf[64];
+//    snprintf(buf, sizeof(buf), "PD index %d selected successfully.\n", pd_ind);
+//    embeddedCliPrint(cli, buf);
+//}
+//
+//static void CMD_Sample_Set_Rate(EmbeddedCli *cli, char *args, void *context) {
 //    int argc = embeddedCliGetTokenCount(args);
-//    if (argc != 2) {
-//        embeddedCliPrint(cli, "Usage: pd_get [pd_index]\n");
+//    if (argc < 3) {
+//        embeddedCliPrint(cli, "Too few arguments. Format: sp_set_rate [sampling_rate] [num_samples]\n");
 //        return;
 //    }
-
-    uint8_t pd_ind = (uint8_t)atoi(embeddedCliGetToken(args, 1));
-    if (pd_ind < 1 || pd_ind > 36) {
-        embeddedCliPrint(cli, "Invalid pd_index. Must be in 1–36\n");
-        return;
-    }
-
-//    SPI_SetDataLength(SPI2, LL_SPI_DATAWIDTH_8BIT);
-//    SPI_SetPrescaler(SPI2, LL_SPI_BAUDRATEPRESCALER_DIV16);
-    ADG1414_Chain_SwitchOn(&photo_sw, pd_ind);
-    LL_mDelay(10);
-
-    ADS8327_Read_Data_Polling(&photo_adc, 1000);
-
-    char msg[64];
-    snprintf(msg, sizeof(msg), "\r\nPD_index[%d]: %d\n", pd_ind, (uint16_t)photo_adc.ADC_val);
-    embeddedCliPrint(cli, msg);
-}
-
-static void CMD_Sample_Set_PD(EmbeddedCli *cli, char *args, void *context) {
-//    int argc = embeddedCliGetTokenCount(args);
-//    if (argc < 2) {
-//        embeddedCliPrint(cli, "Too few arguments. Format: sample_set_pd [pd_index]\n");
+//
+//    uint32_t sp_rate = (uint32_t)atoi(embeddedCliGetToken(args, 1));
+//    uint32_t num_sample = (uint32_t)atoi(embeddedCliGetToken(args, 2));
+//
+//    if (sp_rate < 1 || sp_rate > 330000 || num_sample < 1 || num_sample > 50000) {
+//        embeddedCliPrint(cli, "Invalid sampling rate or number of samples.\n");
 //        return;
 //    }
-//    if (argc > 2) {
-//        embeddedCliPrint(cli, "Too many arguments. Format: sample_set_pd [pd_index]\n");
+//
+//    uint32_t AutoReload = ROUND(1000000.0f / sp_rate) - 1;
+//    LL_TIM_DisableIT_UPDATE(TIM1);
+//    LL_TIM_DisableCounter(TIM1);
+//    LL_TIM_SetAutoReload(TIM1, AutoReload);
+//
+//    adc_rec_total = num_sample;
+//    samp_rate = sp_rate;
+//
+//    embeddedCliPrint(cli, "Sampling rate and sample count set successfully.\n");
+//}
+//
+//static void CMD_Sample_Trig(EmbeddedCli *cli, char *args, void *context) {
+//    if (!adc_rec_total || !samp_rate) {
+//        embeddedCliPrint(cli, "Sampling rate or sample count is not set.\n");
 //        return;
 //    }
-
-    const char *arg1 = embeddedCliGetToken(args, 1);
-    uint8_t pd_ind = (uint8_t)atoi(arg1);
-
-    if (pd_ind < 1 || pd_ind > 36) {
-        embeddedCliPrint(cli, "Invalid PD index. Must be between 1 and 36.\n");
-        return;
-    }
-
-//    SPI_SetDataLength(SPI2, LL_SPI_DATAWIDTH_8BIT);
-//    SPI_SetPrescaler(SPI2, LL_SPI_BAUDRATEPRESCALER_DIV16);
-    ADG1414_Chain_SwitchOn(&photo_sw, pd_ind);
-    photo_index = pd_ind;
-
-    char buf[64];
-    snprintf(buf, sizeof(buf), "PD index %d selected successfully.\n", pd_ind);
-    embeddedCliPrint(cli, buf);
-}
-
-static void CMD_Sample_Set_Rate(EmbeddedCli *cli, char *args, void *context) {
-    int argc = embeddedCliGetTokenCount(args);
-    if (argc < 3) {
-        embeddedCliPrint(cli, "Too few arguments. Format: sp_set_rate [sampling_rate] [num_samples]\n");
-        return;
-    }
-
-    uint32_t sp_rate = (uint32_t)atoi(embeddedCliGetToken(args, 1));
-    uint32_t num_sample = (uint32_t)atoi(embeddedCliGetToken(args, 2));
-
-    if (sp_rate < 1 || sp_rate > 330000 || num_sample < 1 || num_sample > 50000) {
-        embeddedCliPrint(cli, "Invalid sampling rate or number of samples.\n");
-        return;
-    }
-
-    uint32_t AutoReload = ROUND(1000000.0f / sp_rate) - 1;
-    LL_TIM_DisableIT_UPDATE(TIM1);
-    LL_TIM_DisableCounter(TIM1);
-    LL_TIM_SetAutoReload(TIM1, AutoReload);
-
-    adc_rec_total = num_sample;
-    samp_rate = sp_rate;
-
-    embeddedCliPrint(cli, "Sampling rate and sample count set successfully.\n");
-}
-
-static void CMD_Sample_Trig(EmbeddedCli *cli, char *args, void *context) {
-    if (!adc_rec_total || !samp_rate) {
-        embeddedCliPrint(cli, "Sampling rate or sample count is not set.\n");
-        return;
-    }
-
-    memset(adc_rec_buf, 0x00, adc_rec_total * 2);
-    adc_ptr = adc_rec_buf;
-    adc_rec_ind = 0;
-
-    SPI_SetDataLength(SPI2, LL_SPI_DATAWIDTH_16BIT);
-    SPI_SetPrescaler(SPI2, LL_SPI_BAUDRATEPRESCALER_DIV2);
-
-    LL_TIM_SetCounter(TIM1, 0);
-    LL_TIM_EnableIT_UPDATE(TIM1);
-    LL_TIM_EnableCounter(TIM1);
-
-    embeddedCliPrint(cli, "Sampling started.\n");
-}
-
-static void CMD_Sample_Status_Get(EmbeddedCli *cli, char *args, void *context) {
-    char buf[128];
-    snprintf(buf, sizeof(buf), "Photo: %d   Sampling_Rate: %ld SPS   Num_Samples: %ld S\n",
-             photo_index, samp_rate, adc_rec_total);
-    embeddedCliPrint(cli, buf);
-
-    if (adc_rec_ind == adc_rec_total) {
-        embeddedCliPrint(cli, "-> ADC Data ready to get!\n");
-    } else {
-        embeddedCliPrint(cli, "-> ADC Data is not ready!\n");
-    }
-}
-
-static void CMD_Sample_Get(EmbeddedCli *cli, char *args, void *context) {
-    if (!adc_rec_ind) {
-        embeddedCliPrint(cli, "Please send cmd 'sp_trig' first!\n");
-        return;
-    }
-
-    uint32_t num_sample = (uint32_t)atoi(embeddedCliGetToken(args, 1));
-    if (num_sample < 1 || num_sample > 50000) {
-        embeddedCliPrint(cli, "Invalid number of samples.\n");
-        return;
-    }
-
-    uint16_t crc_val = 0xffff;
-    uint8_t bytes_temp[3];
-    uint32_t header = (0x000FFFFF & num_sample) | 0xFFF00000;
-    bytes_temp[0] = (uint8_t)(header >> 16);
-    bytes_temp[1] = (uint8_t)(header >> 8);
-    bytes_temp[2] = (uint8_t)header;
-    UART_Driver_SendString(USART6, (const char *)bytes_temp);
-
-    for (uint32_t i = 0; i < num_sample; i++) {
-        crc16_CCITT_update(&crc_val, adc_rec_buf[i]);
-        bytes_temp[0] = adc_rec_buf[i] >> 8;
-        bytes_temp[1] = adc_rec_buf[i] & 0xFF;
-        UART_Driver_SendString(USART6, (const char *)bytes_temp);
-    }
-
-    bytes_temp[0] = crc_val >> 8;
-    bytes_temp[1] = crc_val & 0xFF;
-    UART_Driver_SendString(USART6, (const char *)bytes_temp);
-}
-
-static void CMD_Sample_Get_Char(EmbeddedCli *cli, char *args, void *context) {
-    if (!adc_rec_ind) {
-        embeddedCliPrint(cli, "Please send cmd 'sp_trig' first!\n");
-        return;
-    }
-
-    uint32_t num_sample = (uint32_t)atoi(embeddedCliGetToken(args, 1));
-    if (num_sample < 1 || num_sample > 50000) {
-        embeddedCliPrint(cli, "Invalid number of samples.\n");
-        return;
-    }
-
-    uint16_t crc_val = 0xffff;
-    char ascii_buf[5];
-    embeddedCliPrint(cli, "\n");
-
-    for (uint32_t i = 0; i < num_sample; i++) {
-        crc16_CCITT_update(&crc_val, adc_rec_buf[i]);
-        htoa(adc_rec_buf[i], ascii_buf);
-        UART_Driver_SendString(USART6, ascii_buf);
-    }
-
-    htoa(crc_val, ascii_buf);
-    UART_Driver_SendString(USART6, ascii_buf);
-}
-
-static void CMD_Sample_Get_Buf(EmbeddedCli *cli, char *args, void *context) {
-    if (!adc_rec_ind) {
-        embeddedCliPrint(cli, "Please send cmd 'sp_trig' first!\n");
-        return;
-    }
-
-    uint16_t crc_val = 0xffff;
-    uint8_t bytes_temp[3];
-    uint32_t header = (0x000FFFFF & adc_rec_total) | 0xFFF00000;
-
-    bytes_temp[0] = (uint8_t)(header >> 16);
-    bytes_temp[1] = (uint8_t)(header >> 8);
-    bytes_temp[2] = (uint8_t)header;
-    UART_Driver_SendString(USART6, (const char *)bytes_temp);
-
-    for (uint32_t i = 0; i < adc_rec_total; i++) {
-        crc16_CCITT_update(&crc_val, adc_rec_buf[i]);
-        bytes_temp[0] = adc_rec_buf[i] >> 8;
-        bytes_temp[1] = adc_rec_buf[i] & 0xFF;
-        UART_Driver_SendString(USART6, (const char *)bytes_temp);
-    }
-
-    bytes_temp[0] = crc_val >> 8;
-    bytes_temp[1] = crc_val & 0xFF;
-    UART_Driver_SendString(USART6, (const char *)bytes_temp);
-}
-
-static void CMD_Sample_Get_Buf_Char(EmbeddedCli *cli, char *args, void *context) {
-    if (!adc_rec_ind) {
-        embeddedCliPrint(cli, "Please send cmd 'sp_trig' first!\n");
-        return;
-    }
-
-    uint16_t crc_val = 0xffff;
-    char ascii_buf[5];
-    embeddedCliPrint(cli, "\n");
-
-    for (uint32_t i = 0; i < adc_rec_total; i++) {
-        crc16_CCITT_update(&crc_val, adc_rec_buf[i]);
-        htoa(adc_rec_buf[i], ascii_buf);
-        UART_Driver_SendString(USART6, ascii_buf);
-    }
-
-    htoa(crc_val, ascii_buf);
-    UART_Driver_SendString(USART6, ascii_buf);
-}
+//
+//    memset(adc_rec_buf, 0x00, adc_rec_total * 2);
+//    adc_ptr = adc_rec_buf;
+//    adc_rec_ind = 0;
+//
+//    SPI_SetDataLength(SPI2, LL_SPI_DATAWIDTH_16BIT);
+//    SPI_SetPrescaler(SPI2, LL_SPI_BAUDRATEPRESCALER_DIV2);
+//
+//    LL_TIM_SetCounter(TIM1, 0);
+//    LL_TIM_EnableIT_UPDATE(TIM1);
+//    LL_TIM_EnableCounter(TIM1);
+//
+//    embeddedCliPrint(cli, "Sampling started.\n");
+//}
+//
+//static void CMD_Sample_Status_Get(EmbeddedCli *cli, char *args, void *context) {
+//    char buf[128];
+//    snprintf(buf, sizeof(buf), "Photo: %d   Sampling_Rate: %ld SPS   Num_Samples: %ld S\n",
+//             photo_index, samp_rate, adc_rec_total);
+//    embeddedCliPrint(cli, buf);
+//
+//    if (adc_rec_ind == adc_rec_total) {
+//        embeddedCliPrint(cli, "-> ADC Data ready to get!\n");
+//    } else {
+//        embeddedCliPrint(cli, "-> ADC Data is not ready!\n");
+//    }
+//}
+//
+//static void CMD_Sample_Get(EmbeddedCli *cli, char *args, void *context) {
+//    if (!adc_rec_ind) {
+//        embeddedCliPrint(cli, "Please send cmd 'sp_trig' first!\n");
+//        return;
+//    }
+//
+//    uint32_t num_sample = (uint32_t)atoi(embeddedCliGetToken(args, 1));
+//    if (num_sample < 1 || num_sample > 50000) {
+//        embeddedCliPrint(cli, "Invalid number of samples.\n");
+//        return;
+//    }
+//
+//    uint16_t crc_val = 0xffff;
+//    uint8_t bytes_temp[3];
+//    uint32_t header = (0x000FFFFF & num_sample) | 0xFFF00000;
+//    bytes_temp[0] = (uint8_t)(header >> 16);
+//    bytes_temp[1] = (uint8_t)(header >> 8);
+//    bytes_temp[2] = (uint8_t)header;
+//    UART_Driver_SendString(USART6, (const char *)bytes_temp);
+//
+//    for (uint32_t i = 0; i < num_sample; i++) {
+//        crc16_CCITT_update(&crc_val, adc_rec_buf[i]);
+//        bytes_temp[0] = adc_rec_buf[i] >> 8;
+//        bytes_temp[1] = adc_rec_buf[i] & 0xFF;
+//        UART_Driver_SendString(USART6, (const char *)bytes_temp);
+//    }
+//
+//    bytes_temp[0] = crc_val >> 8;
+//    bytes_temp[1] = crc_val & 0xFF;
+//    UART_Driver_SendString(USART6, (const char *)bytes_temp);
+//}
+//
+//static void CMD_Sample_Get_Char(EmbeddedCli *cli, char *args, void *context) {
+//    if (!adc_rec_ind) {
+//        embeddedCliPrint(cli, "Please send cmd 'sp_trig' first!\n");
+//        return;
+//    }
+//
+//    uint32_t num_sample = (uint32_t)atoi(embeddedCliGetToken(args, 1));
+//    if (num_sample < 1 || num_sample > 50000) {
+//        embeddedCliPrint(cli, "Invalid number of samples.\n");
+//        return;
+//    }
+//
+//    uint16_t crc_val = 0xffff;
+//    char ascii_buf[5];
+//    embeddedCliPrint(cli, "\n");
+//
+//    for (uint32_t i = 0; i < num_sample; i++) {
+//        crc16_CCITT_update(&crc_val, adc_rec_buf[i]);
+//        htoa(adc_rec_buf[i], ascii_buf);
+//        UART_Driver_SendString(USART6, ascii_buf);
+//    }
+//
+//    htoa(crc_val, ascii_buf);
+//    UART_Driver_SendString(USART6, ascii_buf);
+//}
+//
+//static void CMD_Sample_Get_Buf(EmbeddedCli *cli, char *args, void *context) {
+//    if (!adc_rec_ind) {
+//        embeddedCliPrint(cli, "Please send cmd 'sp_trig' first!\n");
+//        return;
+//    }
+//
+//    uint16_t crc_val = 0xffff;
+//    uint8_t bytes_temp[3];
+//    uint32_t header = (0x000FFFFF & adc_rec_total) | 0xFFF00000;
+//
+//    bytes_temp[0] = (uint8_t)(header >> 16);
+//    bytes_temp[1] = (uint8_t)(header >> 8);
+//    bytes_temp[2] = (uint8_t)header;
+//    UART_Driver_SendString(USART6, (const char *)bytes_temp);
+//
+//    for (uint32_t i = 0; i < adc_rec_total; i++) {
+//        crc16_CCITT_update(&crc_val, adc_rec_buf[i]);
+//        bytes_temp[0] = adc_rec_buf[i] >> 8;
+//        bytes_temp[1] = adc_rec_buf[i] & 0xFF;
+//        UART_Driver_SendString(USART6, (const char *)bytes_temp);
+//    }
+//
+//    bytes_temp[0] = crc_val >> 8;
+//    bytes_temp[1] = crc_val & 0xFF;
+//    UART_Driver_SendString(USART6, (const char *)bytes_temp);
+//}
+//
+//static void CMD_Sample_Get_Buf_Char(EmbeddedCli *cli, char *args, void *context) {
+//    if (!adc_rec_ind) {
+//        embeddedCliPrint(cli, "Please send cmd 'sp_trig' first!\n");
+//        return;
+//    }
+//
+//    uint16_t crc_val = 0xffff;
+//    char ascii_buf[5];
+//    embeddedCliPrint(cli, "\n");
+//
+//    for (uint32_t i = 0; i < adc_rec_total; i++) {
+//        crc16_CCITT_update(&crc_val, adc_rec_buf[i]);
+//        htoa(adc_rec_buf[i], ascii_buf);
+//        UART_Driver_SendString(USART6, ascii_buf);
+//    }
+//
+//    htoa(crc_val, ascii_buf);
+//    UART_Driver_SendString(USART6, ascii_buf);
+//}
 /*************************************************
  *                  End CMD List                 *
  *************************************************/

@@ -8,10 +8,7 @@
 #ifndef ADS8327_H_
 #define ADS8327_H_
 
-#include "stm32f7xx_ll_spi.h"  // Thay đổi tùy dòng STM32 bạn dùng
-#include "stm32f7xx_ll_gpio.h"
-#include "stm32f7xx_ll_system.h"
-#include "stm32f7xx_ll_exti.h"
+#include "board.h"
 #include <stdbool.h>
 
 
@@ -84,11 +81,6 @@ typedef struct {
     uint8_t tran_ind;
     uint8_t buf[2];
 } ADS8327_Device_t;
-
-extern uint16_t adc_rec_buf[50010];
-extern uint16_t *adc_ptr;
-extern uint32_t adc_rec_ind;
-extern uint32_t adc_rec_total;
 
 void ISR_SPI_IRQHandler(ADS8327_Device_t *dev);
 void ISR_TIMTrigger_IRQHandler(ADS8327_Device_t *dev);

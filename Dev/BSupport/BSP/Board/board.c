@@ -24,4 +24,4 @@ ADG1414_Device_t laser_int;
 ADG1414_Device_t laser_ext;
 //ADC_DMA_Device_t laser_adc;
 ADG1414_Device_t photo_sw;
-ADS8327_Device_t photo_adc;
+

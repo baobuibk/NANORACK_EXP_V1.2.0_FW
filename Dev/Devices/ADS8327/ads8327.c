@@ -6,13 +6,8 @@
  */
 #include "ads8327.h"
 #include "main.h"
-#include "uart_driver.h"
-#include "stdio.h"
 
-uint16_t adc_rec_buf[50010];
-uint16_t *adc_ptr = adc_rec_buf;
-uint32_t adc_rec_ind = 0;
-uint32_t adc_rec_total = 0;
+
 
 static uint16_t CFR_user_default = 0x0EFD;		//0000 1110 1111 1101
 
@@ -160,49 +155,23 @@ void ISR_SPI_IRQHandler(ADS8327_Device_t *dev)
 
 void ISR_TIMTrigger_IRQHandler(ADS8327_Device_t *dev)
 {
-	WRITE_REG(dev->convst_port->BSRR, dev->convst_pin);
-	// Collect data
-	if(adc_rec_ind < adc_rec_total)
-	{
-		WRITE_REG(dev->cs_port->BSRR, (dev->cs_pin << 16));
-		SET_BIT(dev->spi->CR2, SPI_CR2_TXEIE);
-		*(__IO uint16_t *)&dev->spi->DR = 0xAAAA;
-		adc_ptr[adc_rec_ind++] = dev->ADC_val;
-	}
-	else
-	{
-		CLEAR_BIT(dev->spi->CR2, SPI_CR2_TXEIE);		//Clear TXE
-		CLEAR_BIT(TIM1->CR1, TIM_CR1_CEN);
-		CLEAR_BIT(TIM1->DIER, TIM_DIER_UIE);
-		char buffer[60];
-		snprintf(buffer, sizeof(buffer), "\r\n %ld samples successfully taken!\r\n", adc_rec_ind);
-		UART_Driver_SendString(USART6, buffer);
-	}
-
-	//	LL_GPIO_SetOutputPin(dev->convst_port, dev->convst_pin);
-	//	LL_GPIO_ResetOutputPin(dev->cs_port, dev->cs_pin);
-	//	LL_SPI_EnableIT_TXE(dev->spi);
-	//	LL_SPI_TransmitData16(dev->spi, 0xAAAA); 	// Transmit dummy
+	WRITE_REG(PHOTO_ADC_CS_GPIO_Port->BSRR, PHOTO_ADC_CS_Pin);
+	WRITE_REG(PHOTO_ADC_CONV_GPIO_Port->BSRR, PHOTO_ADC_CONV_Pin << 16);
+	WRITE_REG(PHOTO_ADC_CONV_GPIO_Port->BSRR, PHOTO_ADC_CONV_Pin);
+	SPI2->DR = 0xAAAA;
+	WRITE_REG(PHOTO_ADC_CS_GPIO_Port->BSRR, PHOTO_ADC_CS_Pin << 16);
+	WRITE_REG(TIM1->SR, ~(TIM_SR_UIF));
 
 }
 
-void ISR_SPI_IRQHandler(ADS8327_Device_t *dev)
+void ISR_SPI_DMA_IRQHandler(ADS8327_Device_t *dev)
 {
-	// Kiểm tra cờ ngắt TXE
-	if (READ_BIT(dev->spi->SR, SPI_SR_TXE) == (SPI_SR_TXE))//LL_SPI_IsActiveFlag_TXE(dev->spi))
-	{
-		WRITE_REG(dev->convst_port->BSRR, (dev->convst_pin << 16));
-		dev->ADC_val = (uint16_t)(READ_REG(dev->spi->DR));
-		WRITE_REG(dev->cs_port->BSRR, dev->cs_pin);
-		CLEAR_BIT(dev->spi->CR2, SPI_CR2_TXEIE);
-		dev->tran_ind = 0;
-		//Trigger convst
-//		LL_GPIO_ResetOutputPin(dev->convst_port, dev->convst_pin);
-//		dev->ADC_val = LL_SPI_ReceiveData16(dev->spi);
-//		LL_GPIO_SetOutputPin(dev->cs_port, dev->cs_pin);
-//		LL_SPI_DisableIT_TXE(dev->spi);
-//		dev->tran_ind = 0;
-	}
+	//WRITE_REG(PD_CS_GPIO_Port->BSRR, PD_CS_Pin);
+	WRITE_REG(DMA1->LIFCR , DMA_LIFCR_CTCIF3);
+	CLEAR_BIT(TIM1->CR1, TIM_CR1_CEN);
+	CLEAR_BIT(TIM1->DIER, TIM_DIER_UIE);
+	//LL_DMA_SetMemoryAddress(DMA1, LL_DMA_STREAM_3, (uint32_t)adc_ptr++);
+	//LL_DMA_EnableStream(DMA1, LL_DMA_STREAM_3);
 }
 
 void SPI_Tranceiver_IT(ADS8327_Device_t *dev)

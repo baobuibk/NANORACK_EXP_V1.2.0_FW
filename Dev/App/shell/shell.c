@@ -159,7 +159,7 @@ void CLI_UART_stdio_rx_callback() {
         embeddedCliReceiveChar(shell_uart_cli, received_data);
      }
 }
-void USART6_IRQHandler(void)
+void Shell_USART_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
 	CLI_UART_stdio_rx_callback();
