@@ -32,14 +32,14 @@ static void MCP4902_Write(MCP4902_Device_t *dev)
     	LL_GPIO_ResetOutputPin(dev->cs_port, dev->cs_pin);
     	temp = i ? ((1<<MCP4902_AB_BIT)|(1<<MCP4902_GA_BIT)|(1<<MCP4902_SHDN_BIT)|(dev->dac_channel[i]<<4)):
 				   ((1<<MCP4902_GA_BIT)|(1<<MCP4902_SHDN_BIT)|(dev->dac_channel[i]<<4));
-
-        LL_SPI_TransmitData8(dev->spi, (uint8_t)(temp>>8));
         while (!LL_SPI_IsActiveFlag_TXE(dev->spi));  // Đợi TXE
-        while (LL_SPI_IsActiveFlag_BSY(dev->spi));   // Đợi BSY
+        LL_SPI_TransmitData8(dev->spi, (uint8_t)(temp>>8));
 
-        LL_SPI_TransmitData8(dev->spi, (uint8_t)temp);
+ //       while (LL_SPI_IsActiveFlag_BSY(dev->spi));   // Đợi BSY
 		while (!LL_SPI_IsActiveFlag_TXE(dev->spi));  // Đợi TXE
-		while (LL_SPI_IsActiveFlag_BSY(dev->spi));   // Đợi BSY
+        LL_SPI_TransmitData8(dev->spi, (uint8_t)temp);
+
+//		while (LL_SPI_IsActiveFlag_BSY(dev->spi));   // Đợi BSY
 
         LL_GPIO_SetOutputPin(dev->cs_port, dev->cs_pin);
 

@@ -60,9 +60,8 @@
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
-extern IS66_t IS66WV ;
 /* USER CODE BEGIN EV */
-
+extern IS66_t IS66WV;
 /* USER CODE END EV */
 
 /******************************************************************************/

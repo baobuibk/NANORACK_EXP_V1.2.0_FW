@@ -8,7 +8,8 @@
 // Định nghĩa lệnh
 #define SRAM_READ_CMD  0x03 // Lệnh đọc
 #define SRAM_WRITE_CMD 0x02 // Lệnh ghi
-
+#define SRAM_READ_ID_CMD 0x9F // Lệnh ghi
+#define SRAM_FAST_READ_CMD 0x0B
 // Struct cấu hình SRAM
 typedef struct {
     SPI_TypeDef *spi;               // Instance SPI (SPI2)
@@ -26,6 +27,10 @@ typedef struct {
 void SRAM_Initialize(IS66_t *config);
 void SRAM_Read(IS66_t *end1, uint32_t address, uint32_t size, uint8_t *buffer);
 void SRAM_Write(IS66_t *end1, uint32_t address, uint32_t size, uint8_t *buffer);
+
+void SRAM_read_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) ;
+void SRAM_write_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) ;
+void SRAM_read_id(IS66_t *config, uint8_t *buffer);
 uint8_t SRAM_IsTransferDone(IS66_t *end1);
 void DMA_TX_callback(IS66_t *dev)  ;
 void DMA_RX_callback(IS66_t *dev)  ;

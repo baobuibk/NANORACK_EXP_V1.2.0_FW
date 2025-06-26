@@ -57,9 +57,6 @@ DMA_HandleTypeDef hdma_adc1;
 
 TIM_HandleTypeDef htim1;
 
-
-#define SPI_RAM_BUFFER_SIZE 100000
-static uint8_t sram_data[SPI_RAM_BUFFER_SIZE];
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -169,14 +166,26 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-//  app_init();
-//  app_start();
-//  app_run();
+  uint8_t buffer[8] = {0};
+
+  bsp_spi_ram_read_id(buffer);
+  bsp_spi_ram_read_id(buffer);
+
+  uint8_t write_buffer[1024];
+  uint8_t read_buffer[1024] = {0};
+  for (uint32_t i=0; i<1024;i++) write_buffer[i] = i;
+  bsp_spi_ram_write_polling(0, 1024, write_buffer);
+  bsp_spi_ram_read_polling(0, 1024, read_buffer);
+  for (uint32_t i=0; i<1024;i++) read_buffer[i] = 0;
+  bsp_spi_ram_fast_read_polling(0, 1024, read_buffer);
+  app_init();
+  app_start();
+  app_run();
 //  bsp_photodiode_timer1_init(1000);
 //  bsp_photodiode_sample_start(10);
 
-  for (uint32_t i = 0;i<1000;i++) sram_data[i] = i&0xFF;
-  bsp_spi_ram_write(0, 1000, sram_data);
+//  for (uint32_t i = 0;i<1000;i++) sram_data[i] = i&0xFF;
+//  bsp_spi_ram_write(0, 1000, sram_data);
   while (1)
   {
 	//  SCH_HandleScheduledTask();
@@ -897,15 +906,15 @@ static void MX_SPI4_Init(void)
   SPI_InitStruct.Mode = LL_SPI_MODE_MASTER;
   SPI_InitStruct.DataWidth = LL_SPI_DATAWIDTH_8BIT;
   SPI_InitStruct.ClockPolarity = LL_SPI_POLARITY_LOW;
-  SPI_InitStruct.ClockPhase = LL_SPI_PHASE_2EDGE;
+  SPI_InitStruct.ClockPhase = LL_SPI_PHASE_1EDGE;
   SPI_InitStruct.NSS = LL_SPI_NSS_SOFT;
-  SPI_InitStruct.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV2;
+  SPI_InitStruct.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV32;
   SPI_InitStruct.BitOrder = LL_SPI_MSB_FIRST;
   SPI_InitStruct.CRCCalculation = LL_SPI_CRCCALCULATION_DISABLE;
   SPI_InitStruct.CRCPoly = 7;
   LL_SPI_Init(SPI4, &SPI_InitStruct);
   LL_SPI_SetStandard(SPI4, LL_SPI_PROTOCOL_MOTOROLA);
-  LL_SPI_DisableNSSPulseMgt(SPI4);
+  LL_SPI_EnableNSSPulseMgt(SPI4);
   /* USER CODE BEGIN SPI4_Init 2 */
   LL_SPI_Enable(SPI4);
   /* USER CODE END SPI4_Init 2 */
@@ -1476,9 +1485,6 @@ static void MX_GPIO_Init(void)
   LL_GPIO_ResetOutputPin(SENSOR2_EN_GPIO_Port, SENSOR2_EN_Pin);
 
   /**/
-  LL_GPIO_ResetOutputPin(FRAM_CS_GPIO_Port, FRAM_CS_Pin);
-
-  /**/
   LL_GPIO_SetOutputPin(PHOTO_SW_CS_GPIO_Port, PHOTO_SW_CS_Pin);
 
   /**/
@@ -1486,6 +1492,9 @@ static void MX_GPIO_Init(void)
 
   /**/
   LL_GPIO_SetOutputPin(PHOTO_ADC_CONV_GPIO_Port, PHOTO_ADC_CONV_Pin);
+
+  /**/
+  LL_GPIO_SetOutputPin(FRAM_CS_GPIO_Port, FRAM_CS_Pin);
 
   /**/
   LL_GPIO_SetOutputPin(TEC_4_CS_GPIO_Port, TEC_4_CS_Pin);

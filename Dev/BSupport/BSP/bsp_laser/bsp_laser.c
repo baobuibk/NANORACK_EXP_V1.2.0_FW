@@ -43,13 +43,13 @@ void bsp_laser_ext_switch_off_all(void){
 void bsp_laser_int_set_current(uint32_t percent)
 {
 	if (percent > 100) percent = 100;
-	MCP4902_Set_Voltage(&DAC_device, 0, 33*percent);
+	MCP4902_Set_DAC(&DAC_device, 0, 255*percent/100);
 }
 
 void bsp_laser_ext_set_current(uint32_t percent)
 {
 	if (percent > 100) percent = 100;
-	MCP4902_Set_Voltage(&DAC_device, 1, 33*percent);
+	MCP4902_Set_DAC(&DAC_device, 0, 255*percent/100);
 }
 void bsp_laser_set_current(uint32_t id, uint32_t percent)
 {

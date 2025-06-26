@@ -100,30 +100,91 @@ void SRAM_Read(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer)
     LL_DMA_EnableStream(config->dma, config->dma_stream_rx);
 }
 
-// Hàm ghi dữ liệu vào SRAM với DMA
-void SRAM_Write(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) {
-
-    config->transfer_size = size;
-    config->transfer_done = 0;
-
-    // Gửi lệnh ghi và địa chỉ
-    uint8_t cmd[4] = {SRAM_WRITE_CMD, (address >> 16) & 0xFF, (address >> 8) & 0xFF, address & 0xFF};
+void SRAM_read_id(IS66_t *config, uint8_t *buffer)
+{
+	uint32_t i;
+    uint8_t cmd[4] = {SRAM_READ_ID_CMD, 0, 0, 0};
     LL_GPIO_ResetOutputPin(config->cs_port, config->cs_pin); // CS thấp
-    for (uint8_t i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++) {
         while (!LL_SPI_IsActiveFlag_TXE(config->spi));
         LL_SPI_TransmitData8(config->spi, cmd[i]);
         while (!LL_SPI_IsActiveFlag_RXNE(config->spi));
         LL_SPI_ReceiveData8(config->spi); // Đọc bỏ dummy
     }
+    for (i = 0; i < 8; i++) {
+        while (!LL_SPI_IsActiveFlag_TXE(config->spi));
+        LL_SPI_TransmitData8(config->spi, 0xAA);
+        while (!LL_SPI_IsActiveFlag_RXNE(config->spi));
+        buffer[i] = LL_SPI_ReceiveData8(config->spi); // Đọc bỏ dummy
+    }
+    LL_GPIO_SetOutputPin(config->cs_port, config->cs_pin); // CS thấp
 
-    // Cấu hình DMA TX
-    LL_DMA_DisableStream(config->dma, config->dma_stream_tx);
-    LL_DMA_SetDataLength(config->dma, config->dma_stream_tx, size);
-    LL_DMA_SetMemoryAddress(config->dma, config->dma_stream_tx, (uint32_t)buffer);
-    LL_DMA_SetMemoryIncMode(config->dma, config->dma_stream_tx, LL_DMA_MEMORY_INCREMENT); // Tăng địa chỉ cho ghi
-    LL_DMA_EnableIT_TC(config->dma, config->dma_stream_tx);
-    LL_DMA_EnableStream(config->dma, config->dma_stream_tx);
 }
+// Hàm ghi dữ liệu vào SRAM với DMA
+void SRAM_write_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) {
+
+	uint32_t i;
+	uint8_t cmd[4] = {SRAM_WRITE_CMD, (address >> 16) & 0xFF, (address >> 8) & 0xFF, address & 0xFF};
+	LL_GPIO_SetOutputPin(config->cs_port, config->cs_pin); // make sure CS is high
+	LL_GPIO_ResetOutputPin(config->cs_port, config->cs_pin); // CS thấp
+	    for (i = 0; i < 4; i++) {
+	        while (!LL_SPI_IsActiveFlag_TXE(config->spi));
+	        LL_SPI_TransmitData8(config->spi, cmd[i]);
+	        while (!LL_SPI_IsActiveFlag_RXNE(config->spi));
+	        LL_SPI_ReceiveData8(config->spi); // Đọc bỏ dummy
+	    }
+	    for (i = 0; i < size; i++) {
+	        while (!LL_SPI_IsActiveFlag_TXE(config->spi));
+	        LL_SPI_TransmitData8(config->spi, buffer[i]);
+	        while (!LL_SPI_IsActiveFlag_RXNE(config->spi));
+	         LL_SPI_ReceiveData8(config->spi); // Đọc bỏ dummy
+	    }
+	    LL_GPIO_SetOutputPin(config->cs_port, config->cs_pin); // CS thấp
+}
+
+void SRAM_read_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) {
+
+	uint32_t i;
+	uint8_t cmd[4] = {SRAM_READ_CMD, (address >> 16) & 0xFF, (address >> 8) & 0xFF, address & 0xFF};
+	LL_GPIO_SetOutputPin(config->cs_port, config->cs_pin); // make sure CS is high
+	LL_GPIO_ResetOutputPin(config->cs_port, config->cs_pin); // CS thấp
+	    for (i = 0; i < 4; i++) {
+	        while (!LL_SPI_IsActiveFlag_TXE(config->spi));
+	        LL_SPI_TransmitData8(config->spi, cmd[i]);
+	        while (!LL_SPI_IsActiveFlag_RXNE(config->spi));
+	        LL_SPI_ReceiveData8(config->spi); // Đọc bỏ dummy
+	    }
+	    for (i = 0; i < size; i++) {
+	        while (!LL_SPI_IsActiveFlag_TXE(config->spi));
+	        LL_SPI_TransmitData8(config->spi, 0xAA);
+	        while (!LL_SPI_IsActiveFlag_RXNE(config->spi));
+	        buffer[i] = LL_SPI_ReceiveData8(config->spi); // Đọc bỏ dummy
+	    }
+	    LL_GPIO_SetOutputPin(config->cs_port, config->cs_pin); // CS thấp
+}
+
+
+void SRAM_fast_read_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) {
+
+	uint32_t i;
+	uint8_t cmd[5] = {SRAM_FAST_READ_CMD, (address >> 16) & 0xFF, (address >> 8) & 0xFF, address & 0xFF,0};
+	LL_GPIO_SetOutputPin(config->cs_port, config->cs_pin); // make sure CS is high
+	LL_GPIO_ResetOutputPin(config->cs_port, config->cs_pin); // CS thấp
+	    for (i = 0; i < 5; i++) {
+	        while (!LL_SPI_IsActiveFlag_TXE(config->spi));
+	        LL_SPI_TransmitData8(config->spi, cmd[i]);
+	        while (!LL_SPI_IsActiveFlag_RXNE(config->spi));
+	        LL_SPI_ReceiveData8(config->spi); // Đọc bỏ dummy
+	    }
+	    for (i = 0; i < size; i++) {
+	        while (!LL_SPI_IsActiveFlag_TXE(config->spi));
+	        LL_SPI_TransmitData8(config->spi, 0xAA);
+	        while (!LL_SPI_IsActiveFlag_RXNE(config->spi));
+	        buffer[i] = LL_SPI_ReceiveData8(config->spi); // Đọc bỏ dummy
+	    }
+	    LL_GPIO_SetOutputPin(config->cs_port, config->cs_pin); // CS thấp
+}
+
 
 // Hàm xử lý ngắt DMA RX (SPI2_RX)
 void DMA_RX_callback(IS66_t *dev) {

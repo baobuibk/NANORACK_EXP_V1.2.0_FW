@@ -4,7 +4,7 @@
  *  Created on: Jun 25, 2025
  *      Author: Admin
  */
-
+#include "bsp_spi_ram.h"
 #include "IS66WVS4M8BLL.h"
 // Byte dummy cho DMA TX
 
@@ -30,4 +30,21 @@ void bsp_spi_ram_write(uint32_t address, uint32_t size, uint8_t *buffer)
 void bsp_spi_ram_read(uint32_t address, uint32_t size, uint8_t *buffer)
 {
 	SRAM_Read(&IS66WV, address, size, buffer);
+}
+void bsp_spi_ram_write_polling(uint32_t address, uint32_t size, uint8_t *buffer)
+{
+	SRAM_write_polling(&IS66WV, address, size, buffer);
+}
+void bsp_spi_ram_read_polling(uint32_t address, uint32_t size, uint8_t *buffer)
+{
+	SRAM_read_polling(&IS66WV, address, size, buffer);
+}
+void bsp_spi_ram_fast_read_polling(uint32_t address, uint32_t size, uint8_t *buffer)
+{
+	SRAM_fast_read_polling(&IS66WV, address, size, buffer);
+}
+
+void bsp_spi_ram_read_id(uint8_t * buffer)
+{
+	SRAM_read_id(&IS66WV,  buffer);
 }

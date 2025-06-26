@@ -649,11 +649,11 @@ static void CMD_Set_Laser_Int_Current(EmbeddedCli *cli, char *args, void *contex
 
 	if (tokenCount != 1)
 	{
-		cli_printf(cli, "format: laser_set_current 0/1 percent (0 for internal, 1 for external\r\n");
+		cli_printf(cli, "format: laser_set_current percent \r\n");
 		return;
 	}
 
-	const char *arg1 = embeddedCliGetToken(args, 2);
+	const char *arg1 = embeddedCliGetToken(args, 1);
 	int16_t percent = atoi(arg1);
 	if (percent > 100)
 
