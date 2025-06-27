@@ -18,6 +18,8 @@ typedef struct bsp_photodiode_time_t
 	uint32_t sampling_time;
 	uint32_t post_time;
 	uint32_t sampling_rate; //in Khz
+	uint32_t pos;
+
 
 }bsp_photodiode_time_t;
 

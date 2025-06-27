@@ -1,0 +1,12 @@
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2640:26:LL_USART_IsActiveFlag_RXNE	16	static
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:3658:25:LL_USART_ReceiveData8	16	static
+../Dev/App/shell/shell.c:58:6:shell_stdio_init	8	static
+../Dev/App/shell/shell.c:70:17:shell_cli_init	48	static
+../Dev/App/shell/shell.c:95:13:shell_cli_write_char	16	static
+../Dev/App/shell/shell.c:98:6:shell_task_ctor	24	static
+../Dev/App/shell/shell.c:108:6:shell_task_ctor_singleton	40	static
+../Dev/App/shell/shell.c:122:6:shell_task_start	16	static
+../Dev/App/shell/shell.c:126:6:shell_task_init	16	static
+../Dev/App/shell/shell.c:135:16:shell_state_process_handler	16	static
+../Dev/App/shell/shell.c:156:6:CLI_UART_stdio_rx_callback	16	static
+../Dev/App/shell/shell.c:162:6:Shell_USART_IRQHandler	8	static

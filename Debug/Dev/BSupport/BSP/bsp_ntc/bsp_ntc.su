@@ -1,0 +1,3 @@
+../Dev/BSupport/BSP/bsp_ntc/bsp_ntc.c:26:6:bsp_ntc_trigger_adc	8	static
+../Dev/BSupport/BSP/bsp_ntc/bsp_ntc.c:36:9:bsp_ntc_get_temperature	16	static
+../Dev/BSupport/BSP/bsp_ntc/bsp_ntc.c:41:6:HAL_ADC_ConvCpltCallback	24	static
