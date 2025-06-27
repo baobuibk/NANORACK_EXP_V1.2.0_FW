@@ -6,6 +6,7 @@
  */
 
 #include "bsp_photodiode.h"
+#include "bsp_laser.h"
 #include "main.h"
 #include "experiment_task.h"
 #include "app_signals.h"
@@ -247,10 +248,10 @@ void bsp_photodiode_set_time_tim2(uint32_t period) {
     uint32_t arr = ticks - 1; // Giá trị ARR = số tick - 1 (TIM2 hỗ trợ 32-bit ARR)
 
     // Nếu ticks lớn hơn 0xFFFF, cần điều chỉnh prescaler
-    if (ticks > 0xFFFF) {
-        prescaler = (ticks / 0xFFFF) + 1; // Làm tròn lên
-        arr = (ticks / prescaler) - 1;
-    }
+//    if (ticks > 0xFFFF) {
+//        prescaler = (ticks / 0xFFFF) + 1; // Làm tròn lên
+//        arr = (ticks / prescaler) - 1;
+//    }
 
     // 3. Cấu hình Timer 2
     //TIM2->CR1 = 0; // Xóa thanh ghi điều khiển
@@ -271,7 +272,7 @@ void bsp_photodiode_sample_start()
 	bsp_photodiode_adc_spi_change_mode();
 	bsp_photo_prepare_pre_sampling();
 	bsp_photodiode_time_t * timing = &photo_diode_adc.timing;
-	uint32_t num_sample = ((timing->post_time + timing->sampling_time + timing->post_time) * timing->sampling_rate) * 1000;
+	uint32_t num_sample = ((timing->post_time + timing->sampling_time + timing->post_time) * timing->sampling_rate) / 1000;
 
 	if (num_sample % BUFFER_FULL_SIZE) photo_diode_adc.block_count = (num_sample / BUFFER_FULL_SIZE) + 1;
 	else photo_diode_adc.block_count = (num_sample / BUFFER_FULL_SIZE);
@@ -370,24 +371,25 @@ void TIM2_IRQHandler(void)
 	        // Xóa cờ ngắt update
 	        TIM2->SR &= ~TIM_SR_UIF;
 
-	        switch (photo_diode_state) {
-	        case PHOTO_SAMPLING_PRE:
-				{
-					photo_diode_state = PHOTO_SAMPLING_SAMPLING;
-//					bsp_photodiode_set_sampling_time();
-					PHOTO_TIMER->ARR = timer_timing.sampling_time_ARR - 1;
-					SST_Task_post((SST_Task *)&experiment_task_inst.super, (SST_Evt *)&finish_pre_phase_evt);
-				}
-	        case PHOTO_SAMPLING_SAMPLING:
-				{
+	        switch (photo_diode_state)
+	        {
+				case PHOTO_SAMPLING_PRE:
+						bsp_laser_int_switch_on(photo_diode_adc.timing.pos);
+						photo_diode_state = PHOTO_SAMPLING_SAMPLING;
+	//					bsp_photodiode_set_sampling_time();
+						PHOTO_TIMER->ARR = timer_timing.sampling_time_ARR - 1;
+						SST_Task_post((SST_Task *)&experiment_task_inst.super, (SST_Evt *)&finish_pre_phase_evt);
+				break;
+
+				case PHOTO_SAMPLING_SAMPLING:
+					bsp_laser_int_switch_off_all();
 					photo_diode_state = PHOTO_SAMPLING_POST;
 //					bsp_photodiode_set_sampling_time();
 					PHOTO_TIMER->ARR = timer_timing.sampling_time_ARR;
 					SST_Task_post((SST_Task *)&experiment_task_inst.super, (SST_Evt *)&finish_sampling_phase_evt);
 //					Stop timer 2
 					TIM2->CR1 &= ~TIM_CR1_CEN;
-
-				}
+				break;
 	        }
 	    }
 }

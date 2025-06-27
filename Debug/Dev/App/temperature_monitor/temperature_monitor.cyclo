@@ -1,0 +1,6 @@
+../Dev/App/temperature_monitor/temperature_monitor.c:29:13:temperature_monitor_task_init	1
+../Dev/App/temperature_monitor/temperature_monitor.c:35:6:temperature_monitor_task_ctor	2
+../Dev/App/temperature_monitor/temperature_monitor.c:45:6:temperature_monitor_task_ctor_singleton	1
+../Dev/App/temperature_monitor/temperature_monitor.c:56:6:temperature_monitor_task_start	1
+../Dev/App/temperature_monitor/temperature_monitor.c:60:16:temperature_monitor_state_process_handler	4
+../Dev/App/temperature_monitor/temperature_monitor.c:83:9:temperature_monitor_get_ntc_temperature	1

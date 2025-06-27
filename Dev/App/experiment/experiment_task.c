@@ -132,6 +132,8 @@ static state_t experiment_task_state_data_aqui_handler(experiment_task_t * const
 			init_photo_time.sampling_time = me->profile.experiment_time ;
 			init_photo_time.post_time = me->profile.post_time ;
 			init_photo_time.sampling_rate = me->profile.sampling_rate;
+			init_photo_time.pos = me->profile.pos;
+			bsp_laser_int_set_current(me->profile.laser_percent);
 			bsp_photo_set_time(& init_photo_time);
 			bsp_photodiode_sample_start();
 			me->sub_state = S_PRE_SAMPLING;
