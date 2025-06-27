@@ -25,14 +25,17 @@ typedef struct {
 
 // Prototype hàm
 void SRAM_Initialize(IS66_t *config);
-void SRAM_Read(IS66_t *end1, uint32_t address, uint32_t size, uint8_t *buffer);
-void SRAM_Write(IS66_t *end1, uint32_t address, uint32_t size, uint8_t *buffer);
-
-void SRAM_read_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) ;
-void SRAM_write_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) ;
+void SRAM_read_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer);
+void SRAM_fast_read_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer);
+void SRAM_write_polling(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer);
 void SRAM_read_id(IS66_t *config, uint8_t *buffer);
-uint8_t SRAM_IsTransferDone(IS66_t *end1);
-void DMA_TX_callback(IS66_t *dev)  ;
-void DMA_RX_callback(IS66_t *dev)  ;
+
+void SRAM_write_DMA(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) ;
+void SRAM_read_DMA(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buffer) ;
+
+
+
+uint8_t SRAM_IsTransferDone(IS66_t *config);
+void DMA_RX_callback(IS66_t *dev);
 
 #endif // IS66WVS4M8BLL_H

@@ -29,8 +29,7 @@ static experiment_task_t *pexperiment_task = &experiment_task_inst;
 /*************************************************
  *                Private variable                 *
  *************************************************/
-static uint8_t photo_index = 0;
-static uint32_t samp_rate = 0;
+
 
 /*************************************************
  *                Command Define                 *
@@ -105,6 +104,9 @@ static void CMD_Ext_Laser_Switch_On(EmbeddedCli *cli, char *args, void *context)
 static void CMD_Int_Laser_Switch_Off(EmbeddedCli *cli, char *args, void *context);
 static void CMD_Ext_Laser_Switch_Off(EmbeddedCli *cli, char *args, void *context);
 
+static void cmd_exp_set_profile(EmbeddedCli *cli, char *args, void *context);
+static void cmd_exp_get_profile(EmbeddedCli *cli, char *args, void *context);
+static void cmd_exp_start_measuring(EmbeddedCli *cli, char *args, void *context);
 
 //static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context);
 //static void CMD_TEC_Get_Auto(EmbeddedCli *cli, char *args, void *context);
@@ -190,6 +192,10 @@ static const CliCommandBinding cliStaticBindings_internal[] = {
 	{ "Laser", "laser_ext_switch_on",    "format: laser_ext_switch_on  pos  ",  true, NULL, CMD_Ext_Laser_Switch_On },
 	{ "Laser", "laser_int_switch_off",    "format: laser_int_switch_off  ",  true, NULL, CMD_Int_Laser_Switch_Off },
 	{ "Laser", "laser_ext_switch_off",    "format: laser_ext_switch_off  ",  true, NULL, CMD_Ext_Laser_Switch_Off },
+
+	{ "Experiment", "exp_set_profile",    "format: exp_set_profile sampling_rate pos laser_percent pre_time experiment_time post_time",  true, NULL, cmd_exp_set_profile },
+	{ "Experiment", "exp_get_profile",    "format: exp_get_profile",  true, NULL, cmd_exp_get_profile },
+	{ "Experiment", "exp_start_measuring",    "format: exp_start_measuring",  true, NULL, cmd_exp_start_measuring },
 
 //	{ NULL, "get_current",  "format: get_current [int/ext]",                                   true, NULL, CMD_Get_Current },
 //	    { NULL, "pd_get",       "format: pd_get [pd_index]",                                       true, NULL, CMD_PD_Get },
@@ -493,32 +499,8 @@ static void CMD_TEC_Man_Set_Output(EmbeddedCli *cli, char *args, void *context)
 	else cli_printf(cli, "disabled tec[%d] output\r\n",tec_id);
 }
 
-static void CMD_TEC_Get_Dir(EmbeddedCli *cli, char *args, void *context) {
-    // TODO: Implement TEC direction get logic
-	const char *arg1 = embeddedCliGetToken(args, 1);
-	tec_dir_t dir[4] = {TEC_COOL, TEC_COOL, TEC_COOL, TEC_COOL};
-	temperature_get_tec_dir(&dir[0], &dir[1], &dir[2], &dir[3]);
-	if (*arg1 == 'a' || *arg1 == '\0') {
-		if (dir[0] == TEC_COOL) embeddedCliPrint(cli, "TEC 0 is cool mode");
-		else embeddedCliPrint(cli, "TEC 0 is heat mode");
-		if (dir[1] == TEC_COOL) embeddedCliPrint(cli, "TEC 1 is cool mode");
-		else embeddedCliPrint(cli, "TEC 1 is heat mode");
-		if (dir[2] == TEC_COOL) embeddedCliPrint(cli, "TEC 2 is cool mode");
-		else embeddedCliPrint(cli, "TEC 2 is heat mode");
-		if (dir[3] == TEC_COOL) embeddedCliPrint(cli, "TEC 3 is cool mode");
-		else embeddedCliPrint(cli, "TEC 3 is heat mode");
-	}
-	else if (*arg1 == '0' || *arg1 == '1' || *arg1 == '2' || *arg1 == '3') {
-		char buffer[40];
-		int channel = atoi(arg1);
-		if (dir[channel] == TEC_COOL)
-			snprintf(buffer, sizeof(buffer), "TEC %d is cool mode", channel);
-		else
-			snprintf(buffer, sizeof(buffer), "TEC %d is heat mode", channel);
-		embeddedCliPrint(cli, buffer);
-	}
-	embeddedCliPrint(cli, "");
-}
+
+
 
 static void CMD_HTR_Set_Profile_Duty(EmbeddedCli *cli, char *args, void *context) {
     // TODO: Implement Heater duty cycle set logic
@@ -747,6 +729,91 @@ static void CMD_Int_Laser_Switch_Off(EmbeddedCli *cli, char *args, void *context
 static void CMD_Ext_Laser_Switch_Off(EmbeddedCli *cli, char *args, void *context){
 	experiment_task_ext_laser_switchoff(pexperiment_task);
 
+}
+
+/*
+ * format: exp_set_profile sampling_rate pos laser_percent pre_time experiment_time post_time
+ * sampling rate in KSample
+ * time in us unit
+ */
+
+static void cmd_exp_set_profile(EmbeddedCli *cli, char *args, void *context)
+{
+	uint32_t tokenCount = embeddedCliGetTokenCount(args);
+
+	if (tokenCount != 6)
+	{
+		cli_printf(cli, "format: exp_set_profile sampling_rate pos laser_percent pre_time experiment_time post_time\r\n");
+		return;
+	}
+	uint32_t sampling_rate = atoi(embeddedCliGetToken(args, 1));
+	if ((sampling_rate == 0) || (sampling_rate > 1000))
+	{
+		cli_printf(cli, "sampling rate out of range (1K-1M)\r\n");
+		return;
+	}
+	uint32_t pos = atoi(embeddedCliGetToken(args, 2));
+		if ((pos == 0) || (pos > 36))
+		{
+			cli_printf(cli, "pos rate out of range (1-36)\r\n");
+			return;
+		}
+	uint32_t percent = atoi(embeddedCliGetToken(args, 3));
+			if (percent > 100)
+			{
+				cli_printf(cli, "percent out of range (0-100)\r\n");
+				return;
+			}
+	uint32_t pre_time = atoi(embeddedCliGetToken(args, 4));
+			if (pre_time == 0)
+			{
+				cli_printf(cli, "pre_time should be larger than 0\r\n");
+				return;
+			}
+	uint32_t sample_time = atoi(embeddedCliGetToken(args, 5));
+			if (sample_time == 0)
+			{
+				cli_printf(cli, "sample time should be larger than 0\r\n");
+				return;
+			}
+	uint32_t post_time = atoi(embeddedCliGetToken(args, 6));
+			if (post_time == 0)
+			{
+				cli_printf(cli, "post_time should be larger than 0\r\n");
+				return;
+			}
+	uint32_t num_sample = ((pre_time + sample_time + post_time) * sampling_rate )/1000000;
+	if (num_sample > 2048)	//larrger than 4MB
+	{
+		cli_printf(cli, "total sample must be less than 2048 K\r\n");
+		return;
+	}
+
+	experiment_profile_t profile;
+	profile.sampling_rate = sampling_rate;
+	profile.pos = pos;
+	profile.laser_percent = percent;
+	profile.pre_time = pre_time;
+	profile.experiment_time = sample_time;
+	profile.post_time = post_time;
+	profile.num_sample = num_sample;
+	profile.period = 1000000 / sampling_rate;
+	experiment_task_set_profile(pexperiment_task,&profile);
+	cli_printf(cli, "set profile sampling_rate:%d, pos: %d, percent:%d, pre_time:%d, sample_time:%d,post_time:%d, num_sample %d, sampling period %d \r\n",sampling_rate, pos, percent, pre_time, sample_time,post_time, num_sample,profile.period);
+}
+
+static void cmd_exp_get_profile(EmbeddedCli *cli, char *args, void *context)
+{
+	experiment_profile_t profile;
+	experiment_task_get_profile(pexperiment_task, &profile);
+	cli_printf(cli, "sampling_rate:%d, pos: %d, percent:%d, pre_time:%d, sample_time:%d,post_time: %d, num_sample: %d, sampling_period %d \r\n",profile.sampling_rate, profile.pos, profile.laser_percent, profile.pre_time, profile.experiment_time ,profile.post_time, profile.num_sample, profile.period);
+
+}
+static void cmd_exp_start_measuring(EmbeddedCli *cli, char *args, void *context)
+{
+	if (experiment_start_measuring(pexperiment_task))
+		cli_printf(cli, "Wrong profile, please check \r\n");
+	else cli_printf(cli,"Starting Measurement\r\n");
 }
 
 //static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context) {

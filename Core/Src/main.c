@@ -32,6 +32,8 @@
 #include "mcp4902.h"
 #include "app_main.h"
 #include "bsp_photodiode.h"
+#include "bsp_spi_ram.h"
+#include "IS66WVS4M8BLL.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,6 +58,7 @@ ADC_HandleTypeDef hadc3;
 DMA_HandleTypeDef hdma_adc1;
 
 TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
 
@@ -80,6 +83,7 @@ static void MX_USART6_UART_Init(void);
 static void MX_ADC2_Init(void);
 static void MX_ADC3_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -134,6 +138,7 @@ int main(void)
   MX_ADC2_Init();
   MX_ADC3_Init();
   MX_TIM1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
  // Ex_Watchdog_Init();
@@ -166,18 +171,52 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  bsp_spi_ram_init();
+
+
+
+
+
   uint8_t buffer[8] = {0};
 
   bsp_spi_ram_read_id(buffer);
   bsp_spi_ram_read_id(buffer);
 
-  uint8_t write_buffer[1024];
-  uint8_t read_buffer[1024] = {0};
-  for (uint32_t i=0; i<1024;i++) write_buffer[i] = i;
-  bsp_spi_ram_write_polling(0, 1024, write_buffer);
-  bsp_spi_ram_read_polling(0, 1024, read_buffer);
-  for (uint32_t i=0; i<1024;i++) read_buffer[i] = 0;
-  bsp_spi_ram_fast_read_polling(0, 1024, read_buffer);
+  uint8_t write_buffer[50];
+  uint8_t read_buffer[110] = {0};
+//  for (uint32_t i=0; i<1024;i++) write_buffer[i] = i;
+//  bsp_spi_ram_write_polling(0, 1024, write_buffer);
+//  bsp_spi_ram_read_polling(0, 1024, read_buffer);
+//  for (uint32_t i=0; i<1024;i++) read_buffer[i] = 0;
+//  bsp_spi_ram_fast_read_polling(0, 1024, read_buffer);
+  for (uint32_t i=0; i<50;i++) write_buffer[i] = i;
+  bsp_spi_ram_write_dma(0, 50, write_buffer);
+  while(!bsp_spi_ram_is_transfer_done());
+
+  bsp_spi_ram_write_dma(50, 50, write_buffer);
+  while(!bsp_spi_ram_is_transfer_done());
+
+
+
+
+
+  for (uint32_t i=0; i<100;i++) read_buffer[i] = 0;
+  bsp_spi_ram_read_dma(0, 100, read_buffer);
+  while(!bsp_spi_ram_is_transfer_done());
+
+  for (uint32_t i=0; i<100;i++) read_buffer[i] = 0;
+    bsp_spi_ram_read_dma(50, 50, read_buffer);
+    while(!bsp_spi_ram_is_transfer_done());
+
+    for (uint32_t i=0; i<100;i++) read_buffer[i] = 0;
+      bsp_spi_ram_read_dma(0, 50, read_buffer);
+      while(!bsp_spi_ram_is_transfer_done());
+
+//  for (uint32_t i=0; i<50;i++) read_buffer[i] = 0;
+//  bsp_spi_ram_fast_read_dma(0, 50, read_buffer);
+//
+//  while(!bsp_spi_ram_is_transfer_done());
+
   app_init();
   app_start();
   app_run();
@@ -906,7 +945,7 @@ static void MX_SPI4_Init(void)
   SPI_InitStruct.Mode = LL_SPI_MODE_MASTER;
   SPI_InitStruct.DataWidth = LL_SPI_DATAWIDTH_8BIT;
   SPI_InitStruct.ClockPolarity = LL_SPI_POLARITY_LOW;
-  SPI_InitStruct.ClockPhase = LL_SPI_PHASE_1EDGE;
+  SPI_InitStruct.ClockPhase = LL_SPI_PHASE_2EDGE;
   SPI_InitStruct.NSS = LL_SPI_NSS_SOFT;
   SPI_InitStruct.BaudRate = LL_SPI_BAUDRATEPRESCALER_DIV32;
   SPI_InitStruct.BitOrder = LL_SPI_MSB_FIRST;
@@ -914,7 +953,7 @@ static void MX_SPI4_Init(void)
   SPI_InitStruct.CRCPoly = 7;
   LL_SPI_Init(SPI4, &SPI_InitStruct);
   LL_SPI_SetStandard(SPI4, LL_SPI_PROTOCOL_MOTOROLA);
-  LL_SPI_EnableNSSPulseMgt(SPI4);
+  LL_SPI_DisableNSSPulseMgt(SPI4);
   /* USER CODE BEGIN SPI4_Init 2 */
   LL_SPI_Enable(SPI4);
   /* USER CODE END SPI4_Init 2 */
@@ -979,11 +1018,11 @@ static void MX_SPI6_Init(void)
 
   LL_DMA_SetStreamPriorityLevel(DMA2, LL_DMA_STREAM_5, LL_DMA_PRIORITY_VERYHIGH);
 
-  LL_DMA_SetMode(DMA2, LL_DMA_STREAM_5, LL_DMA_MODE_CIRCULAR);
+  LL_DMA_SetMode(DMA2, LL_DMA_STREAM_5, LL_DMA_MODE_NORMAL);
 
   LL_DMA_SetPeriphIncMode(DMA2, LL_DMA_STREAM_5, LL_DMA_PERIPH_NOINCREMENT);
 
-  LL_DMA_SetMemoryIncMode(DMA2, LL_DMA_STREAM_5, LL_DMA_MEMORY_NOINCREMENT);
+  LL_DMA_SetMemoryIncMode(DMA2, LL_DMA_STREAM_5, LL_DMA_MEMORY_INCREMENT);
 
   LL_DMA_SetPeriphSize(DMA2, LL_DMA_STREAM_5, LL_DMA_PDATAALIGN_BYTE);
 
@@ -998,7 +1037,7 @@ static void MX_SPI6_Init(void)
 
   LL_DMA_SetStreamPriorityLevel(DMA2, LL_DMA_STREAM_6, LL_DMA_PRIORITY_VERYHIGH);
 
-  LL_DMA_SetMode(DMA2, LL_DMA_STREAM_6, LL_DMA_MODE_CIRCULAR);
+  LL_DMA_SetMode(DMA2, LL_DMA_STREAM_6, LL_DMA_MODE_NORMAL);
 
   LL_DMA_SetPeriphIncMode(DMA2, LL_DMA_STREAM_6, LL_DMA_PERIPH_NOINCREMENT);
 
@@ -1077,6 +1116,52 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 0;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 4294967295;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+//  HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);
+//  HAL_NVIC_EnableIRQ(TIM2_IRQn);
+  /* USER CODE END TIM2_Init 2 */
 
 }
 
@@ -1407,7 +1492,6 @@ static void MX_DMA_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
-  LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
   /* USER CODE BEGIN MX_GPIO_Init_1 */
 
@@ -1446,19 +1530,7 @@ static void MX_GPIO_Init(void)
   LL_GPIO_ResetOutputPin(TEC_4_EN_GPIO_Port, TEC_4_EN_Pin);
 
   /**/
-  LL_GPIO_ResetOutputPin(LASER_DAC_CS_GPIO_Port, LASER_DAC_CS_Pin);
-
-  /**/
-  LL_GPIO_ResetOutputPin(LASER_INT_SW_CS_GPIO_Port, LASER_INT_SW_CS_Pin);
-
-  /**/
   LL_GPIO_ResetOutputPin(WD_DONE_GPIO_Port, WD_DONE_Pin);
-
-  /**/
-  LL_GPIO_ResetOutputPin(LASER_EXT_SW_CS_GPIO_Port, LASER_EXT_SW_CS_Pin);
-
-  /**/
-  LL_GPIO_ResetOutputPin(LASER_DAC_LATCH_GPIO_Port, LASER_DAC_LATCH_Pin);
 
   /**/
   LL_GPIO_ResetOutputPin(LED_G_GPIO_Port, LED_G_Pin);
@@ -1483,6 +1555,18 @@ static void MX_GPIO_Init(void)
 
   /**/
   LL_GPIO_ResetOutputPin(SENSOR2_EN_GPIO_Port, SENSOR2_EN_Pin);
+
+  /**/
+  LL_GPIO_SetOutputPin(LASER_DAC_CS_GPIO_Port, LASER_DAC_CS_Pin);
+
+  /**/
+  LL_GPIO_SetOutputPin(LASER_INT_SW_CS_GPIO_Port, LASER_INT_SW_CS_Pin);
+
+  /**/
+  LL_GPIO_SetOutputPin(LASER_EXT_SW_CS_GPIO_Port, LASER_EXT_SW_CS_Pin);
+
+  /**/
+  LL_GPIO_SetOutputPin(LASER_DAC_LATCH_GPIO_Port, LASER_DAC_LATCH_Pin);
 
   /**/
   LL_GPIO_SetOutputPin(PHOTO_SW_CS_GPIO_Port, PHOTO_SW_CS_Pin);
@@ -1637,6 +1721,12 @@ static void MX_GPIO_Init(void)
   LL_GPIO_Init(PHOTO_ADC_CONV_GPIO_Port, &GPIO_InitStruct);
 
   /**/
+  GPIO_InitStruct.Pin = PHOTO_EOC_Pin;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  LL_GPIO_Init(PHOTO_EOC_GPIO_Port, &GPIO_InitStruct);
+
+  /**/
   GPIO_InitStruct.Pin = IRQ_0_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
@@ -1763,22 +1853,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(TEC_1_CS_GPIO_Port, &GPIO_InitStruct);
-
-  /**/
-  LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTD, LL_SYSCFG_EXTI_LINE11);
-
-  /**/
-  EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_11;
-  EXTI_InitStruct.LineCommand = ENABLE;
-  EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-  EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
-  LL_EXTI_Init(&EXTI_InitStruct);
-
-  /**/
-  LL_GPIO_SetPinPull(GPIOD, LL_GPIO_PIN_11, LL_GPIO_PULL_UP);
-
-  /**/
-  LL_GPIO_SetPinMode(GPIOD, LL_GPIO_PIN_11, LL_GPIO_MODE_INPUT);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 

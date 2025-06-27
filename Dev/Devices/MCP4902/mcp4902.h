@@ -11,7 +11,7 @@
 #include "stm32f7xx_ll_spi.h"
 #include "stm32f7xx_ll_gpio.h"
 
-#define _VREF_DAC		3.3f
+#define _VREF_DAC		3300	// milivolt
 
 #define MCP4902_NUM_CHANNEL		2
 #define MCP4902_BUF_BIT			14

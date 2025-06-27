@@ -10,15 +10,17 @@
 
 static void ADG1414_Chain_Write(ADG1414_Device_t *dev)
 {
+	LL_GPIO_SetOutputPin(dev->cs_port, dev->cs_pin);
 
 	while (!LL_SPI_IsActiveFlag_TXE(dev->spi));
 	LL_GPIO_ResetOutputPin(dev->cs_port, dev->cs_pin);
 
     for (int i = dev->num_of_sw - 1; i >= 0; i--)
     {
-        LL_SPI_TransmitData8(dev->spi, dev->switch_state[i]);
         while (!LL_SPI_IsActiveFlag_TXE(dev->spi));  // Đợi TXE
-        while (LL_SPI_IsActiveFlag_BSY(dev->spi));   // Đợi BSY
+        LL_SPI_TransmitData8(dev->spi, dev->switch_state[i]);
+
+        while (!LL_SPI_IsActiveFlag_RXNE(dev->spi));   // Đợi BSY
         (void)LL_SPI_ReceiveData8(dev->spi);
     }
 

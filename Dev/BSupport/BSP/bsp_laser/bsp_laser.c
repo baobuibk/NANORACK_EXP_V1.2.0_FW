@@ -6,16 +6,56 @@
  */
 #include "bsp_laser.h"
 
+#define LASER_SPI SPI4
+
 MCP4902_Device_t DAC_device;
 ADG1414_Device_t laser_int;
 ADG1414_Device_t laser_ext;
 
+void bsp_laser_set_spi_prescaler(uint32_t Prescaler)
+{
+    LL_SPI_Disable(LASER_SPI);
+    LL_SPI_SetBaudRatePrescaler(LASER_SPI, Prescaler);
+    LL_SPI_Enable(LASER_SPI);
+}
+
+void bsp_laser_set_spi_mode(spi_mode_t spi_mode)
+{
+	LL_SPI_Disable(LASER_SPI);
+	switch(spi_mode)
+	{
+		case SPI_MODE_0:
+			LL_SPI_SetClockPolarity(LASER_SPI, LL_SPI_POLARITY_LOW);
+			LL_SPI_SetClockPhase(LASER_SPI, LL_SPI_PHASE_1EDGE);
+		break;
+
+		case SPI_MODE_1:
+			LL_SPI_SetClockPolarity(LASER_SPI, LL_SPI_POLARITY_LOW);
+			LL_SPI_SetClockPhase(LASER_SPI, LL_SPI_PHASE_2EDGE);
+		break;
+
+		case SPI_MODE_2:
+			LL_SPI_SetClockPolarity(LASER_SPI, LL_SPI_POLARITY_HIGH);
+			LL_SPI_SetClockPhase(LASER_SPI, LL_SPI_PHASE_1EDGE);
+		break;
+
+		case SPI_MODE_3:
+			LL_SPI_SetClockPolarity(LASER_SPI, LL_SPI_POLARITY_HIGH);
+			LL_SPI_SetClockPhase(LASER_SPI, LL_SPI_PHASE_2EDGE);
+		break;
+	}
+	LL_SPI_Enable(LASER_SPI);
+}
+
 void bsp_laser_init(void)
 {
+	bsp_laser_set_spi_mode(SPI_MODE_0);
+	MCP4902_Device_Init(&DAC_device, LASER_SPI, LASER_DAC_CS_GPIO_Port, LASER_DAC_CS_Pin, LASER_DAC_LATCH_GPIO_Port, LASER_DAC_LATCH_Pin);
 
-	  MCP4902_Device_Init(&DAC_device, SPI4, LASER_DAC_CS_GPIO_Port, LASER_DAC_CS_Pin, LASER_DAC_LATCH_GPIO_Port, LASER_DAC_LATCH_Pin);
-	  ADG1414_Chain_Init(&laser_int, SPI4, LASER_INT_SW_CS_GPIO_Port, LASER_INT_SW_CS_Pin, INTERNAL_CHAIN_SWITCH_NUM);
-	  ADG1414_Chain_Init(&laser_ext, SPI4, LASER_EXT_SW_CS_GPIO_Port, LASER_EXT_SW_CS_Pin, EXTERNAL_CHAIN_SWITCH_NUM);
+	bsp_laser_set_spi_mode(SPI_MODE_1);
+	ADG1414_Chain_Init(&laser_int, LASER_SPI, LASER_INT_SW_CS_GPIO_Port, LASER_INT_SW_CS_Pin, INTERNAL_CHAIN_SWITCH_NUM);
+	ADG1414_Chain_Init(&laser_ext, LASER_SPI, LASER_EXT_SW_CS_GPIO_Port, LASER_EXT_SW_CS_Pin, EXTERNAL_CHAIN_SWITCH_NUM);
+
 }
 
 void bsp_laser_int_switch_on(uint32_t channel_idx)

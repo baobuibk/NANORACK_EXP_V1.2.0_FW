@@ -80,7 +80,11 @@ typedef struct {
     uint16_t ADC_val;			   // Giá trị ADC
     uint8_t tran_ind;
     uint8_t buf[2];
+    uint32_t transfer_size;         // Kích thước truyền
+    uint8_t transfer_done;          // Cờ hoàn thành
 } ADS8327_Device_t;
+
+
 
 void ISR_SPI_IRQHandler(ADS8327_Device_t *dev);
 void ISR_TIMTrigger_IRQHandler(ADS8327_Device_t *dev);
@@ -91,14 +95,7 @@ void ADS8327_Wake_Up(ADS8327_Device_t *dev);
 void ADS8327_Write_CFR(ADS8327_Device_t *dev, uint16_t CFR);
 void ADS8327_Default_CFR(ADS8327_Device_t *dev, CFR_default_t CFR_default);
 uint16_t ADS8327_Read_Data_Polling(ADS8327_Device_t *dev, int timeout);
-void ADS8327_Device_Init(	ADS8327_Device_t *dev,
-							SPI_TypeDef *spi,
-							GPIO_TypeDef *cs_port,
-							uint32_t cs_pin,
-							GPIO_TypeDef *convst_port,
-							uint32_t convst_pin,
-							GPIO_TypeDef *EOC_port,
-							uint32_t EOC_pin);
+void ADS8327_Device_Init(	ADS8327_Device_t *dev);
 
 
 

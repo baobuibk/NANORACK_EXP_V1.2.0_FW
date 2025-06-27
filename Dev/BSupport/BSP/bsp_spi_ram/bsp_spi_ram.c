@@ -20,16 +20,12 @@ IS66_t IS66WV = {
     .dma = DMA2, // Dùng DMA2
     .dma_stream_tx = LL_DMA_STREAM_5, // Stream 5 cho TX
     .dma_stream_rx = LL_DMA_STREAM_6, // Stream 6 cho RX
-    .dma_channel = LL_DMA_CHANNEL_0 // Channel 0 chung
+    .dma_channel = LL_DMA_CHANNEL_1 // Channel 1 chung
 };
 
-void bsp_spi_ram_write(uint32_t address, uint32_t size, uint8_t *buffer)
+void bsp_spi_ram_init(void)
 {
-	SRAM_Write(&IS66WV, address, size, buffer);
-}
-void bsp_spi_ram_read(uint32_t address, uint32_t size, uint8_t *buffer)
-{
-	SRAM_Read(&IS66WV, address, size, buffer);
+	SRAM_Initialize(&IS66WV);
 }
 void bsp_spi_ram_write_polling(uint32_t address, uint32_t size, uint8_t *buffer)
 {
@@ -44,7 +40,20 @@ void bsp_spi_ram_fast_read_polling(uint32_t address, uint32_t size, uint8_t *buf
 	SRAM_fast_read_polling(&IS66WV, address, size, buffer);
 }
 
+void bsp_spi_ram_write_dma(uint32_t address, uint32_t size, uint8_t *buffer)
+{
+	SRAM_write_DMA(&IS66WV, address, size, buffer);
+}
+
+void bsp_spi_ram_read_dma(uint32_t address, uint32_t size, uint8_t *buffer)
+{
+	SRAM_read_DMA(&IS66WV, address, size, buffer);
+}
 void bsp_spi_ram_read_id(uint8_t * buffer)
 {
 	SRAM_read_id(&IS66WV,  buffer);
+}
+uint8_t bsp_spi_ram_is_transfer_done(void)
+{
+	return SRAM_IsTransferDone(&IS66WV);
 }

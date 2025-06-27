@@ -152,6 +152,8 @@ void Error_Handler(void);
 #define PHOTO_ADC_CS_GPIO_Port GPIOD
 #define PHOTO_ADC_CONV_Pin LL_GPIO_PIN_10
 #define PHOTO_ADC_CONV_GPIO_Port GPIOD
+#define PHOTO_EOC_Pin LL_GPIO_PIN_11
+#define PHOTO_EOC_GPIO_Port GPIOD
 #define CONS_TX_Pin LL_GPIO_PIN_6
 #define CONS_TX_GPIO_Port GPIOC
 #define CONS_RX_Pin LL_GPIO_PIN_7

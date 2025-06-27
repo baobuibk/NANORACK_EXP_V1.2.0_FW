@@ -26,6 +26,7 @@
 #include "uart_driver.h"
 #include "sst.h"
 #include "IS66WVS4M8BLL.h"
+#include "shell.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -60,6 +61,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
+extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
 extern IS66_t IS66WV;
 /* USER CODE END EV */
@@ -206,15 +208,10 @@ void SysTick_Handler(void)
 /**
   * @brief This function handles DMA1 stream1 global interrupt.
   */
-void DMA1_Stream1_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
 
-  /* USER CODE END DMA1_Stream1_IRQn 0 */
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
-
-  /* USER CODE END DMA1_Stream1_IRQn 1 */
-}
+/**
+  * @brief This function handles TIM2 global interrupt.
+  */
 
 /**
   * @brief This function handles DMA2 stream0 global interrupt.
@@ -236,10 +233,7 @@ void DMA2_Stream0_IRQHandler(void)
 void DMA2_Stream5_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream5_IRQn 0 */
-	if (LL_DMA_IsActiveFlag_TC5(DMA2)) {
-	        LL_DMA_ClearFlag_TC5(DMA2); // Xóa cờ ngắt
-	        DMA_TX_callback(&IS66WV);
-	}
+
   /* USER CODE END DMA2_Stream5_IRQn 0 */
   /* USER CODE BEGIN DMA2_Stream5_IRQn 1 */
 
@@ -252,10 +246,16 @@ void DMA2_Stream5_IRQHandler(void)
 void DMA2_Stream6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream6_IRQn 0 */
-    if (LL_DMA_IsActiveFlag_TC6(DMA2)) {
-        LL_DMA_ClearFlag_TC6(DMA2); // Xóa cờ ngắt
-        DMA_RX_callback(&IS66WV);
-    }
+	if (LL_DMA_IsActiveFlag_TC6(DMA2))
+	{
+		LL_DMA_ClearFlag_TC6(DMA2);
+	}
+	if (LL_DMA_IsActiveFlag_TC5(DMA2))
+	{
+		LL_DMA_ClearFlag_TC5(DMA2);
+	}
+
+	DMA_RX_callback(&IS66WV);
   /* USER CODE END DMA2_Stream6_IRQn 0 */
   /* USER CODE BEGIN DMA2_Stream6_IRQn 1 */
 

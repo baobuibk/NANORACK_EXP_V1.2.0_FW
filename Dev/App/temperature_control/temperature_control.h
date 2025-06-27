@@ -77,8 +77,7 @@ bool temperature_control_is_tec_inited(uint32_t channel);
 void temperature_control_setter_tec_disable(uint32_t channel);
 uint32_t temperature_control_setter_tec_init(uint32_t channel);
 
-
-
+uint32_t temperature_control_man_mode_set(temperature_control_task_t *const me);
 
 void temperature_control_auto_tec_set_output(temperature_control_task_t * const me,uint32_t tec_dir);
 void temperature_control_tec_output_disable_all(temperature_control_task_t * const me);
@@ -100,7 +99,8 @@ uint16_t temperature_control_profile_tec_voltage_get( temperature_control_task_t
 void temperature_control_profile_setpoint_set(temperature_control_task_t *const me, int16_t	setpoint);
 int16_t temperature_control_profile_setpoint_get(temperature_control_task_t *const me);
 uint32_t temperature_control_tec_manual_set_output( temperature_control_task_t *const me,uint32_t tec_idx, uint32_t tec_dir, uint16_t volt_mV);
-
+uint32_t temperature_control_auto_mode_set(temperature_control_task_t *const me);
+uint16_t temperature_control_profile_tec_voltage_get( temperature_control_task_t *const me);
 
 
 

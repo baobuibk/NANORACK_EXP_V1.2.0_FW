@@ -41,4 +41,5 @@ void shell_task_ctor_singleton(void);
 void shell_task_start(uint8_t priority);
 void shell_task_ctor(shell_task_t * const me, shell_task_init_t * const init) ;
 void CLI_UART_stdio_rx_callback();
+void Shell_USART_IRQHandler(void);
 #endif /* APP_SHELL_SHELL_H_ */
