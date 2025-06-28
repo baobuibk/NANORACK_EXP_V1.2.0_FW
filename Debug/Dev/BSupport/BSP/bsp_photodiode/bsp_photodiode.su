@@ -37,11 +37,9 @@
 ../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:192:6:bsp_photodiode_set_sampling_time	8	static
 ../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:196:6:bsp_photodiode_set_post_time	8	static
 ../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:200:6:bsp_photodiode_timer1_init	24	static
-../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:236:6:bsp_photodiode_set_time_tim2	32	static
-../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:270:6:bsp_photodiode_sample_start	16	static
-../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:299:6:bsp_photodiode_start_dma	40	static
-../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:322:6:DMA_HT_RX_callback	16	static
-../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:330:6:DMA_TC_RX_callback	16	static
-../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:348:6:TIM1_UP_TIM10_IRQHandler	8	static,ignoring_inline_asm
-../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:366:6:TIM2_IRQHandler	8	static
-../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:396:6:DMA1_Stream1_IRQHandler	8	static
+../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:226:6:bsp_photodiode_set_time_tim2	32	static
+../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:243:6:bsp_photodiode_sample_start	16	static
+../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:271:6:bsp_photodiode_start_dma	40	static
+../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:295:6:DMA1_Stream1_IRQHandler	8	static
+../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:335:6:TIM1_UP_TIM10_IRQHandler	8	static,ignoring_inline_asm
+../Dev/BSupport/BSP/bsp_photodiode/bsp_photodiode.c:352:6:TIM2_IRQHandler	8	static

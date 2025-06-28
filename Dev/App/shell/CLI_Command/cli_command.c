@@ -196,6 +196,7 @@ static const CliCommandBinding cliStaticBindings_internal[] = {
 	{ "Experiment", "exp_set_profile",    "format: exp_set_profile sampling_rate pos laser_percent pre_time experiment_time post_time",  true, NULL, cmd_exp_set_profile },
 	{ "Experiment", "exp_get_profile",    "format: exp_get_profile",  true, NULL, cmd_exp_get_profile },
 	{ "Experiment", "exp_start_measuring",    "format: exp_start_measuring",  true, NULL, cmd_exp_start_measuring },
+	//{ "Experiment", "exp_get_data",    "format: exp_get_data []",  true, NULL, cmd_exp_get_data },
 
 //	{ NULL, "get_current",  "format: get_current [int/ext]",                                   true, NULL, CMD_Get_Current },
 //	    { NULL, "pd_get",       "format: pd_get [pd_index]",                                       true, NULL, CMD_PD_Get },
@@ -790,16 +791,16 @@ static void cmd_exp_set_profile(EmbeddedCli *cli, char *args, void *context)
 	}
 
 	experiment_profile_t profile;
-	profile.sampling_rate = sampling_rate;
+	profile.sampling_rate = sampling_rate;		// kHz
 	profile.pos = pos;
 	profile.laser_percent = percent;
-	profile.pre_time = pre_time;
-	profile.experiment_time = sample_time;
-	profile.post_time = post_time;
-	profile.num_sample = num_sample;
-	profile.period = 1000000 / sampling_rate;
+	profile.pre_time = pre_time;				// us
+	profile.experiment_time = sample_time;		// us
+	profile.post_time = post_time;				// us
+	profile.num_sample = num_sample;			// kSample
+	profile.period = 1000000 / sampling_rate;	// ns
 	experiment_task_set_profile(pexperiment_task,&profile);
-	cli_printf(cli, "set profile sampling_rate:%d, pos: %d, percent:%d, pre_time:%d, sample_time:%d,post_time:%d, num_sample %d, sampling period %d \r\n",sampling_rate, pos, percent, pre_time, sample_time,post_time, num_sample,profile.period);
+	cli_printf(cli, "set profile sampling_rate:%d, pos: %d, percent:%d, pre_time:%d, sample_time:%d, post_time:%d, num_sample %d, sampling period %d \r\n",sampling_rate, pos, percent, pre_time, sample_time,post_time, num_sample,profile.period);
 }
 
 static void cmd_exp_get_profile(EmbeddedCli *cli, char *args, void *context)

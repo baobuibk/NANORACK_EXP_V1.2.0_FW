@@ -42,7 +42,7 @@ ADS8327_Device_t ads8327_dev = {
 		.cs_pin = PHOTO_ADC_CS_Pin
 };
 
-static uint32_t photo_diode_state = PHOTO_SAMPLING_STOP;
+static photo_state_t photo_diode_state = PHOTO_SAMPLED_PRE;
 
 
 bsp_photodiode_timer_param_t timer_timing;
@@ -69,14 +69,14 @@ void bsp_photo_set_time(bsp_photodiode_time_t * init_photo_time)
 	photo_diode_adc.timing = *init_photo_time;
 	bsp_photodiode_time_t * photo_time = &photo_diode_adc.timing;
 	/*
-	 * timer clock is 200 Mhz, meam 200 tick = 1us
+	 * timer2 clock is 100 Mhz, meam 100 tick = 1us
 	 */
-	timer_timing.post_time_ARR = photo_time->post_time * 200;
-	timer_timing.pre_time_ARR = photo_time->pre_time * 200;
-	timer_timing.sampling_time_ARR = photo_time->sampling_time * 200;
+	timer_timing.post_time_ARR = photo_time->post_time * 100;				// tick
+	timer_timing.pre_time_ARR = photo_time->pre_time * 100;
+	timer_timing.sampling_time_ARR = photo_time->sampling_time * 100;
 
-	//sampling rate in Khz, timer clock is 200 Mhz
-	timer_timing.sampling_period_ARR = (1000 * 200 / photo_time->sampling_rate) ;
+	//sampling rate in Khz, timer1 clock is 200 Mhz
+	timer_timing.sampling_period_ARR = (1000 * 200 / photo_time->sampling_rate);
 }
 
 void bsp_photo_prepare_pre_sampling()
@@ -84,8 +84,8 @@ void bsp_photo_prepare_pre_sampling()
 	bsp_photodiode_sample_rate_timer_init();
 	bsp_photodiode_set_pre_time();
     // Xóa cờ ngắt update
-	TIM1->SR &= ~TIM_SR_UIF; // Xóa cờ ngắt
-    TIM2->SR &= ~TIM_SR_UIF;
+	TIM1->SR = ~TIM_SR_UIF; // Xóa cờ ngắt
+    TIM2->SR = ~TIM_SR_UIF;
 	TIM1->CNT = 0;
 	TIM2->CNT = 0;
 //	TIM1->CR1 |= TIM_CR1_CEN;
@@ -198,16 +198,9 @@ void bsp_photodiode_set_post_time()
 	bsp_photodiode_set_time_tim2(timer_timing.post_time_ARR);
 }
 void bsp_photodiode_timer1_init(uint32_t period) {
-    // 1. Kích hoạt clock cho Timer 1
-    RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;
 
-    // 2. Tính toán giá trị prescaler và period
-    // Xung nhịp APB2 = 200 MHz (giả sử không phân tần)
-    // Chu kỳ 1 tick = 1 / 200 MHz = 5 ns
-    // Số tick cần cho period ns = period / 5
     uint32_t ticks = period ; // Số tick cần cho period
 
-    // Tính prescaler và auto-reload (ARR)
     uint16_t prescaler = 0;
     uint16_t arr = ticks - 1; // Giá trị ARR = số tick - 1
 
@@ -217,63 +210,42 @@ void bsp_photodiode_timer1_init(uint32_t period) {
         arr = (ticks / prescaler) - 1;
     }
 
-    // 3. Cấu hình Timer 1
-    TIM1->CR1 = 0; // Xóa thanh ghi điều khiển
+    // Cấu hình Timer 1
+    //TIM1->CR1 = 0; // Xóa thanh ghi điều khiển
     TIM1->ARR = arr; // Cài đặt giá trị auto-reload
     TIM1->PSC = prescaler; // Cài đặt prescaler
     TIM1->EGR = TIM_EGR_UG; // Tạo sự kiện update để áp dụng ngay
     TIM1->DIER &= ~TIM_DIER_UIE; // off ngắt update
     TIM1->CNT = 0;
-    // 4. Cấu hình NVIC cho ngắt Timer 1
+    // Cấu hình NVIC cho ngắt Timer 1
     NVIC_SetPriority(TIM1_UP_TIM10_IRQn, 0); // Ưu tiên ngắt cao nhất
     NVIC_DisableIRQ(TIM1_UP_TIM10_IRQn);
-
-    // 5. Kích hoạt Timer 1
-    //TIM1->CR1 |= TIM_CR1_CEN;
 }
 
 
 void bsp_photodiode_set_time_tim2(uint32_t period) {
-    // 1. Kích hoạt clock cho Timer 2
-    RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 
-    // 2. Tính toán giá trị prescaler và period
-    // Xung nhịp APB1 = 200 MHz (giả sử không phân tần)
-    // Chu kỳ 1 tick = 1 / 200 MHz = 5 ns
-    // Số tick cần cho period ns = period / 5
     uint32_t ticks = period; // Số tick cần cho period ns
-
     // Tính prescaler và auto-reload (ARR)
     uint16_t prescaler = 0;
     uint32_t arr = ticks - 1; // Giá trị ARR = số tick - 1 (TIM2 hỗ trợ 32-bit ARR)
-
-    // Nếu ticks lớn hơn 0xFFFF, cần điều chỉnh prescaler
-//    if (ticks > 0xFFFF) {
-//        prescaler = (ticks / 0xFFFF) + 1; // Làm tròn lên
-//        arr = (ticks / prescaler) - 1;
-//    }
-
-    // 3. Cấu hình Timer 2
+    // Cấu hình Timer 2
     //TIM2->CR1 = 0; // Xóa thanh ghi điều khiển
     TIM2->ARR = arr; // Cài đặt giá trị auto-reload
     TIM2->PSC = prescaler; // Cài đặt prescaler
     TIM2->EGR = TIM_EGR_UG; // Tạo sự kiện update để áp dụng ngay
-    TIM2->DIER &= ~TIM_DIER_UIE; // Kích hoạt ngắt update
+    TIM2->DIER &= ~TIM_DIER_UIE;
     TIM2->CNT = 0;
     // 4. Cấu hình NVIC cho ngắt Timer 2
     NVIC_SetPriority(TIM2_IRQn, 1); // Ưu tiên ngắt 1
      NVIC_DisableIRQ(TIM2_IRQn);
-
-    // 5. Kích hoạt Timer 2
-    // TIM2->CR1 |= TIM_CR1_CEN;
 }
 void bsp_photodiode_sample_start()
 {
 	bsp_photodiode_adc_spi_change_mode();
 	bsp_photo_prepare_pre_sampling();
 	bsp_photodiode_time_t * timing = &photo_diode_adc.timing;
-	uint32_t num_sample = ((timing->post_time + timing->sampling_time + timing->post_time) * timing->sampling_rate) / 1000;
-
+	uint32_t num_sample = ((timing->pre_time + timing->sampling_time + timing->post_time) * timing->sampling_rate) / 1000;
 	if (num_sample % BUFFER_FULL_SIZE) photo_diode_adc.block_count = (num_sample / BUFFER_FULL_SIZE) + 1;
 	else photo_diode_adc.block_count = (num_sample / BUFFER_FULL_SIZE);
 	photo_diode_adc.ram_current_address = 0;
@@ -291,7 +263,7 @@ void bsp_photodiode_sample_start()
 	    // 5. Kích hoạt Timer 1
 	TIM2->CR1 |= TIM_CR1_CEN;
     TIM1->CR1 |= TIM_CR1_CEN;
-    photo_diode_state = PHOTO_SAMPLING_PRE;
+    photo_diode_state = PHOTO_SAMPLED_PRE;
 
 
 }
@@ -311,106 +283,98 @@ void bsp_photodiode_start_dma(photo_diode_t *config, uint32_t *buffer, uint32_t 
 	// Kích hoạt DMA
 	LL_DMA_EnableIT_TC(config->dma, config->dma_stream_rx);		// Kích hoạt ngắt DMA hoàn tất (cho RX)
 	LL_DMA_EnableIT_HT(config->dma, config->dma_stream_rx);		// Kích hoạt ngắt DMA hoàn tất (cho RX)
-	LL_DMA_EnableStream(config->dma, config->dma_stream_rx); 	// RX trước
-
 	LL_SPI_EnableDMAReq_RX(config->spi);
+	LL_DMA_EnableStream(config->dma, config->dma_stream_rx); 	// RX trước
 }
 
 
 
-// Hàm xử lý ngắt DMA RX (SPI2_RX)
-void DMA_HT_RX_callback(photo_diode_t * photodiode)
-{
-	bsp_spi_ram_write_dma(photodiode->ram_current_address, BUFFER_HALF_SIZE_BYTE, (uint8_t *)photo_data_buffer);
-	photodiode->ram_current_address += BUFFER_HALF_SIZE_BYTE;
 
-}
 
-// Hàm xử lý ngắt DMA RX (SPI2_RX)
-void DMA_TC_RX_callback(photo_diode_t * photodiode)
+// Hàm xử lí DMA ADC
+void DMA1_Stream1_IRQHandler(void)
 {
-	bsp_spi_ram_write_dma(photodiode->ram_current_address, BUFFER_HALF_SIZE_BYTE, (uint8_t *)upper_data_buffer);
-	photodiode->ram_current_address += BUFFER_HALF_SIZE_BYTE;
-	photodiode->block_count --;
-	if ((photodiode->block_count) == 0)
+	TIM1->CR1 &= ~TIM_CR1_CEN;		// Stop timer trigger
+	GPIOD->BSRR = GPIO_BSRR_BS_9; // Đặt CS lên 1
+	// Kiểm tra cờ ngắt HT
+	if (DMA1->LISR & DMA_LISR_HTIF1)
 	{
-		LL_DMA_DisableStream(photodiode->dma, photodiode->dma_stream_rx);
-		LL_DMA_DisableIT_TC(photodiode->dma, photodiode->dma_stream_rx);
-		LL_DMA_DisableIT_HT(photodiode->dma, photodiode->dma_stream_rx);
-		LL_SPI_DisableDMAReq_RX(photodiode->spi);
-		SST_Task_post((SST_Task *)&experiment_task_inst.super, (SST_Evt *)&finish_post_phase_evt);
+		DMA1->LIFCR = DMA_LIFCR_CHTIF1;	// Clear HT flag
+		bsp_spi_ram_write_dma(photo_diode_adc.ram_current_address, BUFFER_HALF_SIZE_BYTE, (uint8_t *)photo_data_buffer);
+		photo_diode_adc.ram_current_address += BUFFER_HALF_SIZE_BYTE;
+		TIM1->CR1 |= TIM_CR1_CEN;		// Continue start timer trigger
 	}
 
+	// Kiểm tra cờ ngắt TC
+	else if (DMA1->LISR & DMA_LISR_TCIF1)
+	{
+		DMA1->LIFCR = DMA_LIFCR_CTCIF1;	// Clear TC flag
+		//DMA_TC_RX_callback(&photo_diode_adc);
+		bsp_spi_ram_write_dma(photo_diode_adc.ram_current_address, BUFFER_HALF_SIZE_BYTE, (uint8_t *)upper_data_buffer);
+		photo_diode_adc.ram_current_address += BUFFER_HALF_SIZE_BYTE;
+		photo_diode_adc.block_count --;
+		TIM1->CR1 |= TIM_CR1_CEN;		// Continue start timer trigger
+		if ((photo_diode_adc.block_count) == 0)
+		{
+			PHOTO_TIMER->CR1 &= ~TIM_CR1_CEN;		// stop timer 2
+			PHOTO_TIMER->DIER &= ~TIM_DIER_UIE;
+			TIM1->CR1 &= ~TIM_CR1_CEN;				// Timer1 disable counter
+			TIM1->DIER &= ~TIM_DIER_UIE;			// Timer1 disable IT Update
+			LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_1);
+			LL_DMA_DisableIT_TC(DMA1, LL_DMA_STREAM_1);
+			LL_DMA_DisableIT_HT(DMA1, LL_DMA_STREAM_1);
+			LL_SPI_DisableDMAReq_RX(photo_diode_adc.spi);
+			SST_Task_post((SST_Task *)&experiment_task_inst.super, (SST_Evt *)&finish_post_phase_evt);
+		}
+	}
+
+
 }
 
-
-// Hàm xử lý ngắt Timer 1
-void TIM1_UP_TIM10_IRQHandler(void) {
-
+// Hàm xử lý ngắt Timer ADC trigger
+void TIM1_UP_TIM10_IRQHandler(void)
+{
 	// Tạo xung trên PD10
 	GPIOD->BSRR = GPIO_BSRR_BS_9; // Đặt CS lên 1
-	GPIOD->BSRR = GPIO_BSRR_BR_10; // Đặt PD10 xuống 0
+	GPIOD->BSRR = GPIO_BSRR_BR_10; // Đặt CV xuống 0
+	__NOP();
+	__NOP();
+	__NOP();
+	__NOP();
 
-	__NOP(); // Lệnh NOP để đảm bảo trễ
-	__NOP(); // Lệnh NOP để đảm bảo trễ
-	__NOP(); // Lệnh NOP để đảm bảo trễ
-	__NOP(); // Lệnh NOP để đảm bảo trễ
+	//PHOTO_SPI->DR = 0xAAAA;
 	GPIOD->BSRR = GPIO_BSRR_BR_9; // CS=0
-	LL_SPI_TransmitData16(SPI2, 0xAAAA);
+	LL_SPI_TransmitData16(PHOTO_SPI, 0xAAAA);
 	GPIOD->BSRR = GPIO_BSRR_BS_10; // Đặt PD10 lên 1
-	TIM1->SR &= ~TIM_SR_UIF; // Xóa cờ ngắt
-
-
+	TIM1->SR = ~TIM_SR_UIF; // Xóa cờ ngắt
 }
 
 void TIM2_IRQHandler(void)
 {
-	   // Kiểm tra cờ ngắt update của Timer 2
-	    if (TIM2->SR & TIM_SR_UIF)
-	    {
-	        // Xóa cờ ngắt update
-	        TIM2->SR &= ~TIM_SR_UIF;
+	if (PHOTO_TIMER->SR & TIM_SR_UIF)
+	{
+		PHOTO_TIMER->SR = ~TIM_SR_UIF;	// Xóa cờ ngắt update
+		switch (photo_diode_state)
+		{
+			case PHOTO_SAMPLED_PRE:
+				bsp_laser_int_switch_on(photo_diode_adc.timing.pos);
+				photo_diode_state = PHOTO_SAMPLED_SAMPLING;
+//				bsp_photodiode_set_sampling_time();
+				PHOTO_TIMER->ARR = timer_timing.sampling_time_ARR - 1;
+				PHOTO_TIMER->CNT = 0;
+				SST_Task_post((SST_Task *)&experiment_task_inst.super, (SST_Evt *)&finish_pre_phase_evt);
+			break;
 
-	        switch (photo_diode_state)
-	        {
-				case PHOTO_SAMPLING_PRE:
-						bsp_laser_int_switch_on(photo_diode_adc.timing.pos);
-						photo_diode_state = PHOTO_SAMPLING_SAMPLING;
-	//					bsp_photodiode_set_sampling_time();
-						PHOTO_TIMER->ARR = timer_timing.sampling_time_ARR - 1;
-						SST_Task_post((SST_Task *)&experiment_task_inst.super, (SST_Evt *)&finish_pre_phase_evt);
-				break;
-
-				case PHOTO_SAMPLING_SAMPLING:
-					bsp_laser_int_switch_off_all();
-					photo_diode_state = PHOTO_SAMPLING_POST;
-//					bsp_photodiode_set_sampling_time();
-					PHOTO_TIMER->ARR = timer_timing.sampling_time_ARR;
-					SST_Task_post((SST_Task *)&experiment_task_inst.super, (SST_Evt *)&finish_sampling_phase_evt);
-//					Stop timer 2
-					TIM2->CR1 &= ~TIM_CR1_CEN;
-				break;
-	        }
-	    }
-}
-void DMA1_Stream1_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
-	if (DMA1->LISR & DMA_LISR_TCIF1) { // Cờ TC cho Stream 1
-	        // Xóa cờ TC
-	        DMA1->LIFCR = DMA_LIFCR_CTCIF1;
-
-	        DMA_TC_RX_callback(&photo_diode_adc);
-	    }
-	    // Kiểm tra cờ ngắt HT
-	    if (DMA1->LISR & DMA_LISR_HTIF1) { // Cờ HT cho Stream 1
-	        // Xóa cờ HT
-	        DMA1->LIFCR = DMA_LIFCR_CHTIF1;
-
-	        DMA_HT_RX_callback(&photo_diode_adc);
-	    }
-  /* USER CODE END DMA1_Stream1_IRQn 0 */
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
-
-  /* USER CODE END DMA1_Stream1_IRQn 1 */
+			case PHOTO_SAMPLED_SAMPLING:
+				bsp_laser_int_switch_off_all();
+				photo_diode_state = PHOTO_SAMPLING_STOP;
+//				bsp_photodiode_set_sampling_time();
+				PHOTO_TIMER->ARR = timer_timing.post_time_ARR-1;
+				PHOTO_TIMER->CNT = 0;
+				SST_Task_post((SST_Task *)&experiment_task_inst.super, (SST_Evt *)&finish_sampling_phase_evt);
+				PHOTO_TIMER->CR1 &= ~TIM_CR1_CEN;		// stop timer
+			break;
+			default: break;
+		}
+	}
 }

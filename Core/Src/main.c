@@ -184,17 +184,14 @@ int main(void)
 
   uint8_t write_buffer[50];
   uint8_t read_buffer[110] = {0};
-//  for (uint32_t i=0; i<1024;i++) write_buffer[i] = i;
-//  bsp_spi_ram_write_polling(0, 1024, write_buffer);
-//  bsp_spi_ram_read_polling(0, 1024, read_buffer);
-//  for (uint32_t i=0; i<1024;i++) read_buffer[i] = 0;
-//  bsp_spi_ram_fast_read_polling(0, 1024, read_buffer);
-  for (uint32_t i=0; i<50;i++) write_buffer[i] = i;
-  bsp_spi_ram_write_dma(0, 50, write_buffer);
-  while(!bsp_spi_ram_is_transfer_done());
 
-  bsp_spi_ram_write_dma(50, 50, write_buffer);
-  while(!bsp_spi_ram_is_transfer_done());
+
+//  for (uint32_t i=0; i<50;i++) write_buffer[i] = i;
+//  bsp_spi_ram_write_dma(0, 50, write_buffer);
+//  while(!bsp_spi_ram_is_transfer_done());
+//
+//  bsp_spi_ram_write_dma(50, 50, write_buffer);
+//  while(!bsp_spi_ram_is_transfer_done());
 
 
 
@@ -1142,7 +1139,7 @@ static void MX_TIM2_Init(void)
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim2.Init.Period = 4294967295;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
   {
     Error_Handler();
@@ -1159,8 +1156,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM2_Init 2 */
-//  HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);
-//  HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
   /* USER CODE END TIM2_Init 2 */
 
 }
@@ -1545,9 +1541,6 @@ static void MX_GPIO_Init(void)
   LL_GPIO_ResetOutputPin(ADG_SCK_GPIO_Port, ADG_SCK_Pin);
 
   /**/
-  LL_GPIO_ResetOutputPin(ADG_CS_GPIO_Port, ADG_CS_Pin);
-
-  /**/
   LL_GPIO_ResetOutputPin(EF_5_EN_GPIO_Port, EF_5_EN_Pin);
 
   /**/
@@ -1576,6 +1569,9 @@ static void MX_GPIO_Init(void)
 
   /**/
   LL_GPIO_SetOutputPin(PHOTO_ADC_CONV_GPIO_Port, PHOTO_ADC_CONV_Pin);
+
+  /**/
+  LL_GPIO_SetOutputPin(ADG_CS_GPIO_Port, ADG_CS_Pin);
 
   /**/
   LL_GPIO_SetOutputPin(FRAM_CS_GPIO_Port, FRAM_CS_Pin);
