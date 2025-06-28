@@ -1,4 +1,10 @@
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2596:26:LL_USART_IsActiveFlag_FE	2
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2607:26:LL_USART_IsActiveFlag_NE	2
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2618:26:LL_USART_IsActiveFlag_ORE	2
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2640:26:LL_USART_IsActiveFlag_RXNE	2
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2872:22:LL_USART_ClearFlag_FE	1
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2883:22:LL_USART_ClearFlag_NE	1
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2894:22:LL_USART_ClearFlag_ORE	1
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:3658:25:LL_USART_ReceiveData8	1
 ../Dev/App/shell/shell.c:58:6:shell_stdio_init	1
 ../Dev/App/shell/shell.c:70:17:shell_cli_init	2
@@ -8,5 +14,5 @@
 ../Dev/App/shell/shell.c:122:6:shell_task_start	1
 ../Dev/App/shell/shell.c:126:6:shell_task_init	2
 ../Dev/App/shell/shell.c:135:16:shell_state_process_handler	4
-../Dev/App/shell/shell.c:156:6:CLI_UART_stdio_rx_callback	2
-../Dev/App/shell/shell.c:162:6:Shell_USART_IRQHandler	1
+../Dev/App/shell/shell.c:156:6:CLI_UART_stdio_rx_callback	5
+../Dev/App/shell/shell.c:174:6:Shell_USART_IRQHandler	1

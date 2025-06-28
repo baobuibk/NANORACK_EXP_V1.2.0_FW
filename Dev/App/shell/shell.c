@@ -35,8 +35,8 @@ circular_char_buffer_t tx_buffer;
 uint8_t rx_static_buffer[SHELL_UART_RX_BUFFER_SIZE];
 uint8_t tx_static_buffer[SHELL_UART_TX_BUFFER_SIZE];
 
-#define SHELL_UART_CLI_BUFFER_SIZE	2048
-#define SHELL_UART_CLI_RX_BUFFER_SIZE	16
+#define SHELL_UART_CLI_BUFFER_SIZE	4096
+#define SHELL_UART_CLI_RX_BUFFER_SIZE	128
 #define SHELL_UART_CLI_CMD_BUFFER_SIZE	64
 #define SHELL_UART_CLI_HISTORY_BUFFER_SIZE 128
 
@@ -158,6 +158,18 @@ void CLI_UART_stdio_rx_callback() {
         uint8_t received_data = LL_USART_ReceiveData8(CLI_UART);
         embeddedCliReceiveChar(shell_uart_cli, received_data);
      }
+    if (LL_USART_IsActiveFlag_ORE(CLI_UART))
+	{
+		LL_USART_ClearFlag_ORE(CLI_UART);
+	}
+	if (LL_USART_IsActiveFlag_FE(CLI_UART))
+	{
+		LL_USART_ClearFlag_FE(CLI_UART);
+	}
+	if (LL_USART_IsActiveFlag_NE(CLI_UART))
+	{
+		LL_USART_ClearFlag_NE(CLI_UART);
+	}
 }
 void Shell_USART_IRQHandler(void)
 {

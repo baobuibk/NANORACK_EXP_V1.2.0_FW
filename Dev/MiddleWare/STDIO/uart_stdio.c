@@ -173,4 +173,8 @@ void uart_stdio_tx_callback(UART_stdio_t* me) {
             me->tx_busy = false;
         }
     }
+    if (LL_USART_IsActiveFlag_TC(me->uart_x))
+	{
+		LL_USART_ClearFlag_TC(me->uart_x);
+	}
 }

@@ -57,3 +57,21 @@ uint8_t bsp_spi_ram_is_transfer_done(void)
 {
 	return SRAM_IsTransferDone(&IS66WV);
 }
+
+// Hàm xử lý ngắt DMA RX (SPI2_RX)
+void DMA2_Stream6_IRQHandler(void)
+{
+	if(DMA2->HISR & DMA_HISR_TCIF6)
+	{
+		DMA2->HIFCR = DMA_HIFCR_CTCIF6;
+	}
+	if(DMA2->HISR & DMA_HISR_TCIF5)
+	{
+		DMA2->HIFCR = DMA_HIFCR_CTCIF5;
+	}
+
+	IS66WV.cs_port->BSRR = IS66WV.cs_pin;		// CS cao
+	IS66WV.transfer_done = 1; // Báo hoàn tất
+	LL_DMA_DisableStream(DMA2, LL_DMA_STREAM_5);
+	LL_DMA_DisableStream(DMA2, LL_DMA_STREAM_6);
+}

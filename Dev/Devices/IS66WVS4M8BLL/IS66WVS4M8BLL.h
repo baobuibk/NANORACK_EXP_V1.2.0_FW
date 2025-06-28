@@ -36,6 +36,5 @@ void SRAM_read_DMA(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buf
 
 
 uint8_t SRAM_IsTransferDone(IS66_t *config);
-void DMA_RX_callback(IS66_t *dev);
 
 #endif // IS66WVS4M8BLL_H

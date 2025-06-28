@@ -23,7 +23,7 @@ typedef struct bsp_photodiode_time_t
 
 }bsp_photodiode_time_t;
 
-enum {PHOTO_SAMPLING_STOP, PHOTO_SAMPLING_PRE, PHOTO_SAMPLING_SAMPLING, PHOTO_SAMPLING_POST};
+typedef enum {PHOTO_SAMPLING_START, PHOTO_SAMPLED_PRE, PHOTO_SAMPLED_SAMPLING, PHOTO_SAMPLING_STOP} photo_state_t;
 
 typedef struct photo_diode_t{
     SPI_TypeDef *spi;               // Instance SPI (SPI2)

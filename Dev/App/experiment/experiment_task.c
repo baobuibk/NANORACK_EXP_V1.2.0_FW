@@ -295,8 +295,8 @@ uint32_t experiment_task_photo_ADC_prepare_SPI(experiment_task_t * const me)
 
 uint32_t experiment_task_set_profile(experiment_task_t * me,experiment_profile_t * profile)
 {
-	if ((profile->sampling_rate ==0 ) || (profile->sampling_rate > 1000)) return ERROR_NOT_SUPPORTED;
-	if ((profile->pos ==0 ) || (profile->pos > 36)) return ERROR_NOT_SUPPORTED;
+	if ((profile->sampling_rate == 0 ) || (profile->sampling_rate > 1000)) return ERROR_NOT_SUPPORTED;
+	if ((profile->pos == 0 ) || (profile->pos > 36)) return ERROR_NOT_SUPPORTED;
 	if ((profile->laser_percent > 100 ) ) return ERROR_NOT_SUPPORTED;
 	if (profile->num_sample > 2048) return ERROR_NOT_SUPPORTED;
 	if (profile->period == 0) return ERROR_NOT_SUPPORTED;
@@ -314,7 +314,8 @@ uint32_t experiment_start_measuring(experiment_task_t * const me)
 	if ((profile->sampling_rate ==0 ) || (profile->sampling_rate > 1000)) return ERROR_NOT_SUPPORTED;
 	if ((profile->pos ==0 ) || (profile->pos > 36)) return ERROR_NOT_SUPPORTED;
 	if ((profile->laser_percent > 100 ) ) return ERROR_NOT_SUPPORTED;
-	if (((profile->pre_time + profile->experiment_time + profile->post_time ) * profile->sampling_rate) > 2048*1000000) return ERROR_NOT_SUPPORTED;
+	if (profile->num_sample > 2048) return ERROR_NOT_SUPPORTED;
+	//if (((profile->pre_time + profile->experiment_time + profile->post_time ) * profile->sampling_rate) > 2048*1000000) return ERROR_NOT_SUPPORTED;
 	SST_Task_post(&me->super, (SST_Evt *)&start_measuring_evt);
 	return ERROR_OK;
 }

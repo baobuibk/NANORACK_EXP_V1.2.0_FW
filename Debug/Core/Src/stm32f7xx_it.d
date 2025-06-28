@@ -49,7 +49,6 @@ Core/Src/stm32f7xx_it.o: ../Core/Src/stm32f7xx_it.c ../Core/Inc/main.h \
  D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/sst0_c/src/sst.h \
  D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/sst0_c/ports/arm-cm/sst_port.h \
  D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/container/circular_buffer.h \
- D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.h \
  D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/App/shell/shell.h \
  D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/FSM/fsm.h \
  D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/FSM/FSM_signals.h \
@@ -113,7 +112,6 @@ D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/Common/basetypede
 D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/sst0_c/src/sst.h:
 D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/sst0_c/ports/arm-cm/sst_port.h:
 D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/container/circular_buffer.h:
-D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.h:
 D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/App/shell/shell.h:
 D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/FSM/fsm.h:
 D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/MiddleWare/FSM/FSM_signals.h:

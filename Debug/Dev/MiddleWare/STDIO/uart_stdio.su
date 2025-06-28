@@ -1,7 +1,9 @@
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:560:22:LL_USART_Enable	16	static
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:574:22:LL_USART_Disable	16	static
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2640:26:LL_USART_IsActiveFlag_RXNE	16	static
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2651:26:LL_USART_IsActiveFlag_TC	16	static
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2662:26:LL_USART_IsActiveFlag_TXE	16	static
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:2916:22:LL_USART_ClearFlag_TC	16	static
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:3038:22:LL_USART_EnableIT_RXNE	40	static,ignoring_inline_asm
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:3060:22:LL_USART_EnableIT_TXE	40	static,ignoring_inline_asm
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h:3202:22:LL_USART_DisableIT_RXNE	40	static,ignoring_inline_asm
