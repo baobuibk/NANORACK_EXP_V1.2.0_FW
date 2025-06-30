@@ -30,8 +30,6 @@ Dev/Sensor_I2C/sensor_i2c.o: ../Dev/Sensor_I2C/sensor_i2c.c \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_i2c.h \
  D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/Sensor_I2C/LSM6DSOX/lsm6dsox.h \
  D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/Sensor_I2C/BMP390/bmp390.h \
@@ -91,8 +89,6 @@ D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/BSupport/I2C/i2c.
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h:
-../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h:
-../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_i2c.h:
 D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/Sensor_I2C/LSM6DSOX/lsm6dsox.h:
 D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/Sensor_I2C/BMP390/bmp390.h:

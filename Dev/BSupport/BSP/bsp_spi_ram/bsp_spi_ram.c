@@ -74,4 +74,6 @@ void DMA2_Stream6_IRQHandler(void)
 	IS66WV.transfer_done = 1; // Báo hoàn tất
 	LL_DMA_DisableStream(DMA2, LL_DMA_STREAM_5);
 	LL_DMA_DisableStream(DMA2, LL_DMA_STREAM_6);
+	LL_SPI_EnableDMAReq_TX(IS66WV.spi);
+	LL_SPI_EnableDMAReq_RX(IS66WV.spi);
 }

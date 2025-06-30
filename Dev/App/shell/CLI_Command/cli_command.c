@@ -107,6 +107,7 @@ static void CMD_Ext_Laser_Switch_Off(EmbeddedCli *cli, char *args, void *context
 static void cmd_exp_set_profile(EmbeddedCli *cli, char *args, void *context);
 static void cmd_exp_get_profile(EmbeddedCli *cli, char *args, void *context);
 static void cmd_exp_start_measuring(EmbeddedCli *cli, char *args, void *context);
+static void cmd_exp_ram_read(EmbeddedCli *cli, char *args, void *context);
 
 //static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context);
 //static void CMD_TEC_Get_Auto(EmbeddedCli *cli, char *args, void *context);
@@ -196,7 +197,7 @@ static const CliCommandBinding cliStaticBindings_internal[] = {
 	{ "Experiment", "exp_set_profile",    "format: exp_set_profile sampling_rate pos laser_percent pre_time experiment_time post_time",  true, NULL, cmd_exp_set_profile },
 	{ "Experiment", "exp_get_profile",    "format: exp_get_profile",  true, NULL, cmd_exp_get_profile },
 	{ "Experiment", "exp_start_measuring",    "format: exp_start_measuring",  true, NULL, cmd_exp_start_measuring },
-	//{ "Experiment", "exp_get_data",    "format: exp_get_data []",  true, NULL, cmd_exp_get_data },
+	{ "Experiment", "exp_ram_read",    "format: exp_ram_read [address] [num_sample]",  true, NULL, cmd_exp_ram_read },
 
 //	{ NULL, "get_current",  "format: get_current [int/ext]",                                   true, NULL, CMD_Get_Current },
 //	    { NULL, "pd_get",       "format: pd_get [pd_index]",                                       true, NULL, CMD_PD_Get },
@@ -389,7 +390,7 @@ static void CMD_TEC_Get_Profile_Volt(EmbeddedCli *cli, char *args, void *context
 
 	uint16_t tec_volt;
 	tec_volt = temperature_control_profile_tec_voltage_get(ptemperature_control_task);
-	cli_printf(cli, "profile setpoint of TEC = %d mV",tec_volt);
+	cli_printf(cli, "profile setpoint of TEC = %d mV\r\n",tec_volt);
 	return;
 
 }
@@ -420,8 +421,8 @@ static void CMD_TEC_Profile_Get(EmbeddedCli *cli, char *args, void *context)
 	uint8_t tec_profile = temperature_control_profile_tec_get(ptemperature_control_task);
 	for (uint32_t i=0;i<4;i++)
 	{
-		if (tec_profile & (1<<i)) cli_printf(cli, "tec[%d] registered ",i);
-		else cli_printf(cli, "tec[%d] unregistered ",i);
+		if (tec_profile & (1<<i)) cli_printf(cli, "tec[%d] registered\r\n",i);
+		else cli_printf(cli, "tec[%d] unregistered\r\n",i);
 	}
 	cli_printf(cli, "\r\n");
 }
@@ -516,7 +517,7 @@ static void CMD_HTR_Set_Profile_Duty(EmbeddedCli *cli, char *args, void *context
 	uint8_t duty = atoi(arg1);
 	if (duty > 100)
 	{
-		cli_printf(cli, "require duty in range of 0-100 \r\n");
+		cli_printf(cli, "require duty in range of 0-100\r\n");
 		return;
 	}
 
@@ -528,7 +529,7 @@ static void CMD_HTR_Set_Profile_Duty(EmbeddedCli *cli, char *args, void *context
 static void CMD_HTR_Get_Profile_Duty(EmbeddedCli *cli, char *args, void *context) {
     // TODO: Implement Heater duty cycle get logic
 	uint8_t profile_duty = temperature_control_profile_heater_duty_get(ptemperature_control_task);
-	cli_printf(cli, "heater profile duty = %d \r\n",profile_duty);
+	cli_printf(cli, "heater profile duty = %d\r\n",profile_duty);
 }
 static void CMD_Heater_Profile_Register(EmbeddedCli *cli, char *args, void *context)
 {
@@ -557,8 +558,8 @@ static void CMD_Heater_Profile_Get(EmbeddedCli *cli, char *args, void *context)
 	uint8_t heater_profile = temperature_control_profile_heater_profile_get(ptemperature_control_task);
 	for (uint32_t i=0;i<4;i++)
 	{
-		if (heater_profile & (1<<i)) cli_printf(cli, "heater[%d] registered ");
-		else cli_printf(cli, "heater[%d] unregistered ");
+		if (heater_profile & (1<<i)) cli_printf(cli, "heater[%d] registered\r\n");
+		else cli_printf(cli, "heater[%d] unregistered\r\n");
 	}
 	cli_printf(cli, "\r\n");
 }
@@ -576,7 +577,7 @@ static void CMD_Ref_Set_Temp(EmbeddedCli *cli, char *args, void *context) {
 	const char *arg1 = embeddedCliGetToken(args, 1);
 	int16_t setpoint = atoi(arg1);
 	temperature_control_profile_setpoint_set(ptemperature_control_task,setpoint);
-	cli_printf(cli, "temperature setpoint: %.2f *C", (float)setpoint/10);
+	cli_printf(cli, "temperature setpoint: %.2f *C\r\n", (float)setpoint/10);
 
 }
 
@@ -584,7 +585,7 @@ static void CMD_Ref_Get_Temp(EmbeddedCli *cli, char *args, void *context) {
     // TODO: Implement reference temperature get logic
 
 	int16_t setpoint = temperature_control_profile_setpoint_get(ptemperature_control_task);
-	cli_printf(cli, "Reference Temperature: %.2f *C", (float)setpoint/10);
+	cli_printf(cli, "Reference Temperature: %.2f *C\r\n", (float)setpoint/10);
 }
 
 static void CMD_Ref_Set_NTC(EmbeddedCli *cli, char *args, void *context) {
@@ -599,7 +600,7 @@ static void CMD_Ref_Set_NTC(EmbeddedCli *cli, char *args, void *context) {
 	const char *arg1 = embeddedCliGetToken(args, 1);
 	uint32_t NTC_Ref = atoi(arg1);
 	if (NTC_Ref > 7) {
-		cli_printf(cli, "NTC index out of range (0-7");
+		cli_printf(cli, "NTC index out of range (0-7)\r\n");
 		return;
 	}
 	temperature_control_profile_ntc_register(ptemperature_control_task,NTC_Ref);
@@ -610,17 +611,17 @@ static void CMD_Ref_Get_NTC(EmbeddedCli *cli, char *args, void *context) {
     // TODO: Implement reference NTC get logic
 	uint8_t NTC_Ref = 0;
 	NTC_Ref = temperature_control_profile_ntc_get( ptemperature_control_task);
-	cli_printf(cli, "NTC Ref is %d", NTC_Ref);
+	cli_printf(cli, "NTC Ref is %d\r\n", NTC_Ref);
 }
 static void CMD_Start_Auto_Mode(EmbeddedCli *cli, char *args, void *context)
 {
 	temperature_control_auto_mode_set(ptemperature_control_task);
-	cli_printf(cli, "Auto mode started");
+	cli_printf(cli, "Auto mode started\r\n");
 }
 static void CMD_Stop_Auto_Mode(EmbeddedCli *cli, char *args, void *context)
 {
 	temperature_control_man_mode_set(ptemperature_control_task);
-	cli_printf(cli, "Auto mode stopped");
+	cli_printf(cli, "Auto mode stopped\r\n");
 }
 
 /*
@@ -675,7 +676,7 @@ static void CMD_Laser_Get_Current(EmbeddedCli *cli, char *args, void *context)
 	uint32_t int_laser_current = experiment_task_laser_get_current(pexperiment_task, 0);
 	uint32_t ext_laser_current = experiment_task_laser_get_current(pexperiment_task, 1);
 
-	cli_printf(cli, "int_laser current = %d percent ext_laser current = %d percent",int_laser_current,ext_laser_current);
+	cli_printf(cli, "int_laser current = %d percent ext_laser current = %d percent\r\n",int_laser_current,ext_laser_current);
 }
 static void CMD_Int_Laser_Switch_On(EmbeddedCli *cli, char *args, void *context)
 {
@@ -816,6 +817,64 @@ static void cmd_exp_start_measuring(EmbeddedCli *cli, char *args, void *context)
 		cli_printf(cli, "Wrong profile, please check \r\n");
 	else cli_printf(cli,"Starting Measurement\r\n");
 }
+
+static void cmd_exp_ram_read(EmbeddedCli *cli, char *args, void *context)
+{
+	uint32_t tokenCount = embeddedCliGetTokenCount(args);
+
+	if (tokenCount != 2)
+	{
+		cli_printf(cli, "format: exp_ram_read [address] [num_sample]\r\n");
+		return;
+	}
+
+	data_profile_t data_profile;
+	data_profile_t remain_data_profile;
+
+	// 32Mb = 4096kB = 2048kW = 2097152W -> addr < (2097152 - 1)W
+	data_profile.start_address = atoi(embeddedCliGetToken(args, 1));		// calculated by halfword
+	if (data_profile.start_address > 2097151)
+	{
+		cli_printf(cli, "address out of range (0-2097151 nsamples)\r\n");
+		return;
+	}
+
+	// 32Mb = 4096kB = 2048kW = 2097152W -> num_sample <= (2097152 - addr) sample
+	data_profile.num_data = atoi(embeddedCliGetToken(args, 2));		// calculated by halfword
+	if (data_profile.num_data > 2097152 - data_profile.start_address)
+	{
+		cli_printf(cli, "num sample out of range (0-%d samples)\r\n", 2097152 - data_profile.start_address);
+		return;
+	}
+
+
+    uint16_t ram_buffer[1000];
+    remain_data_profile.num_data = data_profile.num_data;
+    remain_data_profile.start_address = data_profile.start_address;
+
+    while (remain_data_profile.num_data > 0)
+    {
+        uint32_t batch_size = (remain_data_profile.num_data > 1000) ? 1000 : remain_data_profile.num_data;
+        experiment_task_get_ram_data(pexperiment_task, &remain_data_profile, ram_buffer);
+
+        for (uint32_t i = 0; i < batch_size; i++)
+        {
+            cli_printf(cli, "0x%04X ", ram_buffer[i]);
+            LL_mDelay(1);
+        }
+
+        remain_data_profile.num_data -= batch_size;
+        remain_data_profile.start_address += batch_size;
+    }
+
+
+    cli_printf(cli, "\r\n");
+}
+
+
+
+
+
 
 //static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context) {
 //    // TODO: Implement TEC auto mode set logic

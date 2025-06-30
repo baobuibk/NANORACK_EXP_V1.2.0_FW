@@ -28,8 +28,6 @@ Dev/Sensor_I2C/BME280/bme280.o: ../Dev/Sensor_I2C/BME280/bme280.c \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_dma.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_i2c.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_rcc.h \
@@ -80,8 +78,6 @@ Dev/Sensor_I2C/BME280/bme280.o: ../Dev/Sensor_I2C/BME280/bme280.c \
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h:
-../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h:
-../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_dma.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_i2c.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_rcc.h:

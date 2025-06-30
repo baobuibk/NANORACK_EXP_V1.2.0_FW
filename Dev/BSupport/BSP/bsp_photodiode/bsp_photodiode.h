@@ -42,8 +42,7 @@ void bsp_photodiode_set_spi_prescaler(uint32_t Prescaler);
 void bsp_photodiode_sw_spi_change_mode(void);
 void bsp_photodiode_adc_spi_change_mode(void);
 
-void bsp_photo_sw_init(void);
-void bsp_photo_adc_init(void);
+void bsp_photodiode_init(void);
 void bsp_photo_set_time(bsp_photodiode_time_t * init_photo_time);
 void bsp_photo_switch_on(uint32_t channel_idx);
 void bsp_photo_switch_off_all(void);

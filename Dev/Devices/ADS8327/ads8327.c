@@ -108,9 +108,8 @@ void ISR_SPI_DMA_Rx_IRQHandler(ADS8327_Device_t *dev)
 }
 
 
-void ADS8327_Device_Init(	ADS8327_Device_t *dev)
+void ADS8327_Device_Init(ADS8327_Device_t *dev)
 {
-//TODO: change mode
 	dev->ADC_val = 0xFFFF;
 	dev->tran_ind = 0;
 

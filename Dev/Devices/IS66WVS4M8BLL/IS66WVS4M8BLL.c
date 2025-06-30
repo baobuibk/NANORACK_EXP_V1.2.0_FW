@@ -127,7 +127,8 @@ void SRAM_write_DMA(IS66_t *config, uint32_t address, uint32_t size, uint8_t *bu
 	uint32_t i;
 	uint8_t cmd[4] = {SRAM_WRITE_CMD, (address >> 16) & 0xFF, (address >> 8) & 0xFF, address & 0xFF};
 	config->transfer_done = 0;
-
+	LL_DMA_DisableStream(config->dma, config->dma_stream_tx);
+	LL_DMA_DisableStream(config->dma, config->dma_stream_rx);
 	config->cs_port->BSRR = config->cs_pin;
 	//LL_GPIO_SetOutputPin(config->cs_port, config->cs_pin); // make sure CS is high
 	// start transfer
@@ -160,6 +161,8 @@ void SRAM_write_DMA(IS66_t *config, uint32_t address, uint32_t size, uint8_t *bu
 	LL_DMA_SetMemoryIncMode(config->dma, config->dma_stream_rx, LL_DMA_MEMORY_NOINCREMENT);
 
 	// Kích hoạt DMA
+	LL_SPI_EnableDMAReq_TX(config->spi);
+	LL_SPI_EnableDMAReq_RX(config->spi);
 	LL_DMA_EnableStream(config->dma, config->dma_stream_rx); 	// RX trước
 	LL_DMA_EnableStream(config->dma, config->dma_stream_tx); 	// TX sau
 
@@ -172,6 +175,8 @@ void SRAM_read_DMA(IS66_t *config, uint32_t address, uint32_t size, uint8_t *buf
 	uint32_t i;
 	uint8_t cmd[5] = {SRAM_FAST_READ_CMD, (address >> 16) & 0xFF, (address >> 8) & 0xFF, address & 0xFF,0};
 	config->transfer_done = 0;
+	LL_DMA_DisableStream(config->dma, config->dma_stream_tx);
+	LL_DMA_DisableStream(config->dma, config->dma_stream_rx);
 	LL_GPIO_SetOutputPin(config->cs_port, config->cs_pin); // make sure CS is high
 
 	LL_GPIO_ResetOutputPin(config->cs_port, config->cs_pin); // CS thấp

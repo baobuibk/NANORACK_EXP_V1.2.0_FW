@@ -60,7 +60,6 @@
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
-extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -210,6 +209,11 @@ void SysTick_Handler(void)
 
 
 /**
+  * @brief This function handles TIM1 update interrupt and TIM10 global interrupt.
+  */
+
+
+/**
   * @brief This function handles TIM2 global interrupt.
   */
 
@@ -244,7 +248,6 @@ void DMA2_Stream5_IRQHandler(void)
 /**
   * @brief This function handles DMA2 stream6 global interrupt.
   */
-
 
 /**
   * @brief This function handles USART6 global interrupt.

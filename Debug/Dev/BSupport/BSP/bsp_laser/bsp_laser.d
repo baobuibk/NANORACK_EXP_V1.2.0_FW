@@ -31,8 +31,6 @@ Dev/BSupport/BSP/bsp_laser/bsp_laser.o: \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_dma.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_i2c.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_rcc.h \
@@ -82,8 +80,6 @@ D:/WorkSpace/STM32\ PRJ/EXP_Firmware/EXP_DMA_V120/EXP_V120/Dev/BSupport/BSP/Boar
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_i2c_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h:
-../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h:
-../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_dma.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_i2c.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_rcc.h:

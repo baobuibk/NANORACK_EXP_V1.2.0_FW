@@ -17,4 +17,5 @@
 ../Dev/App/experiment/experiment_task.c:286:10:experiment_task_photo_ADC_prepare_SPI	2
 ../Dev/App/experiment/experiment_task.c:296:10:experiment_task_set_profile	8
 ../Dev/App/experiment/experiment_task.c:307:6:experiment_task_get_profile	1
-../Dev/App/experiment/experiment_task.c:311:10:experiment_start_measuring	7
+../Dev/App/experiment/experiment_task.c:312:10:experiment_start_measuring	7
+../Dev/App/experiment/experiment_task.c:324:6:experiment_task_get_ram_data	2

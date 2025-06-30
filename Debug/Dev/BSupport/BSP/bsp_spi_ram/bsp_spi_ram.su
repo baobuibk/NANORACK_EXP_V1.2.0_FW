@@ -1,4 +1,6 @@
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_dma.h:517:22:LL_DMA_DisableStream	16	static
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_spi.h:1209:22:LL_SPI_EnableDMAReq_RX	16	static
+../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_spi.h:1242:22:LL_SPI_EnableDMAReq_TX	16	static
 ../Dev/BSupport/BSP/bsp_spi_ram/bsp_spi_ram.c:26:6:bsp_spi_ram_init	8	static
 ../Dev/BSupport/BSP/bsp_spi_ram/bsp_spi_ram.c:30:6:bsp_spi_ram_write_polling	24	static
 ../Dev/BSupport/BSP/bsp_spi_ram/bsp_spi_ram.c:34:6:bsp_spi_ram_read_polling	24	static

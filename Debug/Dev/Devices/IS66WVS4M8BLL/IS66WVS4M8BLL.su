@@ -23,6 +23,6 @@
 ../Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.c:71:6:SRAM_read_polling	40	static
 ../Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.c:93:6:SRAM_fast_read_polling	48	static
 ../Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.c:124:6:SRAM_write_DMA	48	static
-../Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.c:170:6:SRAM_read_DMA	56	static
-../Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.c:213:6:DMA_RX_callback	16	static
-../Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.c:224:9:SRAM_IsTransferDone	16	static
+../Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.c:173:6:SRAM_read_DMA	56	static
+../Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.c:218:6:DMA_RX_callback	16	static
+../Dev/Devices/IS66WVS4M8BLL/IS66WVS4M8BLL.c:229:9:SRAM_IsTransferDone	16	static

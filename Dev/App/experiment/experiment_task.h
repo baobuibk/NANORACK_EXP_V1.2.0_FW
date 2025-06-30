@@ -55,8 +55,7 @@ struct experiment_task_t{
 	uint8_t	 laser_spi_mode; // SPI mode is 0, 1, 2, 3
 	uint8_t  photo_pos;		//0-36, 0xFF for switched OFF all
 	uint16_t photo_value;	//photo adc 16bit value
-	uint8_t	 photo_spi_mode; // SPI mode is 0, 1, 2, 3
-
+	enum {ADC_MODE, SW_MODE} photodiode_mode;
 };
 
 struct experiment_task_init_t {
@@ -77,7 +76,7 @@ uint32_t experiment_task_ext_laser_switchoff(experiment_task_t * const me);
 uint32_t experiment_task_int_laser_switchoff(experiment_task_t * const me);
 
 uint32_t experiment_task_set_profile(experiment_task_t * me,experiment_profile_t * profile);
-
+void experiment_task_get_ram_data(experiment_task_t * const me, data_profile_t *data_profile, uint16_t* buffer);
 void experiment_task_get_profile(experiment_task_t * me, experiment_profile_t * profile);
 uint32_t experiment_start_measuring(experiment_task_t * const me);
 uint32_t experiment_task_photo_ADC_prepare_SPI(experiment_task_t * const me);

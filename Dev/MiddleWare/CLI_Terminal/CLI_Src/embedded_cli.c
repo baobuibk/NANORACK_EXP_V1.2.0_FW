@@ -562,7 +562,7 @@ void embeddedCliPrint(EmbeddedCli *cli, const char *string) {
 
     // print provided string
     writeToOutput(cli, string);
-    writeToOutput(cli, lineBreak);
+//    writeToOutput(cli, lineBreak);
 
     // print current command back to screen
     if (!IS_FLAG_SET(impl->flags, CLI_FLAG_DIRECT_PRINT)) {

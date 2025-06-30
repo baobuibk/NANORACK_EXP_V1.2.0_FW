@@ -41,9 +41,9 @@ static void experiment_task_init(experiment_task_t * const me,experiment_evt_t c
 	DBG(DBG_LEVEL_INFO,"experiment_task init\r\n");
 	bsp_laser_init();
 	bsp_spi_ram_init();
-	bsp_photo_sw_init();
-	bsp_photo_adc_init();
+	bsp_photodiode_init();
 	me->laser_spi_mode = 1;
+	me->photodiode_mode = ADC_MODE;
 }
 static void experiment_task_dispatch(experiment_task_t * const me,experiment_evt_t const * const e)
 {
@@ -122,10 +122,10 @@ static state_t experiment_task_state_data_aqui_handler(experiment_task_t * const
 			SST_TimeEvt_arm(&me->timeout_timer, EXPERIMENT_TASK_AQUI_TIMEOUT, 0);
 	//      Switch the photodiode on
 			experiment_task_photodiode_switchon(me, me->profile.pos);
-			DBG(DBG_LEVEL_INFO,"switch on photo %d\r\n", me->photo_pos);
+			DBG(DBG_LEVEL_INFO,"switch on photo %d\r\n", me->profile.pos);
 	//		Switch the SPI to ADC supported mode
 			experiment_task_photo_ADC_prepare_SPI(me);
-			DBG(DBG_LEVEL_INFO,"switch on photo %d and change SPI mode to 0\r\n", me->photo_pos);
+			DBG(DBG_LEVEL_INFO,"switch on photo %d and change SPI mode to 0\r\n", me->profile.pos);
 	//		Prepare the timer for sampling
 			bsp_photodiode_time_t init_photo_time;
 			init_photo_time.pre_time = me->profile.pre_time ;
@@ -262,10 +262,10 @@ uint32_t experiment_task_ext_laser_switchoff(experiment_task_t * const me)
 uint32_t experiment_task_photodiode_switchon(experiment_task_t * const me, uint32_t photo_id)
 {
 	if (photo_id > INTERNAL_CHAIN_CHANNEL_NUM - 1) return ERROR_NOT_SUPPORTED;
-	if(me->photo_spi_mode != 1)
+	if(me->photodiode_mode != SW_MODE)
 	{
 		bsp_photodiode_sw_spi_change_mode();
-		me->photo_spi_mode = 1;
+		me->photodiode_mode = SW_MODE;
 	}
 	bsp_photo_switch_on(photo_id);
 	me->photo_pos = photo_id;
@@ -273,10 +273,10 @@ uint32_t experiment_task_photodiode_switchon(experiment_task_t * const me, uint3
 }
 uint32_t experiment_task_photodiode_switchoff(experiment_task_t * const me)
 {
-	if(me->photo_spi_mode != 1)
+	if(me->photodiode_mode != SW_MODE)
 	{
 		bsp_photodiode_sw_spi_change_mode();
-		me->photo_spi_mode = 1;
+		me->photodiode_mode = SW_MODE;
 	}
 	bsp_photo_switch_off_all();
 	me->photo_pos = 0xFF; //photo is OFF
@@ -285,10 +285,10 @@ uint32_t experiment_task_photodiode_switchoff(experiment_task_t * const me)
 
 uint32_t experiment_task_photo_ADC_prepare_SPI(experiment_task_t * const me)
 {
-	if(me->photo_spi_mode != 0)
+	if(me->photodiode_mode != ADC_MODE)
 	{
 		bsp_photodiode_adc_spi_change_mode();
-		me->photo_spi_mode = 0;
+		me->photodiode_mode = ADC_MODE;
 	}
 	return ERROR_OK;
 }
@@ -308,6 +308,7 @@ void experiment_task_get_profile(experiment_task_t * me, experiment_profile_t * 
 {
 	*profile = me->profile;
 }
+
 uint32_t experiment_start_measuring(experiment_task_t * const me)
 {
 	experiment_profile_t * profile = &me->profile;
@@ -320,4 +321,9 @@ uint32_t experiment_start_measuring(experiment_task_t * const me)
 	return ERROR_OK;
 }
 
+void experiment_task_get_ram_data(experiment_task_t * const me, data_profile_t *data_profile, uint16_t* buffer)
+{
+	bsp_spi_ram_read_dma(data_profile->start_address * 2, data_profile->num_data * 2, (uint8_t *)buffer);
+	while(!bsp_spi_ram_is_transfer_done());
+}
 

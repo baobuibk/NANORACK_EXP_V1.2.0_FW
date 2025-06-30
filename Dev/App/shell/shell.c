@@ -154,21 +154,14 @@ static state_t shell_state_process_handler(shell_task_t * const me, shell_evt_t 
 
 // Callback xử lý ngắt nhận
 void CLI_UART_stdio_rx_callback() {
-    if (LL_USART_IsActiveFlag_RXNE(CLI_UART)) {
+    if (LL_USART_IsActiveFlag_RXNE(CLI_UART))
+    {
         uint8_t received_data = LL_USART_ReceiveData8(CLI_UART);
         embeddedCliReceiveChar(shell_uart_cli, received_data);
      }
     if (LL_USART_IsActiveFlag_ORE(CLI_UART))
 	{
 		LL_USART_ClearFlag_ORE(CLI_UART);
-	}
-	if (LL_USART_IsActiveFlag_FE(CLI_UART))
-	{
-		LL_USART_ClearFlag_FE(CLI_UART);
-	}
-	if (LL_USART_IsActiveFlag_NE(CLI_UART))
-	{
-		LL_USART_ClearFlag_NE(CLI_UART);
 	}
 }
 void Shell_USART_IRQHandler(void)
