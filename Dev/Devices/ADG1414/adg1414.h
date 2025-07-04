@@ -8,8 +8,8 @@
 #ifndef ADG1414_H
 #define ADG1414_H
 
-#include "stm32f7xx_ll_spi.h"  // Thay đổi tùy dòng STM32 bạn dùng
-#include "stm32f7xx_ll_gpio.h"
+#include "stm32f7xx.h"
+
 
 /* Định nghĩa số lượng chip và switch */
 #define ADG1414_CHAIN_NUM_CHIPS_MAX    16   // max chip trong daisy chain

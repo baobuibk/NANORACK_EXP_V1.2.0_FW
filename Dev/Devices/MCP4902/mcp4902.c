@@ -6,7 +6,7 @@
  */
 
 #include "mcp4902.h"
-
+#include "stm32f7xx_ll_spi.h"
 
 /*
  * Chuyển đổi giá trị điện áp (milivolt) sang giá trị DAC (Bộ chuyển đổi số sang analog).

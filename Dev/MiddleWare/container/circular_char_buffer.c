@@ -52,8 +52,9 @@ uint32_t circular_char_buffer_push(circular_char_buffer_t * const me, uint8_t co
 		me->head = (me->head + 1) % me->max_items;
 		me->count++;
 		result = ERROR_OK;
-		EXIT_CRITICAL();
+
 	}
+	EXIT_CRITICAL();
     return result;
 }
 

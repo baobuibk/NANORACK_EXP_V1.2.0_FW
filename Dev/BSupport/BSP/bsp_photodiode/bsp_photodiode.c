@@ -414,3 +414,28 @@ void DMA1_Stream1_IRQHandler(void)
 
   /* USER CODE END DMA1_Stream1_IRQn 1 */
 }
+
+
+
+/*
+ *Moved from ADS driver
+ */
+
+
+// void ISR_TIMTrigger_IRQHandler(ADS8327_Device_t *dev)
+// {
+// 	WRITE_REG(PHOTO_ADC_CS_GPIO_Port->BSRR, PHOTO_ADC_CS_Pin);
+// 	WRITE_REG(PHOTO_ADC_CONV_GPIO_Port->BSRR, PHOTO_ADC_CONV_Pin << 16);
+// 	WRITE_REG(PHOTO_ADC_CONV_GPIO_Port->BSRR, PHOTO_ADC_CONV_Pin);
+// 	SPI2->DR = 0xAAAA;
+// 	WRITE_REG(PHOTO_ADC_CS_GPIO_Port->BSRR, PHOTO_ADC_CS_Pin << 16);
+// 	WRITE_REG(TIM1->SR, ~(TIM_SR_UIF));
+//
+// }
+//
+// void ISR_SPI_DMA_Rx_IRQHandler(ADS8327_Device_t *dev)
+// {
+// 	WRITE_REG(DMA1->LIFCR , DMA_LIFCR_CTCIF3);		// Clear TC flag DMA Transfer 	***Note: Modify num of flag to clear
+// 	CLEAR_BIT(TIM1->CR1, TIM_CR1_CEN);				// Timer disable counter
+// 	CLEAR_BIT(TIM1->DIER, TIM_DIER_UIE);			// Timer disable IT Update
+// }

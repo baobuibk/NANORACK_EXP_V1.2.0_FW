@@ -6,8 +6,9 @@
  */
 
 #include "adg1414.h"
-
-
+#include "stm32f7xx.h"
+#include "stm32f7xx_ll_gpio.h"
+#include "stm32f7xx_ll_spi.h"
 static void ADG1414_Chain_Write(ADG1414_Device_t *dev)
 {
 	LL_GPIO_SetOutputPin(dev->cs_port, dev->cs_pin);

@@ -1200,7 +1200,7 @@ void CMD_Help(EmbeddedCli *cli, char *tokens, void *context) {
 
     uint16_t tokenCount = embeddedCliGetTokenCount(tokens);
     if (tokenCount == 0) {
-        const int MAX_CAT = 32;
+        const int MAX_CAT = 33;
         const char* categories[MAX_CAT];
         int catCount = 0;
 

@@ -8,8 +8,9 @@
 #ifndef MCP4902_H_
 #define MCP4902_H_
 
-#include "stm32f7xx_ll_spi.h"
+#include "stm32f7xx.h"
 #include "stm32f7xx_ll_gpio.h"
+
 
 #define _VREF_DAC		3300	// milivolt
 

@@ -42,6 +42,6 @@ uint32_t uart_stdio_printf(UART_stdio_t* me, const char * format, ...);
 void uart_stdio_rx_callback(UART_stdio_t* me);
 
 // Callback cho ngắt phát (gọi từ UART ISR)
-void uart_stdio_tx_callback(UART_stdio_t* me);
+uint32_t uart_stdio_tx_callback(UART_stdio_t* me);
 
 #endif

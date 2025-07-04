@@ -145,8 +145,8 @@ void SST_Task_post(SST_Task * const me, SST_Evt const * const e) {
     /*! @pre the queue must be sized adequately and cannot overflow */
     //DBC_REQUIRE(300, me->nUsed <= me->end);
 
-    SST_PORT_CRIT_STAT
-    SST_PORT_CRIT_ENTRY();
+//    SST_PORT_CRIT_STAT
+
     // me->qBuf[me->head] = e; /* insert event into the queue */
     // if (me->head == 0U) {   /* need to wrap the head? */
     //     me->head = me->end; /* wrap around */
@@ -156,6 +156,7 @@ void SST_Task_post(SST_Task * const me, SST_Evt const * const e) {
     // }
     circular_buffer_push(me->evt_queue, e); /* insert event into the queue */
     //++me->nUsed;
+    SST_PORT_CRIT_ENTRY();
     task_readySet |= (1U << (me->prio - 1U));
     SST_PORT_CRIT_EXIT();
 }

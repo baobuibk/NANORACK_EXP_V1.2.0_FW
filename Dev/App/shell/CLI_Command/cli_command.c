@@ -6,18 +6,14 @@
  */
 
 #include "cli_command.h"
-#include "uart_driver.h"
-#include "sensor_i2c.h"
 #include "ntc.h"
 #include "lt8722.h"
 #include "temperature_control.h"
 #include "temperature_monitor.h"
 #include "experiment_task.h"
+#include "shell.h"
 #include <stdlib.h>
 #include <string.h>
-
-
-#include "k33.h"
 #include "board.h"
 
 extern temperature_control_task_t temperature_control_task_inst ;
@@ -26,6 +22,8 @@ static temperature_control_task_t *ptemperature_control_task = &temperature_cont
 extern experiment_task_t experiment_task_inst;
 static experiment_task_t *pexperiment_task = &experiment_task_inst;
 
+extern shell_task_t shell_task_inst ;
+static shell_task_t *pshell_task_instt = &shell_task_inst;
 /*************************************************
  *                Private variable                 *
  *************************************************/
@@ -65,6 +63,9 @@ static void htoa(uint16_t hex_value, char *output)
 /*************************************************
  *                Command Define                 *
  *************************************************/
+static void CMD_test_send_buffer(EmbeddedCli *cli, char *args, void *context);
+uint16_t test_buffer[4096*20];
+
 static void CMD_Clear_CLI(EmbeddedCli *cli, char *args, void *context);
 static void CMD_Reset(EmbeddedCli *cli, char *args, void *context);
 
@@ -152,6 +153,7 @@ static const CliCommandBinding cliStaticBindings_internal[] = {
     { "Ultis", "help",         "Print list of all available CLI commands [Firmware: 1]", false,  NULL, CMD_Help },
     { "Ultis", "cls",          "Clear the console output screen",                        false,  NULL, CMD_Clear_CLI },
     { "Ultis", "reset",        "Perform MCU software reset",                             false,  NULL, CMD_Reset },
+    { "Ultis", "test_send_buffer",        "Perform send test buffer",                             false,  NULL, CMD_test_send_buffer },
 
     // NTC
     { "NTC",   "ntc_get_temp", "Read temperature value from NTC sensor [ch: 0-7, a=all]", true,   NULL, CMD_NTC_Get_Temp },
@@ -814,6 +816,14 @@ static void cmd_exp_start_measuring(EmbeddedCli *cli, char *args, void *context)
 	if (experiment_start_measuring(pexperiment_task))
 		cli_printf(cli, "Wrong profile, please check \r\n");
 	else cli_printf(cli,"Starting Measurement\r\n");
+}
+
+
+
+static void CMD_test_send_buffer(EmbeddedCli *cli, char *args, void *context)
+{
+	for (uint32_t i=0;i<4096*20;i++) test_buffer[i] = (uint16_t )i;
+	shell_send_buffer(pshell_task_instt, test_buffer, 4096*20);
 }
 
 //static void CMD_TEC_Set_Auto(EmbeddedCli *cli, char *args, void *context) {
