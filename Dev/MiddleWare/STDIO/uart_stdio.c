@@ -159,10 +159,12 @@ void uart_stdio_rx_callback(UART_stdio_t* me) {
 }
 
 // Callback xử lý ngắt phát
-void uart_stdio_tx_callback(UART_stdio_t* me) {
+uint32_t uart_stdio_tx_callback(UART_stdio_t* me) {
+    uint8_t data;
+    uint32_t result = ERROR_OK;
+
     if (LL_USART_IsActiveFlag_TXE(me->uart_x) && me->is_active) {
-        uint8_t data;
-        uint32_t result;
+
         result = circular_char_buffer_pop(me->tx_buffer, &data);
         if (!result) {
             // Tiếp tục truyền byte tiếp theo
@@ -173,4 +175,5 @@ void uart_stdio_tx_callback(UART_stdio_t* me) {
             me->tx_busy = false;
         }
     }
+    return result;
 }

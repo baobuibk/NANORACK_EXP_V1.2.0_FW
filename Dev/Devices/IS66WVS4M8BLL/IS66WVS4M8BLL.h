@@ -1,9 +1,7 @@
 #ifndef IS66WVS4M8BLL_H
 #define IS66WVS4M8BLL_H
 
-#include "stm32f7xx_ll_gpio.h"
-#include "stm32f7xx_ll_spi.h"
-#include "stm32f7xx_ll_dma.h"
+#include "stm32f7xx.h"
 
 // Định nghĩa lệnh
 #define SRAM_READ_CMD  0x03 // Lệnh đọc

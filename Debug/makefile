@@ -21,6 +21,7 @@ RM := rm -rf
 -include Dev/MiddleWare/container/subdir.mk
 -include Dev/MiddleWare/Utils/subdir.mk
 -include Dev/MiddleWare/STDIO/subdir.mk
+-include Dev/MiddleWare/MIN_Protocol/subdir.mk
 -include Dev/MiddleWare/FSM/subdir.mk
 -include Dev/MiddleWare/CLI_Terminal/CLI_Src/subdir.mk
 -include Dev/Devices/NTC/subdir.mk
@@ -47,6 +48,7 @@ RM := rm -rf
 -include Dev/App/temperature_control/subdir.mk
 -include Dev/App/shell/CLI_Command/subdir.mk
 -include Dev/App/shell/subdir.mk
+-include Dev/App/min_shell/subdir.mk
 -include Dev/App/experiment/subdir.mk
 -include Dev/App/app_main/subdir.mk
 -include Core/Startup/subdir.mk
@@ -105,8 +107,8 @@ all: main-build
 main-build: EXP_V120.elf secondary-outputs
 
 # Tool invocations
-EXP_V120.elf EXP_V120.map: $(OBJS) $(USER_OBJS) D:\WorkSpace\STM32\ PRJ\EXP_Firmware\EXP_DMA_V120\EXP_V120\STM32F765VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "EXP_V120.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"D:\WorkSpace\STM32 PRJ\EXP_Firmware\EXP_DMA_V120\EXP_V120\STM32F765VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EXP_V120.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+EXP_V120.elf EXP_V120.map: $(OBJS) $(USER_OBJS) D:\PROJECT\BOOK_EXAMPLE\EXP_V120\STM32F765VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "EXP_V120.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"D:\PROJECT\BOOK_EXAMPLE\EXP_V120\STM32F765VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EXP_V120.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -23,6 +23,10 @@ struct shell_task_t {
     UART_stdio_t * shell_uart_stdio;
     EmbeddedCli * shell_uart_cli ;
     SST_TimeEvt shell_task_timeout_timer;
+    uint8_t * buffer_to_send;
+    uint32_t remain_word;
+    uint8_t  htoa_buffer[5];
+    uint8_t  htoa_buffer_index;
 } ;
 
 
@@ -42,4 +46,6 @@ void shell_task_start(uint8_t priority);
 void shell_task_ctor(shell_task_t * const me, shell_task_init_t * const init) ;
 void CLI_UART_stdio_rx_callback();
 void Shell_USART_IRQHandler(void);
+
+void shell_send_buffer(shell_task_t * const me, uint16_t *buffer, uint32_t size);
 #endif /* APP_SHELL_SHELL_H_ */

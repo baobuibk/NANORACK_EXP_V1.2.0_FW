@@ -258,8 +258,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Devices/DateTime|LED|MIN_Proto|Sche|Temperature/temp|CLI_Terminal/CLI_Command|CLI_Terminal/CLI_Setup|MiddleWare/sst0_c/examples|bsp|Scheduler" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Dev"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+						<entry excluding="MiddleWare/Utils/ports/stm32f4xx|Devices/DateTime|LED|MIN_Proto|Sche|Temperature/temp|CLI_Terminal/CLI_Command|CLI_Terminal/CLI_Setup|MiddleWare/sst0_c/examples|bsp|Scheduler" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Dev"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 					</sourceEntries>
 				</configuration>
@@ -552,8 +552,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Devices/DateTime|LED|MIN_Proto|Sche|Temperature/temp|CLI_Terminal/CLI_Command|CLI_Terminal/CLI_Setup|MiddleWare/sst0_c/examples|bsp|Scheduler" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Dev"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+						<entry excluding="MiddleWare/Utils/ports/stm32f4xx|Devices/DateTime|LED|MIN_Proto|Sche|Temperature/temp|CLI_Terminal/CLI_Command|CLI_Terminal/CLI_Setup|MiddleWare/sst0_c/examples|bsp|Scheduler" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Dev"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 					</sourceEntries>
 				</configuration>

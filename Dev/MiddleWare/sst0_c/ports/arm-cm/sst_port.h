@@ -26,6 +26,7 @@
 #ifndef SST_PORT_H_
 #define SST_PORT_H_
 
+#include <stm32f7xx.h>
 #define SST_PORT_TASK_ATTR SST_TaskPrio prio;
 
 #define SST_PORT_MAX_TASK 32U
@@ -34,10 +35,25 @@
 #define SST_PORT_INT_DISABLE() __asm volatile ("cpsid i")
 #define SST_PORT_INT_ENABLE()  __asm volatile ("cpsie i")
 
+// Define BASEPRI priority level (0-15, lower number = higher priority)
+#define BASE_PRI 1
+
+// Macro để vào critical section
+#define SST_ENTER_CRITICAL() do { \
+    __set_BASEPRI(BASE_PRI << (8 - __NVIC_PRIO_BITS)); \
+} while (0)
+
+// Macro để thoát critical section
+#define SST_EXIT_CRITICAL() do { \
+    __set_BASEPRI(0); \
+} while (0)
+
 /* SST-PORT critical section */
 #define SST_PORT_CRIT_STAT
-#define SST_PORT_CRIT_ENTRY() SST_PORT_INT_DISABLE()
-#define SST_PORT_CRIT_EXIT()  SST_PORT_INT_ENABLE()
+//#define SST_PORT_CRIT_ENTRY() SST_PORT_INT_DISABLE()
+//#define SST_PORT_CRIT_EXIT()  SST_PORT_INT_ENABLE()
+#define SST_PORT_CRIT_ENTRY() SST_ENTER_CRITICAL()
+#define SST_PORT_CRIT_EXIT()  SST_EXIT_CRITICAL()
 
 typedef uint32_t SST_ReadySet;
 

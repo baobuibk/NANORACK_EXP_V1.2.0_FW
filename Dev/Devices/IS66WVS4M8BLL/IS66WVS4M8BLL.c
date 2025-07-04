@@ -1,6 +1,8 @@
 #include "is66wvs4m8bll.h"
 #include "stm32f7xx_ll_bus.h"
 #include "stm32f7xx_ll_dma.h"
+#include "stm32f7xx_ll_gpio.h"
+#include "stm32f7xx_ll_spi.h"
 
 static uint8_t data_dummy = 0xAA;
 

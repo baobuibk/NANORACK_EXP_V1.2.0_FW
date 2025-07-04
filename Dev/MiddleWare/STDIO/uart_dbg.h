@@ -41,6 +41,6 @@ extern UART_stdio_t uart_stdio;
 #endif
 
 /* Convenience Macro for Simple Printing */
-#define Printf(format, ...) uart_stdio_printf(&min_shell_uart, format, ##__VA_ARGS__)
+//#define Printf(format, ...) uart_stdio_printf(&min_shell_uart, format, ##__VA_ARGS__)
 
 #endif /* STDIO_UART_DBG_H_ */

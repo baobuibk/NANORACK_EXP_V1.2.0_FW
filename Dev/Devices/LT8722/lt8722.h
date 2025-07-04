@@ -9,7 +9,7 @@
 #define DEVICES_LT8722_LT8722_H_
 
 #include "board.h"
-#include "stm32f7xx_ll_spi.h"
+#include "stm32f7xx.h"
 #include "stdbool.h"
 
 typedef enum {TEC_COOL = 0, TEC_HEAT = 1} tec_dir_t;

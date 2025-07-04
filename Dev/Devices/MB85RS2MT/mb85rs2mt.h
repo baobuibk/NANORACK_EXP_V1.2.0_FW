@@ -8,7 +8,7 @@
 #ifndef DEVICES_MB85RS2MT_MB85RS2MT_H_
 #define DEVICES_MB85RS2MT_MB85RS2MT_H_
 
-#include "stm32f7xx_ll_spi.h"
+#include "stm32f7xx.h"
 #include "main.h"
 
 // SPI Command List for MB85RS2MTA

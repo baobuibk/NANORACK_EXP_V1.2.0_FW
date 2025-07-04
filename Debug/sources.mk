@@ -28,6 +28,7 @@ Core/Src \
 Core/Startup \
 Dev/App/app_main \
 Dev/App/experiment \
+Dev/App/min_shell \
 Dev/App/shell/CLI_Command \
 Dev/App/shell \
 Dev/App/temperature_control \
@@ -54,6 +55,7 @@ Dev/Devices/MCP4902 \
 Dev/Devices/NTC \
 Dev/MiddleWare/CLI_Terminal/CLI_Src \
 Dev/MiddleWare/FSM \
+Dev/MiddleWare/MIN_Protocol \
 Dev/MiddleWare/STDIO \
 Dev/MiddleWare/Utils \
 Dev/MiddleWare/container \
